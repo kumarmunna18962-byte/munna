@@ -1,24 +1,29 @@
-DC CHAT INDIA — ONLINE STARTER V20
+DC CHAT INDIA — ONLINE STARTER V21 (OWNER ADMIN)
 
-WHAT THIS INCLUDES
-- V20 frontend with Gmail + password login only (no Create Account button in the main app).
-- Separate /register page for first-time account setup.
-- Node.js + Express + Socket.IO backend, password hashing, DC UID, 1-to-1 text messages, typing/read events.
-- /health endpoint for checking server status.
+INCLUDED
+- DC_Chat_Final_V20.html: existing V20 user interface (preserved).
+- register.html: separate account registration page.
+- server.js: Express + Socket.IO API, password hashing, DC UID, one-to-one text messaging, typing/read events, owner-only admin API.
+- admin.html: owner dashboard to view accounts, see basic counts, block/unblock users.
+- package.json: Node.js dependencies.
 
 IMPORTANT
-This ZIP is not itself a public server. It must be deployed to a Node.js host before separate phones can message each other. I cannot publish it to the internet without the owner's hosting account/authorization.
+This ZIP is source code, not a live website. Real accounts/messages only work after hosting the Node server and setting environment variables. The starter still stores data in a JSON file; use a managed database or correctly mounted persistent disk before public use.
 
-DEPLOY (Node.js host supporting persistent disk)
-1. Upload/extract all files to a Node.js service.
-2. Set Start Command: npm start
-3. Set environment variable DC_CHAT_SECRET to a long random secret (32+ characters).
-4. Ensure the service has a persistent disk mounted for dc-chat-data.json, or configure DC_CHAT_DB to a writable persistent path.
-5. After deployment, open https://YOUR-SERVICE/register once to create the first account. This page is separate from the main login screen.
-6. Open https://YOUR-SERVICE/ and log in with that Gmail/password. Friend must also create an account and share their DC UID.
-7. Test https://YOUR-SERVICE/health; it should return {"ok":true,...}.
+DEPLOYMENT ENVIRONMENT VARIABLES
+1. NODE_ENV=production
+2. DC_CHAT_SECRET=a unique random secret with at least 32 characters (do not share or commit it).
+3. DC_CHAT_ADMIN_EMAIL=the owner's Gmail address (lowercase, @gmail.com). The owner must register this exact Gmail at /register after these variables are configured; only that account gets the admin role.
+4. Optional: DC_CHAT_DB=/path/on/persistent/disk/dc-chat-data.json
 
-LIMITATIONS
-- Gmail format is checked, but this starter does not verify ownership of the Gmail inbox. Do not reuse your Gmail password; choose a unique DC Chat password.
-- JSON-file storage is for a small prototype only, not a production-grade database. Use a managed database and proper backups before public launch.
-- Voice/video calling, push notifications and media storage need additional services and are not fully enabled by this backend.
+AFTER HOSTING
+- Open /health and check that it returns {"ok":true,...}.
+- Open /register and create the owner's account first using a unique DC Chat password (not the Gmail password).
+- Open /admin and sign in with that owner account to manage users.
+- Other people can register at /register and then use the main app URL. Share DC UIDs to find each other.
+
+SECURITY / LIMITS
+- Gmail syntax is checked, but inbox ownership is NOT verified by email confirmation. Do not call this Gmail-verified authentication.
+- Admin permissions are enforced by the server, not by hiding buttons in the browser.
+- JSON-file storage is only for a small prototype; simultaneous writes, backups, and scale need a proper database. Do not launch publicly for a large audience until database persistence, rate limiting, email verification, monitoring, and security review are added.
+- Voice/video calls, push notifications and media storage are not enabled by this backend.
