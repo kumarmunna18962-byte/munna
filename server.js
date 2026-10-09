@@ -6,6 +6,7 @@ import jwt from 'jsonwebtoken';
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
+import nodemailer from 'nodemailer';
 
 const app = express();
 const server = http.createServer(app);
@@ -25,6 +26,10 @@ if (process.env.NODE_ENV === 'production' && !ADMIN_EMAIL) {
 }
 const JWT_SECRET = SECRET || 'local-development-only-change-before-deploy-123456';
 const DB = process.env.DC_CHAT_DB || path.resolve('dc-chat-data.json');
+const resetCodes = new Map();
+const smtpReady = !!(process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS && process.env.SMTP_FROM);
+const mailer = smtpReady ? nodemailer.createTransport({host:process.env.SMTP_HOST,port:Number(process.env.SMTP_PORT||587),secure:String(process.env.SMTP_SECURE||'false')==='true',auth:{user:process.env.SMTP_USER,pass:process.env.SMTP_PASS}}) : null;
+const resetAttempts = new Map();
 app.use(express.json({ limit: '1mb' }));
 app.use(express.static(path.resolve('.')));
 let db = { users: {}, messages: [] };
@@ -56,6 +61,52 @@ function adminOnly(req, res, next) { if (!req.user || req.user.role !== 'admin' 
 app.get('/health', (_req, res) => res.json({ ok: true, service: 'DC Chat India', time: new Date().toISOString() }));
 app.get('/register', (_req, res) => res.sendFile(path.resolve('register.html')));
 app.get('/admin', (_req, res) => res.sendFile(path.resolve('admin.html')));
+
+// Password recovery: OTPs are short-lived, one-use, rate-limited, and never returned by the API.
+app.post('/api/forgot-password', async (req, res) => {
+  const email = cleanEmail(req.body.email);
+  if (!validGmail(email)) return res.status(400).json({error:'Enter the Gmail address used for your DC Chat account.'});
+  if (!mailer) return res.status(503).json({error:'Password recovery email is not configured yet. Please try again later.'});
+  const now = Date.now(), last = resetAttempts.get(email) || 0;
+  if (now-last < 60_000) return res.status(429).json({error:'Please wait one minute before requesting another code.'});
+  resetAttempts.set(email, now);
+  const user = db.users[email];
+  // Same generic response prevents exposing whether an account exists.
+  if (!user) return res.json({ok:true,message:'If a DC Chat account exists for this Gmail, a verification code has been sent.'});
+  const code = String(crypto.randomInt(0,1000000)).padStart(6,'0');
+  resetCodes.set(email,{hash:crypto.createHash('sha256').update(code).digest('hex'),expires:now+10*60_000,attempts:0});
+  try {
+    await mailer.sendMail({
+      from:process.env.SMTP_FROM,
+      to:email,
+      subject:'Your DC Chat password reset code',
+      text:`Hello ${user.name},\n\nYour DC Chat password reset code is: ${code}\n\nIt expires in 10 minutes and can be used only once. If you did not request this, ignore this email. DC Chat support will never ask you to share this code.\n\nDC Chat Team`,
+      html:`<div style="font-family:Arial,sans-serif;max-width:520px;margin:auto;padding:24px;color:#17202a"><div style="background:#075e54;color:white;padding:18px;border-radius:12px;font-size:22px;font-weight:bold">DC Chat</div><h2>Password reset</h2><p>Hello ${String(user.name).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))},</p><p>Use this verification code to reset your password:</p><div style="font-size:32px;font-weight:bold;letter-spacing:8px;background:#f0f2f5;padding:18px;text-align:center;border-radius:10px">${code}</div><p>This code expires in 10 minutes and can be used once. If you did not request it, ignore this email.</p><small>DC Chat will never ask you to share this code.</small></div>`
+    });
+    return res.json({ok:true,message:'Verification code sent if this Gmail is registered. Check Inbox and Spam.'});
+  } catch (err) {
+    resetCodes.delete(email);
+    console.error('Password reset email failed:',err?.message||'unknown error');
+    return res.status(502).json({error:'Could not send the email right now. Please try again later.'});
+  }
+});
+app.post('/api/reset-password', async (req,res) => {
+  const email=cleanEmail(req.body.email), code=String(req.body.code||'').trim(), password=String(req.body.password||'');
+  if(!validGmail(email)||!/^\d{6}$/.test(code)) return res.status(400).json({error:'Enter your Gmail and the 6-digit code.'});
+  if(password.length<8) return res.status(400).json({error:'New password must be at least 8 characters.'});
+  const entry=resetCodes.get(email), user=db.users[email];
+  if(!entry||!user||entry.expires<Date.now()) { resetCodes.delete(email); return res.status(400).json({error:'Code expired or invalid. Request a new code.'}); }
+  entry.attempts++;
+  const candidate=crypto.createHash('sha256').update(code).digest('hex');
+  if(entry.attempts>5||!crypto.timingSafeEqual(Buffer.from(entry.hash,'hex'),Buffer.from(candidate,'hex'))) {
+    if(entry.attempts>=5) resetCodes.delete(email);
+    return res.status(400).json({error:'Code is incorrect or expired. Check the email and try again.'});
+  }
+  user.password=await bcrypt.hash(password,12);
+  save(); resetCodes.delete(email);
+  return res.json({ok:true,message:'Password updated. You can now log in with your new password.'});
+});
+
 app.post('/api/register', async (req, res) => {
   const email = cleanEmail(req.body.email), password = String(req.body.password || ''), name = String(req.body.name || email.split('@')[0]).trim().slice(0, 40);
   if (!validGmail(email) || password.length < 8 || !name) return res.status(400).json({ error: 'Use a Gmail address, display name, and password of at least 8 characters.' });
