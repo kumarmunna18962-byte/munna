@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: dc-chat-india
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DC_CHAT_SECRET
+        generateValue: true
+      - key: DC_CHAT_ADMIN_EMAIL
+        sync: false
