@@ -16,8 +16,12 @@ const ADMIN_EMAIL = String(process.env.DC_CHAT_ADMIN_EMAIL || '').trim().toLower
 if (process.env.NODE_ENV === 'production' && (!SECRET || SECRET.length < 32)) {
   console.error('Set DC_CHAT_SECRET to a random secret of at least 32 characters.'); process.exit(1);
 }
-if (process.env.NODE_ENV === 'production' && !ADMIN_EMAIL.endsWith('@gmail.com')) {
-  console.error('Set DC_CHAT_ADMIN_EMAIL to the owner Gmail address.'); process.exit(1);
+if (process.env.NODE_ENV === 'production' && ADMIN_EMAIL && !/^[^\\s@]+@gmail\\.com$/.test(ADMIN_EMAIL)) {
+  console.error('DC_CHAT_ADMIN_EMAIL must be a valid Gmail address when provided.');
+  process.exit(1);
+}
+if (process.env.NODE_ENV === 'production' && !ADMIN_EMAIL) {
+  console.warn('DC_CHAT_ADMIN_EMAIL is not set. Service will start, but owner admin features stay disabled until it is configured.');
 }
 const JWT_SECRET = SECRET || 'local-development-only-change-before-deploy-123456';
 const DB = process.env.DC_CHAT_DB || path.resolve('dc-chat-data.json');
