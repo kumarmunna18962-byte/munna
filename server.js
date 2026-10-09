@@ -26,6 +26,15 @@ app.use(express.static(path.resolve('.')));
 let db = { users: {}, messages: [] };
 try { if (fs.existsSync(DB)) db = { ...db, ...JSON.parse(fs.readFileSync(DB, 'utf8')) }; } catch (e) { console.error('Database file could not be read:', e.message); }
 const save = () => { const tmp = DB + '.tmp'; fs.writeFileSync(tmp, JSON.stringify(db, null, 2)); fs.renameSync(tmp, DB); };
+// Keep the configured owner account as admin after restarts, including existing accounts.
+if (ADMIN_EMAIL && db.users[ADMIN_EMAIL]) {
+  let changed = false;
+  for (const u of Object.values(db.users)) {
+    const role = u.email === ADMIN_EMAIL ? 'admin' : 'user';
+    if (u.role !== role) { u.role = role; changed = true; }
+  }
+  if (changed) save();
+}
 const cleanEmail = e => String(e || '').trim().toLowerCase();
 const validGmail = e => /^[^\s@]+@gmail\.com$/.test(e);
 const publicUser = u => ({ uid: u.uid, email: u.email, name: u.name, role: u.role || 'user', blocked: !!u.blocked, createdAt: u.createdAt });
