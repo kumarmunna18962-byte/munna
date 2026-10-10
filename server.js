@@ -32,7 +32,7 @@ const mailer = smtpReady ? nodemailer.createTransport({host:process.env.SMTP_HOS
 const resetAttempts = new Map();
 app.use(express.json({ limit: '1mb' }));
 app.use(express.static(path.resolve('.')));
-let db = { users: {}, messages: [] };
+let db = { users: {}, messages: [], contacts: {} };
 try { if (fs.existsSync(DB)) db = { ...db, ...JSON.parse(fs.readFileSync(DB, 'utf8')) }; } catch (e) { console.error('Database file could not be read:', e.message); }
 const save = () => { const tmp = DB + '.tmp'; fs.writeFileSync(tmp, JSON.stringify(db, null, 2)); fs.renameSync(tmp, DB); };
 // Keep the configured owner account as admin after restarts, including existing accounts.
@@ -123,6 +123,24 @@ app.post('/api/login', async (req, res) => {
 });
 app.get('/api/me', auth, (req, res) => res.json(publicUser(req.user)));
 app.get('/api/users/:uid', auth, (req, res) => { const uid = String(req.params.uid || '').toUpperCase(); const u = Object.values(db.users).find(x => x.uid === uid && !x.blocked); if (!u) return res.status(404).json({ error: 'DC UID not found.' }); res.json({ uid:u.uid, email:u.email, name:u.name }); });
+// Server-saved contacts: each account can only read/write its own contact list.
+app.get('/api/contacts', auth, (req, res) => {
+  const ids = Array.isArray(db.contacts[req.user.uid]) ? db.contacts[req.user.uid] : [];
+  const contacts = ids.map(uid => Object.values(db.users).find(u => u.uid === uid && !u.blocked))
+    .filter(Boolean).map(u => ({ uid:u.uid, email:u.email, name:u.name }));
+  res.json(contacts);
+});
+app.post('/api/contacts', auth, (req, res) => {
+  const uid = String(req.body.uid || '').trim().toUpperCase();
+  if (!uid || uid === req.user.uid) return res.status(400).json({error:'Enter another user’s DC UID.'});
+  const target = Object.values(db.users).find(u => u.uid === uid && !u.blocked);
+  if (!target) return res.status(404).json({error:'No active DC Chat account found for that UID.'});
+  const ids = Array.isArray(db.contacts[req.user.uid]) ? db.contacts[req.user.uid] : [];
+  if (!ids.includes(uid)) ids.push(uid);
+  db.contacts[req.user.uid] = ids;
+  save();
+  res.status(201).json({uid:target.uid,email:target.email,name:target.name});
+});
 app.get('/api/messages/:peer', auth, (req, res) => { const me = req.user.uid, peer = String(req.params.peer); res.json(db.messages.filter(m => (m.from === me && m.to === peer) || (m.from === peer && m.to === me)).slice(-500)); });
 app.post('/api/messages', auth, (req, res) => {
   const to = String(req.body.to || '').trim().toUpperCase(), text = String(req.body.text || '').slice(0, 10000);
