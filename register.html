@@ -1,1 +1,32 @@
-<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Create DC Chat account</title><style>body{font:16px system-ui;background:#eaf2ef;margin:0;min-height:100vh;display:grid;place-items:center}.card{background:white;padding:24px;border-radius:18px;width:min(390px,calc(100% - 40px));box-shadow:0 12px 40px #0002}h1{color:#075e54}input,button{box-sizing:border-box;width:100%;padding:13px;margin:7px 0;border:1px solid #ccd5d2;border-radius:9px;font:inherit}button{background:#087e6d;color:white;border:0;font-weight:700;cursor:pointer}#msg{font-size:14px;color:#b42318;white-space:pre-wrap}</style><div class="card"><h1>DC Chat</h1><h2>Create your account</h2><p>One-time account setup. Afterwards, use the main DC Chat Gmail + password login.</p><form id="f"><input id="name" placeholder="Display name" required maxlength="40"><input id="email" type="email" placeholder="Gmail address (@gmail.com)" required><input id="password" type="password" placeholder="Password (at least 8 characters)" minlength="8" required><button>Create DC Chat account</button></form><div id="msg" role="status"></div><script>f.onsubmit=async e=>{e.preventDefault();msg.style.color='#b42318';msg.textContent='Creating account…';try{let r=await fetch('/api/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:name.value,email:email.value,password:password.value})});let j=await r.json();if(!r.ok)throw Error(j.error||'Registration failed');msg.style.color='#087e6d';msg.textContent='Account created! Your DC UID: '+j.user.uid+'\nSave this UID. Now open DC Chat and log in.';f.reset()}catch(err){msg.textContent=err.message+'\nIf the server is not deployed, this page will not work.'}}</script></div></html>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#075e54"><title>Create DC Chat account</title><style>body{font:16px system-ui;background:#eaf2ef;margin:0;min-height:100vh;display:grid;place-items:center}.card{background:white;padding:24px;border-radius:18px;width:min(390px,calc(100% - 40px));box-shadow:0 12px 40px #0002}h1{color:#075e54}input,button{box-sizing:border-box;width:100%;padding:13px;margin:7px 0;border:1px solid #ccd5d2;border-radius:9px;font:inherit}button{background:#087e6d;color:white;border:0;font-weight:700;cursor:pointer}button:disabled{opacity:.65;cursor:wait}#msg{font-size:14px;color:#b42318;white-space:pre-wrap}a{color:#087e6d}</style></head><body><div class="card"><h1>DC Chat</h1><h2>Create your account</h2><p>Register once, then use the same Gmail and password to log in.</p><form id="registerForm"><label for="displayName">Display name</label><input id="displayName" name="displayName" placeholder="Your name" required maxlength="40" autocomplete="name"><label for="email">Gmail address</label><input id="email" name="email" type="email" placeholder="Gmail address (@gmail.com)" required autocomplete="username"><label for="password">Password</label><input id="password" name="password" type="password" placeholder="At least 8 characters" minlength="8" required autocomplete="new-password"><button id="submitBtn" type="submit">Create DC Chat account</button></form><div id="msg" role="status" aria-live="polite"></div><p><a href="/">Back to Login</a></p></div><script>
+const form = document.getElementById('registerForm');
+const nameField = document.getElementById('displayName');
+const emailField = document.getElementById('email');
+const passwordField = document.getElementById('password');
+const message = document.getElementById('msg');
+const submitBtn = document.getElementById('submitBtn');
+form.addEventListener('submit', async (event) => {
+  event.preventDefault();
+  const name = nameField.value.trim();
+  const email = emailField.value.trim().toLowerCase();
+  const password = passwordField.value;
+  if (!/^[^\\s@]+@gmail\\.com$/.test(email)) { message.textContent = 'Please enter a valid @gmail.com address.'; emailField.focus(); return; }
+  if (password.length < 8) { message.textContent = 'Password must contain at least 8 characters.'; passwordField.focus(); return; }
+  submitBtn.disabled = true; submitBtn.textContent = 'Creating account…'; message.style.color = '#667781'; message.textContent = 'Connecting to DC Chat…';
+  try {
+    const response = await fetch('/api/register', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({name,email,password}) });
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(result.error || 'Registration failed (' + response.status + ').');
+    if (!result.user || !result.token) throw new Error('The server response was incomplete. Please try again.');
+    message.style.color = '#087e6d';
+    message.textContent = 'Account created successfully!\\nYour DC UID: ' + result.user.uid + '\\nPlease save your UID. You can now log in.';
+    form.reset();
+    const back = document.createElement('a'); back.href = '/'; back.textContent = ' Open DC Chat login'; message.appendChild(back);
+  } catch (error) {
+    message.style.color = '#b42318';
+    message.textContent = error.message || 'Server se connection nahi hua. Please try again.';
+  } finally {
+    submitBtn.disabled = false; submitBtn.textContent = 'Create DC Chat account';
+  }
+});
+</script></body></html>
