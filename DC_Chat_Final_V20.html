@@ -322,7 +322,7 @@ async function doLogin(){
  try{
   const r=await fetch('/api/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:e,password:p})});
   let j={};try{j=await r.json()}catch(_){}
-  if(!r.ok){loginError(j.error||j.message||('Login failed ('+r.status+').'));return}
+  if(!r.ok){if(r.status===401){loginError('Is Gmail se DC Chat account nahi mila ya password galat hai. Naya account banane ke liye yahan kholein: /register');const box=document.getElementById('loginError');if(box&&!box.querySelector('a')){const a=document.createElement('a');a.href='/register';a.textContent='Create DC Chat account';a.style.cssText='display:inline-block;margin-top:8px;color:#075e54;font-weight:700;text-decoration:underline';box.appendChild(document.createElement('br'));box.appendChild(a)}}else{loginError(j.error||j.message||('Login failed ('+r.status+').'))}return}
   if(!j.token||!j.user){loginError('Server response incomplete. Please try again.');return}
   onlineToken=j.token;onlineUser=j.user;localStorage.setItem('dc_online_token',onlineToken);localStorage.setItem('dc_account',JSON.stringify(j.user));showOnlineApp();connectOnline();toast('Welcome to DC Chat ✓')
  }catch(err){loginError('Server se connection nahi ho raha. Internet check karke dobara try karein.')}
