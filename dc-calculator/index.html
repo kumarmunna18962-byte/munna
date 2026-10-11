@@ -268,26 +268,26 @@
     const got=num('marksGot'),total=num('marksTotal');
     if(got===null||total===null||total<=0||got<0||got>total){resultText('marksResult','Please enter valid marks (obtained marks must not exceed total marks).');return;}
     const pct=got/total*100,grade=pct>=90?'A+ estimate':pct>=80?'A estimate':pct>=70?'B estimate':pct>=60?'C estimate':pct>=50?'D estimate':'Keep practising';
-    resultText('marksResult','Percentage: '+nFmt(pct)+'%\\n'+grade+'\\nMarks left to full score: '+nFmt(total-got));
+    resultText('marksResult','Percentage: '+nFmt(pct)+'%\n'+grade+'\nMarks left to full score: '+nFmt(total-got));
   });
   $('calcMoney').addEventListener('click',()=>{
     const amount=num('priceOriginal'),discount=num('discountRate'),gst=num('gstRate');
     if(amount===null||discount===null||gst===null||amount<0||discount<0||discount>100||gst<0||gst>100){resultText('moneyResult','Enter a valid price, discount (0–100%) and GST rate.');return;}
     const saving=amount*discount/100,taxable=amount-saving,tax=taxable*gst/100,total=taxable+tax;
-    resultText('moneyResult','Final price\\n'+moneyFmt(total)+'\\n\\nOriginal: '+moneyFmt(amount)+'\\nDiscount saved: −'+moneyFmt(saving)+'\\nAfter discount: '+moneyFmt(taxable)+'\\nGST amount: '+moneyFmt(tax));
+    resultText('moneyResult','Final price\n'+moneyFmt(total)+'\n\nOriginal: '+moneyFmt(amount)+'\nDiscount saved: −'+moneyFmt(saving)+'\nAfter discount: '+moneyFmt(taxable)+'\nGST amount: '+moneyFmt(tax));
   });
   $('calcEmi').addEventListener('click',()=>{
     const principal=num('loanAmount'),annual=num('loanRate'),months=num('loanMonths');
     if(principal===null||annual===null||months===null||principal<=0||annual<0||months<1||months>600||!Number.isInteger(months)){resultText('emiResult','Enter a valid loan amount, rate and duration (1–600 months).');return;}
     const r=annual/1200,emi=r===0?principal/months:principal*r*Math.pow(1+r,months)/(Math.pow(1+r,months)-1),paid=emi*months;
-    resultText('emiResult','Estimated monthly EMI\\n'+moneyFmt(emi)+'\\n\\nLoan amount: '+moneyFmt(principal)+'\\nTotal repayment: '+moneyFmt(paid)+'\\nTotal interest: '+moneyFmt(paid-principal));
+    resultText('emiResult','Estimated monthly EMI\n'+moneyFmt(emi)+'\n\nLoan amount: '+moneyFmt(principal)+'\nTotal repayment: '+moneyFmt(paid)+'\nTotal interest: '+moneyFmt(paid-principal));
   });
   const unitMeta={km:{group:'length',factor:1000},m:{group:'length',factor:1},mi:{group:'length',factor:1609.344},ft:{group:'length',factor:.3048},kg:{group:'weight',factor:1000},g:{group:'weight',factor:1},lb:{group:'weight',factor:453.59237},c:{group:'temp'},f:{group:'temp'}};
   function convertValue(v,from,to){if(unitMeta[from].group!==unitMeta[to].group)throw Error('Choose units from the same category.');if(from==='c'){const x=v*9/5+32;return to==='f'?x:v;}if(from==='f'){const x=(v-32)*5/9;return to==='c'?x:v;}return v*unitMeta[from].factor/unitMeta[to].factor;}
   $('calcConvert').addEventListener('click',()=>{
     const v=num('convertValue'),from=$('convertFrom').value,to=$('convertTo').value;
     if(v===null){resultText('convertResult','Enter a numeric value first.');return;}
-    try{const converted=convertValue(v,from,to);resultText('convertResult',nFmt(v)+' '+from+' =\\n'+nFmt(converted)+' '+to);}catch(err){resultText('convertResult',err.message);}
+    try{const converted=convertValue(v,from,to);resultText('convertResult',nFmt(v)+' '+from+' =\n'+nFmt(converted)+' '+to);}catch(err){resultText('convertResult',err.message);}
   });
 
   $('copyText').addEventListener('click',copyResult);
