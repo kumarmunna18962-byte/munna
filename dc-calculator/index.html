@@ -151,7 +151,7 @@
   function saveHistory(){try{localStorage.setItem(HISTORY_KEY,JSON.stringify(history));}catch{}}
   function saveMemory(){try{localStorage.setItem(MEMORY_KEY,String(memory));}catch{}}
   function fmt(n){if(!Number.isFinite(n))return 'Error';if(Object.is(n,-0))n=0;const v=Number.parseFloat(n.toPrecision(12));if(Math.abs(v)>=1e12 || (Math.abs(v)>0&&Math.abs(v)<1e-7))return v.toExponential(6).replace(/\.0+e/,'e');return v.toLocaleString('en-US',{maximumFractionDigits:10,useGrouping:true});}
-  function pretty(s){return String(s).replace(/\*/g,' × ').replace(/\//g,' ÷ ').replace(/\+/g,' + ').replace(/-/g,' − ').replace(/\s+/g,' ').trim();}
+  function pretty(s){return String(s).replace(/\\*/g,' × ').replace(/\\//g,' ÷ ').replace(/\\+/g,' + ').replace(/-/g,' − ').replace(/\\^/g,' ^ ').replace(/\\s+/g,' ').trim();}
   function parse(source){
     let s=String(source).replace(/\\s+/g,'');
     if(!s)return 0;
@@ -199,7 +199,7 @@
     function add(){let a=product();while(tokens[p]&&(tokens[p].t==='+'||tokens[p].t==='-')){const op=tokens[p++].t,b=product(),base=norm(a),rhs=b.pc?base*b.v/100:b.v,v=op==='+'?base+rhs:base-rhs;if(!Number.isFinite(v))throw Error('Math error');a={v,pc:false};}return a.pc?a.v/100:a.v;}
     if(!tokens.length)return 0;const result=add();if(p<tokens.length)throw Error('Invalid expression');if(!Number.isFinite(result))throw Error('Math error');return result;
   }
-  function isIncomplete(s){return !s||/[+\-*/.(]$/.test(s)||/^-?$/.test(s)||/\($/.test(s);}
+  function isIncomplete(s){return !s||/[+\\-*/^.(]$/.test(s)||/^-?$/.test(s)||/\\($/.test(s);}
   function show(){
     expressionEl.textContent=expr?pretty(expr):'Enter a calculation';expressionEl.classList.toggle('empty',!expr);
     let result=0,invalid=false,incomplete=false;
@@ -215,9 +215,9 @@
   function feedback(){try{if(navigator.vibrate&&matchMedia('(pointer:coarse)').matches)navigator.vibrate(7);}catch{}}
   function toast(msg){toastEl.textContent=msg;toastEl.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>toastEl.classList.remove('show'),1800);}
   function currentResult(){try{if(justEvaluated)return lastAnswer;if(!expr||isIncomplete(expr))return null;const n=parse(expr);return Number.isFinite(n)?n:null;}catch{return null;}}
-  function pushDigit(v){feedback();if(justEvaluated){expr='';justEvaluated=false;}if(expr==='0')expr=v;else if(expr==='-0')expr='-'+v;else if(/\)%?$/.test(expr))expr+='*'+v;else expr+=v;show();}
+  function pushDigit(v){feedback();if(justEvaluated){expr='';justEvaluated=false;}if(expr==='0')expr=v;else if(expr==='-0')expr='-'+v;else if(/[)%!]$/.test(expr))expr+='*'+v;else expr+=v;show();}
   function operator(op){feedback();if(justEvaluated){expr=String(lastAnswer);justEvaluated=false;}if(!expr){if(op!=='-')return;expr='-';show();return;}if(/[+\-*/]$/.test(expr)){if(expr.length===1&&expr==='-'&&op!=='-')return;expr=expr.slice(0,-1)+op;}else expr+=op;show();}
-  function decimal(){feedback();if(justEvaluated){expr='0.';justEvaluated=false;show();return;}if(/\)$/.test(expr)||/%$/.test(expr)){expr+='*0.';show();return;}const tail=(expr.match(/(?:^|[+*/(]|(?<!\*)-)(\d*\.?\d*)$/)||[])[1];if(tail&&tail.includes('.'))return;if(!expr||/[+\-*/(]$/.test(expr))expr+='0.';else expr+='.';show();}
+  function decimal(){feedback();if(justEvaluated){expr='0.';justEvaluated=false;show();return;}if(/[)%!]$/.test(expr)){expr+='*0.';show();return;}const tail=(expr.match(/(?:^|[+*/(]|(?<!\\*)-)(\\d*\\.?\\d*)$/)||[])[1];if(tail&&tail.includes('.'))return;if(!expr||/[+\\-*/(]$/.test(expr))expr+='0.';else expr+='.';show();}
   function paren(){feedback();if(justEvaluated){expr='';justEvaluated=false;}const opens=(expr.match(/\(/g)||[]).length,closes=(expr.match(/\)/g)||[]).length;if(!expr||/[+\-*/(]$/.test(expr))expr+='(';else if(opens>closes)expr+=')';else expr+='*(';show();}
   function percent(){feedback();if(justEvaluated){expr=String(lastAnswer);justEvaluated=false;}if(!expr||/[+\-*/(]$/.test(expr)||/%$/.test(expr))return;expr+='%';show();}
   function toggleSign(){feedback();if(justEvaluated){expr=String(-lastAnswer);lastAnswer=-lastAnswer;justEvaluated=false;show();return;}const m=expr.match(/(\d*\.?\d+%?)$/);if(m){const start=expr.length-m[1].length,prefix=expr.slice(0,start),tail=m[1];if(prefix.endsWith('(-'))expr=prefix.slice(0,-2)+'('+tail;else if(prefix.endsWith('-')&&(prefix.length===1||/[+\-*/(]$/.test(prefix.slice(0,-1))))expr=prefix.slice(0,-1)+tail;else expr=prefix+'(-'+tail+')';}else if(expr){expr='-('+expr+')';}else expr='-';justEvaluated=false;show();}
