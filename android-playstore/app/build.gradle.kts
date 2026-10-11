@@ -6,6 +6,13 @@ dependencies {
     implementation("com.android.billingclient:billing:9.1.0")
 }
 
+// Modern Kotlin stdlib bundles the JDK 7/8 extensions; exclude legacy split jars
+// that cause duplicate classes when combined with the current Play Billing library.
+configurations.configureEach {
+    exclude(group = "org.jetbrains.kotlin", module = "kotlin-stdlib-jdk7")
+    exclude(group = "org.jetbrains.kotlin", module = "kotlin-stdlib-jdk8")
+}
+
 val signingPropsFile = rootProject.file("keystore.properties")
 val signingProps = Properties().apply {
     if (signingPropsFile.exists()) signingPropsFile.inputStream().use { load(it) }
