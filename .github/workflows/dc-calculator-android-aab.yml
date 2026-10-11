@@ -6,6 +6,7 @@ on:
       - dc-calculator-android-playstore
     paths:
       - "android-playstore/**"
+      - "dc-calculator/**"
       - ".github/workflows/dc-calculator-android-aab.yml"
   workflow_dispatch:
 
