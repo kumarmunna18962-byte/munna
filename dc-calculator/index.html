@@ -679,7 +679,7 @@
   $('openHistory').addEventListener('click',()=>$('historyPanel').classList.add('open'));$('closeHistory').addEventListener('click',()=>$('historyPanel').classList.remove('open'));
   document.querySelectorAll('[data-memory]').forEach(b=>b.addEventListener('click',()=>memoryAction(b.dataset.memory)));
   try{if(localStorage.getItem(THEME_KEY)==='dark'){$('themeBtn').click();}}catch{}
-  renderHistory();show();
+  renderHistory();show();refreshVipStatus();
   // Read-only test hooks for automated regression checks; no calculator state is changed by exposing these.
   window.DCCalculatorTest={parse,fmt,pretty,setAngleMode:(v)=>{angleMode=v;}};
   if('serviceWorker' in navigator && location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});
