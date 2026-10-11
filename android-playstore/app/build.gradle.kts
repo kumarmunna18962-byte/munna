@@ -2,6 +2,10 @@ import java.util.Properties
 
 plugins { id("com.android.application") }
 
+dependencies {
+    implementation("com.android.billingclient:billing:9.1.0")
+}
+
 val signingPropsFile = rootProject.file("keystore.properties")
 val signingProps = Properties().apply {
     if (signingPropsFile.exists()) signingPropsFile.inputStream().use { load(it) }
