@@ -1,0 +1,14 @@
+{
+  "name": "DC Calculator",
+  "short_name": "DC Calculator",
+  "description": "A polished everyday calculator with history and memory.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f2f4f6",
+  "theme_color": "#f2f4f6",
+  "icons": [
+    {"src":"dc-icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}
+  ]
+}
