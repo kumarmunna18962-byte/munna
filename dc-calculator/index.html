@@ -16,6 +16,43 @@
 @media(max-width:370px){.calculator{padding-left:12px;padding-right:12px}.keypad{gap:7px}.key{height:clamp(49px,8.6vh,66px);min-height:47px;border-radius:16px}.display{min-height:165px}.memory button{font-size:10px}.key.function{font-size:14px}}
 @media(max-height:690px) and (min-width:761px){body{padding:12px}.shell{min-height:calc(100dvh - 24px)}.calculator{padding:17px 20px}.display{min-height:105px;padding:13px 3px 12px}.answer{font-size:clamp(39px,5.2vw,58px)}.key{height:51px;min-height:45px;border-radius:15px}.keypad{gap:7px}.memory{margin-bottom:8px}.history{padding:18px 15px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;scroll-behavior:auto!important}}
+.mode-tabs{display:flex;gap:6px;padding:5px;background:var(--panel-2);border:1px solid var(--line);border-radius:16px;margin:17px 0 0}
+.mode-tab{display:flex;align-items:center;justify-content:center;gap:7px;flex:1;min-width:0;border-radius:11px;background:transparent;color:var(--muted);font-size:12px;font-weight:750;padding:10px 8px;transition:background .16s,color .16s,box-shadow .16s}
+.mode-tab.active{color:#fff;background:linear-gradient(135deg,#5468ef,#7655f5);box-shadow:0 4px 10px rgba(86,89,225,.2)}
+.tab-glyph{font-size:15px;font-weight:850}
+.scientific-panel{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;padding:10px 0 12px;animation:panel-in .18s ease-out}
+.scientific-panel[hidden]{display:none}
+.sci-key{min-height:40px;border-radius:13px;border:1px solid var(--line);background:var(--panel-2);color:var(--text);font-size:13px;font-weight:700;box-shadow:0 2px 3px rgba(31,38,70,.025);transition:transform .1s,background .12s,border .12s;touch-action:manipulation}
+.sci-key:hover{border-color:color-mix(in srgb,var(--accent) 38%,var(--line));background:var(--fn)}.sci-key:active{transform:scale(.97)}
+.angle-row{grid-column:1/-1;display:flex;align-items:center;gap:7px;padding:7px 2px 0;color:var(--muted);font-size:11px;font-weight:700}
+.angle-chip{padding:6px 12px;border-radius:9px;background:var(--key);color:var(--muted);font-size:10px;font-weight:850}
+.angle-chip.active{color:#fff;background:#5468ed}.angle-hint{margin-left:auto;font-size:10px;font-weight:500}
+.tools-overlay{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(13,18,35,.58);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);animation:overlay-in .17s ease}
+.tools-overlay[hidden]{display:none}
+.tools-sheet{width:min(100%,620px);max-height:min(90dvh,900px);overflow:auto;background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:28px;padding:25px;box-shadow:0 30px 90px rgba(0,0,0,.3);animation:sheet-in .2s ease-out}
+.tools-head{display:flex;align-items:flex-start;gap:12px;justify-content:space-between}.tools-kicker{font-size:10px;font-weight:900;letter-spacing:1.8px;color:var(--accent)}.tools-head h2{font-size:28px;letter-spacing:-1px;line-height:1.12;margin:5px 0}.tools-head p{font-size:12px;color:var(--muted);margin:0;line-height:1.5}
+.tool-tabs{display:flex;gap:6px;padding:5px;background:var(--panel-2);border:1px solid var(--line);border-radius:15px;margin:19px 0 17px;overflow-x:auto}
+.tool-tab{flex:1;min-width:max-content;background:transparent;border-radius:10px;padding:10px 12px;font-size:11px;font-weight:800;color:var(--muted)}
+.tool-tab.active{background:var(--panel);color:var(--accent);box-shadow:0 2px 7px rgba(36,47,76,.09)}
+.tool-pane[hidden]{display:none}.tool-pane{animation:panel-in .17s ease}
+.tool-card{display:flex;align-items:center;gap:12px;padding:15px;border:1px solid var(--line);border-radius:17px;margin-bottom:15px;background:linear-gradient(120deg,var(--panel-2),var(--panel))}
+.tool-card-icon{width:45px;height:45px;display:grid;place-items:center;border-radius:14px;font-size:23px;font-weight:850;flex:none;background:#ecebff;color:#5a4bd8}
+.accent-orange .tool-card-icon{background:#fff0df;color:#d9752d}.accent-cyan .tool-card-icon{background:#def8f7;color:#168b91}.accent-violet .tool-card-icon{background:#f0e7ff;color:#8b4ce1}
+.tool-card h3{font-size:14px;margin:0 0 4px}.tool-card p{font-size:11px;color:var(--muted);margin:0;line-height:1.45}
+.tool-pane label{display:flex;flex-direction:column;gap:7px;font-size:11px;font-weight:800;color:var(--muted);margin:12px 0}
+.tool-pane input,.tool-pane select{width:100%;min-width:0;border:1px solid var(--line);border-radius:12px;padding:12px 13px;background:var(--panel-2);color:var(--text);font:600 14px system-ui,-apple-system,sans-serif;outline:0;accent-color:var(--accent)}
+.tool-pane input:focus,.tool-pane select:focus{border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 14%,transparent)}
+.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.tool-primary{display:flex;justify-content:space-between;align-items:center;width:100%;margin-top:14px;padding:14px 16px;border-radius:14px;background:linear-gradient(135deg,#5468ed,#7854ef);color:white;font-size:12px;font-weight:850;box-shadow:0 7px 18px rgba(88,85,230,.22)}
+.tool-primary span{font-size:19px;font-weight:500}
+.tool-result{margin-top:12px;border:1px solid var(--line);border-radius:15px;padding:15px;background:var(--panel-2);color:var(--text);font-size:13px;font-weight:650;line-height:1.6;overflow-wrap:anywhere;white-space:pre-line}
+.tool-result strong{font-size:23px;letter-spacing:-.5px;color:var(--accent)}
+.mini-info{display:flex;gap:10px;align-items:baseline;margin-top:12px;color:var(--muted);font-size:10px;line-height:1.5}.mini-info b{color:var(--text);white-space:nowrap}.mini-info code{font-size:10px}
+.tools-foot{display:flex;justify-content:space-between;gap:10px;padding-top:14px;margin-top:17px;border-top:1px solid var(--line);font-size:10px;color:var(--muted)}
+@keyframes overlay-in{from{opacity:0}to{opacity:1}}@keyframes sheet-in{from{opacity:.7;transform:translateY(10px) scale(.99)}to{opacity:1;transform:none}}@keyframes panel-in{from{opacity:.55;transform:translateY(4px)}to{opacity:1;transform:none}}
+@media(max-width:760px){.mode-tabs{margin-top:14px;border-radius:14px}.mode-tab{font-size:11px;padding:9px 5px;gap:5px}.scientific-panel{gap:6px;padding-top:8px}.sci-key{min-height:40px;border-radius:12px}.angle-hint{display:none}.tools-overlay{align-items:flex-end;padding:0}.tools-sheet{width:100%;max-height:92dvh;border-radius:28px 28px 0 0;padding:22px 17px calc(17px + env(safe-area-inset-bottom));border-bottom:0}.tools-head h2{font-size:25px}.tool-tabs{margin-top:15px}.tool-tab{padding:10px 11px}.tools-foot{font-size:9px}}
+@media(max-width:360px){.mode-tab{font-size:10px}.tab-glyph{display:none}.scientific-panel{gap:5px}.sci-key{font-size:12px}.tools-sheet{padding-left:13px;padding-right:13px}.tool-card{padding:12px}.form-grid{gap:8px}}
+
 </style>
 </head>
 <body>
@@ -30,6 +67,11 @@
       <button class="icon-btn" id="themeBtn" aria-label="Switch color theme" title="Light/dark theme"><svg id="themeIcon" viewBox="0 0 24 24" fill="none"><path d="M20.2 15.3A8.3 8.3 0 0 1 8.7 3.8 8.6 8.6 0 1 0 20.2 15.3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></button>
     </div>
   </header>
+  <nav class="mode-tabs" aria-label="Calculator modes">
+    <button class="mode-tab active" id="basicMode" type="button"><span class="tab-glyph">＋</span> Basic</button>
+    <button class="mode-tab" id="scientificMode" type="button"><span class="tab-glyph">ƒx</span> Scientific</button>
+    <button class="mode-tab" id="studentTools" type="button"><span class="tab-glyph">▦</span> Student tools</button>
+  </nav>
   <section class="display" aria-live="polite" aria-atomic="true">
     <div class="expression-wrap"><div class="expression empty" id="expression">Enter a calculation</div></div>
     <div class="answer preview" id="answer">0</div>
@@ -37,6 +79,14 @@
   </section>
   <section class="memory" aria-label="Memory controls">
     <button data-memory="clear" id="memoryClear" disabled>MC</button><button data-memory="recall" id="memoryRecall" disabled>MR</button><button data-memory="add">M+</button><button data-memory="subtract">M−</button><button data-memory="store">MS</button>
+  </section>
+  <section class="scientific-panel" id="scientificPanel" hidden aria-label="Scientific functions">
+    <button class="sci-key" data-sci="sin">sin</button><button class="sci-key" data-sci="cos">cos</button><button class="sci-key" data-sci="tan">tan</button><button class="sci-key" data-sci="square">x²</button>
+    <button class="sci-key" data-sci="asin">sin⁻¹</button><button class="sci-key" data-sci="acos">cos⁻¹</button><button class="sci-key" data-sci="atan">tan⁻¹</button><button class="sci-key" data-sci="power">xʸ</button>
+    <button class="sci-key" data-sci="sqrt">√x</button><button class="sci-key" data-sci="cbrt">∛x</button><button class="sci-key" data-sci="reciprocal">1/x</button><button class="sci-key" data-sci="factorial">x!</button>
+    <button class="sci-key" data-sci="log">log</button><button class="sci-key" data-sci="ln">ln</button><button class="sci-key" data-sci="abs">|x|</button><button class="sci-key" data-sci="exp">eˣ</button>
+    <button class="sci-key" data-sci="pi">π</button><button class="sci-key" data-sci="e">e</button><button class="sci-key" data-sci="paren">( )</button><button class="sci-key" data-sci="ans">ANS</button>
+    <div class="angle-row"><span>Angle unit</span><button type="button" class="angle-chip active" id="degrees">DEG</button><button type="button" class="angle-chip" id="radians">RAD</button><span class="angle-hint">Trigonometry uses the selected unit</span></div>
   </section>
   <section class="keypad" id="keypad" aria-label="Calculator keypad">
     <button class="key function" data-action="clear" aria-label="All clear">AC</button>
@@ -53,6 +103,41 @@
   <div class="history-list" id="historyList"></div><div class="history-bottom">Calculations stay on this device.<br>Tip: use your keyboard for faster input.</div>
 </aside>
 </main>
+<div class="tools-overlay" id="toolsOverlay" hidden>
+  <section class="tools-sheet" role="dialog" aria-modal="true" aria-labelledby="toolsTitle">
+    <header class="tools-head"><div><div class="tools-kicker">DC CALCULATOR PLUS</div><h2 id="toolsTitle">Smart tools</h2><p>Useful calculations for school and everyday life.</p></div><button class="icon-btn" id="closeTools" aria-label="Close tools">×</button></header>
+    <nav class="tool-tabs" aria-label="Smart tools">
+      <button class="tool-tab active" data-tool-tab="student">Student</button><button class="tool-tab" data-tool-tab="money">GST &amp; Discount</button><button class="tool-tab" data-tool-tab="emi">EMI</button><button class="tool-tab" data-tool-tab="convert">Convert</button>
+    </nav>
+    <section class="tool-pane active" id="tool-student">
+      <div class="tool-card accent-indigo"><div class="tool-card-icon">％</div><div><h3>Marks &amp; percentage</h3><p>Calculate marks percentage and a simple grade estimate.</p></div></div>
+      <div class="form-grid"><label>Marks obtained<input id="marksGot" type="number" inputmode="decimal" min="0" placeholder="e.g. 420"></label><label>Total marks<input id="marksTotal" type="number" inputmode="decimal" min="1" placeholder="e.g. 500"></label></div>
+      <button class="tool-primary" id="calcMarks">Calculate percentage <span>→</span></button><div class="tool-result" id="marksResult" aria-live="polite">Enter your marks to see the result.</div>
+      <div class="mini-info"><b>Formula</b><code>(Obtained ÷ Total) × 100</code></div>
+    </section>
+    <section class="tool-pane" id="tool-money" hidden>
+      <div class="tool-card accent-orange"><div class="tool-card-icon">₹</div><div><h3>GST &amp; discount</h3><p>Find the final price after discount and GST.</p></div></div>
+      <label>Original price (₹)<input id="priceOriginal" type="number" inputmode="decimal" min="0" placeholder="e.g. 999"></label>
+      <div class="form-grid"><label>Discount (%)<input id="discountRate" type="number" inputmode="decimal" min="0" max="100" value="10"></label><label>GST (%)<input id="gstRate" type="number" inputmode="decimal" min="0" value="18"></label></div>
+      <button class="tool-primary" id="calcMoney">Calculate final price <span>→</span></button><div class="tool-result" id="moneyResult" aria-live="polite">Your price breakdown will appear here.</div>
+      <div class="mini-info"><b>Note</b><span>Estimation only. Actual GST treatment can vary by transaction.</span></div>
+    </section>
+    <section class="tool-pane" id="tool-emi" hidden>
+      <div class="tool-card accent-cyan"><div class="tool-card-icon">↗</div><div><h3>EMI calculator</h3><p>Estimate monthly loan instalments.</p></div></div>
+      <label>Loan amount (₹)<input id="loanAmount" type="number" inputmode="decimal" min="1" placeholder="e.g. 250000"></label>
+      <div class="form-grid"><label>Annual interest (%)<input id="loanRate" type="number" inputmode="decimal" min="0" value="10"></label><label>Duration (months)<input id="loanMonths" type="number" inputmode="numeric" min="1" max="600" value="36"></label></div>
+      <button class="tool-primary" id="calcEmi">Calculate EMI <span>→</span></button><div class="tool-result" id="emiResult" aria-live="polite">Your EMI estimate will appear here.</div>
+      <div class="mini-info"><b>Reminder</b><span>Final lender charges and rounding may differ.</span></div>
+    </section>
+    <section class="tool-pane" id="tool-convert" hidden>
+      <div class="tool-card accent-violet"><div class="tool-card-icon">⇄</div><div><h3>Quick unit converter</h3><p>Convert length, weight and temperature.</p></div></div>
+      <label>Value<input id="convertValue" type="number" inputmode="decimal" value="1"></label>
+      <div class="form-grid"><label>From<select id="convertFrom"><option value="km">Kilometres (km)</option><option value="m">Metres (m)</option><option value="mi">Miles (mi)</option><option value="ft">Feet (ft)</option><option value="kg">Kilograms (kg)</option><option value="g">Grams (g)</option><option value="lb">Pounds (lb)</option><option value="c">Celsius (°C)</option><option value="f">Fahrenheit (°F)</option></select></label><label>To<select id="convertTo"><option value="mi">Miles (mi)</option><option value="km">Kilometres (km)</option><option value="m">Metres (m)</option><option value="ft">Feet (ft)</option><option value="kg">Kilograms (kg)</option><option value="g">Grams (g)</option><option value="lb">Pounds (lb)</option><option value="c">Celsius (°C)</option><option value="f">Fahrenheit (°F)</option></select></label></div>
+      <button class="tool-primary" id="calcConvert">Convert units <span>→</span></button><div class="tool-result" id="convertResult" aria-live="polite">1 kilometre = 0.621371 miles</div>
+    </section>
+    <footer class="tools-foot"><span>✓ Calculations happen on your device</span><span>DC Calculator</span></footer>
+  </section>
+</div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <script>
 (() => {
@@ -60,37 +145,61 @@
   const $ = id => document.getElementById(id);
   const expressionEl=$('expression'), answerEl=$('answer'), statusEl=$('status'), keypad=$('keypad'), toastEl=$('toast');
   const HISTORY_KEY='dc-calculator-history-v2', THEME_KEY='dc-calculator-theme-v2', MEMORY_KEY='dc-calculator-memory-v2';
-  let expr='', justEvaluated=false, lastAnswer=0, history=[], memory=0, toastTimer=null;
+  let expr='', justEvaluated=false, lastAnswer=0, history=[], memory=0, toastTimer=null, angleMode='DEG';
   try { history=JSON.parse(localStorage.getItem(HISTORY_KEY)||'[]'); if(!Array.isArray(history))history=[]; history=history.filter(x=>x&&typeof x.e==='string'&&Number.isFinite(x.n)).slice(0,30); } catch {history=[];}
   try {const savedMemory=Number(localStorage.getItem(MEMORY_KEY));if(Number.isFinite(savedMemory))memory=savedMemory;}catch{}
   function saveHistory(){try{localStorage.setItem(HISTORY_KEY,JSON.stringify(history));}catch{}}
   function saveMemory(){try{localStorage.setItem(MEMORY_KEY,String(memory));}catch{}}
   function fmt(n){if(!Number.isFinite(n))return 'Error';if(Object.is(n,-0))n=0;const v=Number.parseFloat(n.toPrecision(12));if(Math.abs(v)>=1e12 || (Math.abs(v)>0&&Math.abs(v)<1e-7))return v.toExponential(6).replace(/\.0+e/,'e');return v.toLocaleString('en-US',{maximumFractionDigits:10,useGrouping:true});}
-  function pretty(s){return String(s).replace(/\*/g,' × ').replace(/\//g,' ÷ ').replace(/\+/g,' + ').replace(/-/g,' − ').replace(/\s+/g,' ').trim();}
+  function pretty(s){return String(s).replace(/\\*/g,' × ').replace(/\\//g,' ÷ ').replace(/\\+/g,' + ').replace(/-/g,' − ').replace(/\\^/g,' ^ ').replace(/\\s+/g,' ').trim();}
   function parse(source){
-    let s=String(source).replace(/\s+/g,'');
+    let s=String(source).replace(/\\s+/g,'');
     if(!s)return 0;
-    // Implicit multiplication is supported: 2(3+4), (2+3)(4), 2π is intentionally not supported.
-    s=s.replace(/(\d|\))(?=\()/g,'$1*').replace(/\)(?=\d)/g,')*');
-    const tokens=[];let i=0;
-    while(i<s.length){const ch=s[i];
-      if(/[0-9.]/.test(ch)){let raw='',dots=0;while(i<s.length&&/[0-9.]/.test(s[i])){if(s[i]==='.')dots++;raw+=s[i++];}if(dots>1||raw==='.'||!Number.isFinite(Number(raw)))throw Error('Invalid number');tokens.push({t:'n',v:Number(raw)});continue;}
-      if('+-*/()%'.includes(ch)){tokens.push({t:ch});i++;continue;}throw Error('Invalid input');
+    const raw=[];let i=0;
+    while(i<s.length){
+      const ch=s[i];
+      if(/[0-9.]/.test(ch)){let n='',dots=0;while(i<s.length&&/[0-9.]/.test(s[i])){if(s[i]==='.')dots++;n+=s[i++];}if(dots>1||n==='.'||!Number.isFinite(Number(n)))throw Error('Invalid number');raw.push({t:'n',v:Number(n)});continue;}
+      if(/[a-zA-Z]/.test(ch)){let id='';while(i<s.length&&/[a-zA-Z]/.test(s[i]))id+=s[i++];raw.push({t:'id',v:id.toLowerCase()});continue;}
+      if('+-*/^()%!,'.includes(ch)){raw.push({t:ch});i++;continue;}throw Error('Invalid input');
     }
-    let p=0;
-    function primary(){let t=tokens[p];if(!t)throw Error('Incomplete');let out;
-      if(t.t==='+'||t.t==='-'){p++;out=primary();if(t.t==='-')out={v:-out.v,pc:out.pc};}
-      else if(t.t==='n'){p++;out={v:t.v,pc:false};}
-      else if(t.t==='('){p++;const v=sum();if(tokens[p]?.t!==')')throw Error('Bracket');p++;out={v,pc:false};}
+    const fnNames=new Set(['sin','cos','tan','asin','acos','atan','sqrt','cbrt','abs','ln','log','exp','floor','ceil','round']);
+    const ends=t=>t&&(t.t==='n'||t.t===')'||t.t==='%'||t.t==='!'||(t.t==='id'&&!fnNames.has(t.v)));
+    const begins=t=>t&&(t.t==='n'||t.t==='('||t.t==='id');
+    const tokens=[];
+    for(let k=0;k<raw.length;k++){const prev=raw[k-1],cur=raw[k];if(prev&&ends(prev)&&begins(cur)){const call=prev.t==='id'&&fnNames.has(prev.v)&&cur.t==='(';if(!call)tokens.push({t:'*'});}tokens.push(cur);}
+    let p=0;const norm=a=>a.pc?a.v/100:a.v;
+    function primary(){
+      const t=tokens[p];if(!t)throw Error('Incomplete');let out;
+      if(t.t==='n'){p++;out={v:t.v,pc:false};}
+      else if(t.t==='id'){
+        p++;
+        if(fnNames.has(t.v)){
+          if(tokens[p]?.t!=='(')throw Error('Function needs parentheses');p++;const a={v:add(),pc:false};if(tokens[p]?.t!==')')throw Error('Bracket');p++;
+          const rad=angleMode==='DEG'?Math.PI/180:1;let v;
+          switch(t.v){
+            case'sin':v=Math.sin(norm(a)*rad);break;case'cos':v=Math.cos(norm(a)*rad);break;case'tan':v=Math.tan(norm(a)*rad);break;
+            case'asin':v=Math.asin(norm(a))/rad;break;case'acos':v=Math.acos(norm(a))/rad;break;case'atan':v=Math.atan(norm(a))/rad;break;
+            case'sqrt':if(norm(a)<0)throw Error('Domain');v=Math.sqrt(norm(a));break;case'cbrt':v=Math.cbrt(norm(a));break;case'abs':v=Math.abs(norm(a));break;
+            case'ln':if(norm(a)<=0)throw Error('Domain');v=Math.log(norm(a));break;case'log':if(norm(a)<=0)throw Error('Domain');v=Math.log10(norm(a));break;case'exp':v=Math.exp(norm(a));break;
+            case'floor':v=Math.floor(norm(a));break;case'ceil':v=Math.ceil(norm(a));break;case'round':v=Math.round(norm(a));break;default:throw Error('Unsupported function');
+          }
+          if(!Number.isFinite(v))throw Error('Math error');out={v,pc:false};
+        }else if(t.v==='pi')out={v:Math.PI,pc:false};else if(t.v==='e')out={v:Math.E,pc:false};else if(t.v==='ans')out={v:lastAnswer,pc:false};else throw Error('Unknown value');
+      }else if(t.t==='('){p++;const v=add();if(tokens[p]?.t!==')')throw Error('Bracket');p++;out={v,pc:false};}
       else throw Error('Incomplete');
-      while(tokens[p]?.t==='%'){p++;out={v:out.v,pc:true};}
+      while(tokens[p]&&(tokens[p].t==='%'||tokens[p].t==='!')){
+        const op=tokens[p++].t;if(op==='%')out={v:out.v,pc:true};
+        else{const n=norm(out);if(n<0||n>170||!Number.isInteger(n))throw Error('Factorial domain');let v=1;for(let j=2;j<=n;j++)v*=j;out={v,pc:false};}
+      }
       return out;
     }
-    function product(){let a=primary();while(tokens[p]&&(tokens[p].t==='*'||tokens[p].t==='/')){const op=tokens[p++].t,b=primary();const av=a.pc?a.v/100:a.v;const bv=b.pc?b.v/100:b.v;let v=op==='*'?av*bv:av/bv;if(!Number.isFinite(v))throw Error('Math error');a={v,pc:false};}return a;}
-    function sum(){let a=product();if(a.pc)a={v:a.v/100,pc:false};while(tokens[p]&&(tokens[p].t==='+'||tokens[p].t==='-')){const op=tokens[p++].t;let b=product();const n=b.pc?a.v*b.v/100:b.v;let v=op==='+'?a.v+n:a.v-n;if(!Number.isFinite(v))throw Error('Math error');a={v,pc:false};}return a.v;}
-    if(!tokens.length)return 0;const result=sum();if(p<tokens.length)throw Error('Invalid expression');if(!Number.isFinite(result))throw Error('Math error');return result;
+    function unary(){if(tokens[p]?.t==='+'){p++;return unary();}if(tokens[p]?.t==='-'){p++;const a=unary();return {v:-a.v,pc:a.pc};}return power();}
+    function power(){let a=primary();if(tokens[p]?.t==='^'){p++;const b=unary();const v=Math.pow(norm(a),norm(b));if(!Number.isFinite(v))throw Error('Math error');a={v,pc:false};}return a;}
+    function product(){let a=unary();while(tokens[p]&&(tokens[p].t==='*'||tokens[p].t==='/')){const op=tokens[p++].t,b=unary(),av=norm(a),bv=norm(b);if(op==='/'&&bv===0)throw Error('Cannot divide by zero');const v=op==='*'?av*bv:av/bv;if(!Number.isFinite(v))throw Error('Math error');a={v,pc:false};}return a;}
+    function add(){let a=product();while(tokens[p]&&(tokens[p].t==='+'||tokens[p].t==='-')){const op=tokens[p++].t,b=product(),base=norm(a),rhs=b.pc?base*b.v/100:b.v,v=op==='+'?base+rhs:base-rhs;if(!Number.isFinite(v))throw Error('Math error');a={v,pc:false};}return a.pc?a.v/100:a.v;}
+    if(!tokens.length)return 0;const result=add();if(p<tokens.length)throw Error('Invalid expression');if(!Number.isFinite(result))throw Error('Math error');return result;
   }
-  function isIncomplete(s){return !s||/[+\-*/.(]$/.test(s)||/^-?$/.test(s)||/\($/.test(s);}
+  function isIncomplete(s){const t=String(s||'').slice(-1);return !s||['+','-','*','/','^','.','('].includes(t)||s==='-';}
   function show(){
     expressionEl.textContent=expr?pretty(expr):'Enter a calculation';expressionEl.classList.toggle('empty',!expr);
     let result=0,invalid=false,incomplete=false;
@@ -106,9 +215,9 @@
   function feedback(){try{if(navigator.vibrate&&matchMedia('(pointer:coarse)').matches)navigator.vibrate(7);}catch{}}
   function toast(msg){toastEl.textContent=msg;toastEl.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>toastEl.classList.remove('show'),1800);}
   function currentResult(){try{if(justEvaluated)return lastAnswer;if(!expr||isIncomplete(expr))return null;const n=parse(expr);return Number.isFinite(n)?n:null;}catch{return null;}}
-  function pushDigit(v){feedback();if(justEvaluated){expr='';justEvaluated=false;}if(expr==='0')expr=v;else if(expr==='-0')expr='-'+v;else if(/\)%?$/.test(expr))expr+='*'+v;else expr+=v;show();}
-  function operator(op){feedback();if(justEvaluated){expr=String(lastAnswer);justEvaluated=false;}if(!expr){if(op!=='-')return;expr='-';show();return;}if(/[+\-*/]$/.test(expr)){if(expr.length===1&&expr==='-'&&op!=='-')return;expr=expr.slice(0,-1)+op;}else expr+=op;show();}
-  function decimal(){feedback();if(justEvaluated){expr='0.';justEvaluated=false;show();return;}if(/\)$/.test(expr)||/%$/.test(expr)){expr+='*0.';show();return;}const tail=(expr.match(/(?:^|[+*/(]|(?<!\*)-)(\d*\.?\d*)$/)||[])[1];if(tail&&tail.includes('.'))return;if(!expr||/[+\-*/(]$/.test(expr))expr+='0.';else expr+='.';show();}
+  function pushDigit(v){feedback();if(justEvaluated){expr='';justEvaluated=false;}if(expr==='0')expr=v;else if(expr==='-0')expr='-'+v;else if(/[)%!]$/.test(expr))expr+='*'+v;else expr+=v;show();}
+  function operator(op){feedback();if(justEvaluated){expr=String(lastAnswer);justEvaluated=false;}if(!expr){if(op!=='-')return;expr='-';show();return;}if(['+','-','*','/','^'].includes(expr.slice(-1))){if(expr.length===1&&expr==='-'&&op!=='-')return;expr=expr.slice(0,-1)+op;}else expr+=op;show();}
+  function decimal(){feedback();if(justEvaluated){expr='0.';justEvaluated=false;show();return;}if(/[)%!]$/.test(expr)){expr+='*0.';show();return;}const ops=['+','-','*','/','^','('];let at=-1;for(const op of ops)at=Math.max(at,expr.lastIndexOf(op));const tail=expr.slice(at+1);if(tail.includes('.'))return;if(!expr||ops.includes(expr.slice(-1)))expr+='0.';else expr+='.';show();}
   function paren(){feedback();if(justEvaluated){expr='';justEvaluated=false;}const opens=(expr.match(/\(/g)||[]).length,closes=(expr.match(/\)/g)||[]).length;if(!expr||/[+\-*/(]$/.test(expr))expr+='(';else if(opens>closes)expr+=')';else expr+='*(';show();}
   function percent(){feedback();if(justEvaluated){expr=String(lastAnswer);justEvaluated=false;}if(!expr||/[+\-*/(]$/.test(expr)||/%$/.test(expr))return;expr+='%';show();}
   function toggleSign(){feedback();if(justEvaluated){expr=String(-lastAnswer);lastAnswer=-lastAnswer;justEvaluated=false;show();return;}const m=expr.match(/(\d*\.?\d+%?)$/);if(m){const start=expr.length-m[1].length,prefix=expr.slice(0,start),tail=m[1];if(prefix.endsWith('(-'))expr=prefix.slice(0,-2)+'('+tail;else if(prefix.endsWith('-')&&(prefix.length===1||/[+\-*/(]$/.test(prefix.slice(0,-1))))expr=prefix.slice(0,-1)+tail;else expr=prefix+'(-'+tail+')';}else if(expr){expr='-('+expr+')';}else expr='-';justEvaluated=false;show();}
@@ -118,19 +227,76 @@
   function renderHistory(){const root=$('historyList');root.replaceChildren();$('historyCount').textContent=String(history.length);if(!history.length){const empty=document.createElement('div');empty.className='empty-history';empty.innerHTML='<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5"/><path d="M12 7v5l3 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>No calculations yet.<br>Your recent results will appear here.';root.append(empty);return;}for(const item of history){const btn=document.createElement('button');btn.className='history-item';btn.type='button';const e=document.createElement('div');e.className='history-expr';e.textContent=pretty(item.e)+' =';const n=document.createElement('div');n.className='history-result';n.textContent=fmt(item.n);const at=document.createElement('div');at.className='history-time';at.textContent=new Date(item.at||Date.now()).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});btn.append(e,n,at);btn.addEventListener('click',()=>{expr=String(item.n);lastAnswer=item.n;justEvaluated=true;show();$('historyPanel').classList.remove('open');});root.append(btn);}}
   function equals(){feedback();if(!expr)return;try{const original=expr,n=parse(expr);if(!Number.isFinite(n))throw Error('Math error');lastAnswer=n;addHistory(original,n);expr=String(Number(n.toPrecision(12)));justEvaluated=true;show();statusEl.textContent='Calculated';}catch{answerEl.textContent='Cannot calculate';answerEl.classList.remove('preview');answerEl.classList.add('error');statusEl.textContent='Check expression';toast('Please check the expression');}}
   function updateMemoryButtons(){const has=memory!==0;$('memoryClear').disabled=!has;$('memoryRecall').disabled=!has;}
-  function memoryAction(action){const value=currentResult();switch(action){case'clear':memory=0;break;case'recall':if(memory!==0){if(justEvaluated||!expr){expr=String(memory);justEvaluated=false;}else if(/[+\-*/(]$/.test(expr)){expr+=String(memory);}else{expr+='*'+String(memory);}show();}break;case'add':if(value===null){toast('Enter a valid calculation first');return;}memory+=value;break;case'subtract':if(value===null){toast('Enter a valid calculation first');return;}memory-=value;break;case'store':if(value===null){toast('Enter a valid calculation first');return;}memory=value;break;}saveMemory();updateMemoryButtons();toast(action==='clear'?'Memory cleared':action==='recall'?'Memory recalled':'Memory updated');}
+  function memoryAction(action){const value=currentResult();switch(action){case'clear':memory=0;break;case'recall':if(memory!==0){if(justEvaluated||!expr){expr=String(memory);justEvaluated=false;}else if(['+','-','*','/','^','('].includes(expr.slice(-1))){expr+=String(memory);}else{expr+='*'+String(memory);}show();}break;case'add':if(value===null){toast('Enter a valid calculation first');return;}memory+=value;break;case'subtract':if(value===null){toast('Enter a valid calculation first');return;}memory-=value;break;case'store':if(value===null){toast('Enter a valid calculation first');return;}memory=value;break;}saveMemory();updateMemoryButtons();toast(action==='clear'?'Memory cleared':action==='recall'?'Memory recalled':'Memory updated');}
   async function copyResult(){const value=currentResult();if(value===null){toast('No valid result to copy');return;}try{await navigator.clipboard.writeText(String(value));toast('Result copied');}catch{const ta=document.createElement('textarea');ta.value=String(value);ta.style.position='fixed';ta.style.opacity='0';document.body.append(ta);ta.select();const ok=document.execCommand('copy');ta.remove();toast(ok?'Result copied':'Copy is unavailable in this browser');}}
   keypad.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.num!==undefined){pushDigit(b.dataset.num);return;}if(b.dataset.op){operator(b.dataset.op);return;}switch(b.dataset.action){case'clear':clear();break;case'backspace':backspace();break;case'decimal':decimal();break;case'sign':toggleSign();break;case'percent':percent();break;case'paren':paren();break;case'equals':equals();break;}});
-  document.addEventListener('keydown',e=>{if(e.ctrlKey||e.metaKey||e.altKey)return;const k=e.key;if(/^[0-9]$/.test(k)){pushDigit(k);e.preventDefault();}else if(k==='.'){decimal();e.preventDefault();}else if(['+','-','*','/'].includes(k)){operator(k);e.preventDefault();}else if(k==='%'){percent();e.preventDefault();}else if(k==='('||k===')'){feedback();if(k==='('){if(justEvaluated){expr='';justEvaluated=false;}if(expr&&/[\d)%]$/.test(expr))expr+='*';expr+='(';}else{const opens=(expr.match(/\(/g)||[]).length,closes=(expr.match(/\)/g)||[]).length;if(opens>closes&&!/[+\-*/(]$/.test(expr))expr+=')';}show();e.preventDefault();}else if(k==='Enter'||k==='='){equals();e.preventDefault();}else if(k==='Backspace'){backspace();e.preventDefault();}else if(k==='Escape'||k==='Delete'){clear();e.preventDefault();}});
+  document.addEventListener('keydown',e=>{if(e.ctrlKey||e.metaKey||e.altKey)return;const k=e.key;if(/^[0-9]$/.test(k)){pushDigit(k);e.preventDefault();}else if(k==='.'){decimal();e.preventDefault();}else if(['+','-','*','/','^'].includes(k)){operator(k);e.preventDefault();}else if(k==='%'){percent();e.preventDefault();}else if(k==='('||k===')'){feedback();if(k==='('){if(justEvaluated){expr='';justEvaluated=false;}if(expr&&/[\d)%]$/.test(expr))expr+='*';expr+='(';}else{const opens=(expr.match(/\(/g)||[]).length,closes=(expr.match(/\)/g)||[]).length;if(opens>closes&&!/[+\-*/(]$/.test(expr))expr+=')';}show();e.preventDefault();}else if(k==='Enter'||k==='='){equals();e.preventDefault();}else if(k==='Backspace'){backspace();e.preventDefault();}else if(k==='Escape'||k==='Delete'){clear();e.preventDefault();}});
   $('clearHistory').addEventListener('click',()=>{history=[];saveHistory();renderHistory();toast('History cleared');});
   $('themeBtn').addEventListener('click',()=>{const dark=document.documentElement.dataset.theme!=='dark';document.documentElement.dataset.theme=dark?'dark':'light';try{localStorage.setItem(THEME_KEY,dark?'dark':'light');}catch{}$('themeIcon').innerHTML=dark?'<circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.8"/><path d="M12 2v2m0 16v2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M2 12h2m16 0h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>':'<path d="M20.2 15.3A8.3 8.3 0 0 1 8.7 3.8 8.6 8.6 0 1 0 20.2 15.3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>';document.querySelector('meta[name="theme-color"]').content=dark?'#0d111b':'#edf0f7';});
+
+  function setScientific(on){$('scientificPanel').hidden=!on;$('scientificMode').classList.toggle('active',on);$('basicMode').classList.toggle('active',!on);if(on)setTimeout(()=>document.querySelector('.scientific-panel')?.scrollIntoView({block:'nearest',behavior:'smooth'}),30);}
+  function appendToken(token){feedback();if(justEvaluated){expr=String(lastAnswer);justEvaluated=false;}if(!expr)expr=token;else if(/[0-9)%!]$/.test(expr)&&/^(pi|e|ans|sin|cos|tan|sqrt|cbrt|abs|ln|log|exp|asin|acos|atan)\\b/.test(token))expr+='*'+token;else expr+=token;show();}
+  function applyScientific(action){
+    feedback();
+    if(action==='paren'){paren();return;}
+    if(action==='power'){operator('^');return;}
+    if(action==='pi'||action==='e'||action==='ans'){appendToken(action==='ans'?String(lastAnswer):action);return;}
+    let base=justEvaluated?String(lastAnswer):expr;
+    if(action==='factorial'){if(!base){toast('Enter a value first');return;}expr='('+base+')!';justEvaluated=false;show();return;}
+    if(action==='square'){if(!base){toast('Enter a value first');return;}expr='('+base+')^2';justEvaluated=false;show();return;}
+    if(action==='reciprocal'){if(!base){expr='1/(';justEvaluated=false;show();return;}expr='1/('+base+')';justEvaluated=false;show();return;}
+    if(action==='exp'){if(!base){expr='exp(';justEvaluated=false;show();return;}expr='exp('+base+')';justEvaluated=false;show();return;}
+    const fn={sin:'sin',cos:'cos',tan:'tan',asin:'asin',acos:'acos',atan:'atan',sqrt:'sqrt',cbrt:'cbrt',log:'log',ln:'ln',abs:'abs'}[action];
+    if(fn){expr=base&&!isIncomplete(base)?fn+'('+base+')':fn+'(';justEvaluated=false;show();}
+  }
+  function toolTab(name){document.querySelectorAll('[data-tool-tab]').forEach(b=>b.classList.toggle('active',b.dataset.toolTab===name));document.querySelectorAll('.tool-pane').forEach(p=>{p.hidden=p.id!=='tool-'+name;p.classList.toggle('active',!p.hidden);});}
+  function num(id){const raw=$(id).value.trim();if(raw==='')return null;const v=Number(raw);return Number.isFinite(v)?v:null;}
+  const moneyFmt=n=>'₹'+Number(n).toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2});
+  const nFmt=n=>Number(n).toLocaleString('en-IN',{maximumFractionDigits:10});
+  function resultText(id,msg){$(id).textContent=msg;}
+  $('basicMode').addEventListener('click',()=>setScientific(false));
+  $('scientificMode').addEventListener('click',()=>setScientific(!$('scientificPanel').hidden));
+  $('studentTools').addEventListener('click',()=>{$('toolsOverlay').hidden=false;toolTab('student');});
+  $('closeTools').addEventListener('click',()=>$('toolsOverlay').hidden=true);
+  $('toolsOverlay').addEventListener('click',e=>{if(e.target===$('toolsOverlay'))$('toolsOverlay').hidden=true;});
+  document.querySelectorAll('[data-tool-tab]').forEach(b=>b.addEventListener('click',()=>toolTab(b.dataset.toolTab)));
+  document.querySelectorAll('[data-sci]').forEach(b=>b.addEventListener('click',()=>applyScientific(b.dataset.sci)));
+  $('degrees').addEventListener('click',()=>{angleMode='DEG';$('degrees').classList.add('active');$('radians').classList.remove('active');show();toast('Angle unit: degrees');});
+  $('radians').addEventListener('click',()=>{angleMode='RAD';$('radians').classList.add('active');$('degrees').classList.remove('active');show();toast('Angle unit: radians');});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('toolsOverlay').hidden){$('toolsOverlay').hidden=true;}});
+  $('calcMarks').addEventListener('click',()=>{
+    const got=num('marksGot'),total=num('marksTotal');
+    if(got===null||total===null||total<=0||got<0||got>total){resultText('marksResult','Please enter valid marks (obtained marks must not exceed total marks).');return;}
+    const pct=got/total*100,grade=pct>=90?'A+ estimate':pct>=80?'A estimate':pct>=70?'B estimate':pct>=60?'C estimate':pct>=50?'D estimate':'Keep practising';
+    resultText('marksResult','Percentage: '+nFmt(pct)+'%\n'+grade+'\nMarks left to full score: '+nFmt(total-got));
+  });
+  $('calcMoney').addEventListener('click',()=>{
+    const amount=num('priceOriginal'),discount=num('discountRate'),gst=num('gstRate');
+    if(amount===null||discount===null||gst===null||amount<0||discount<0||discount>100||gst<0||gst>100){resultText('moneyResult','Enter a valid price, discount (0–100%) and GST rate.');return;}
+    const saving=amount*discount/100,taxable=amount-saving,tax=taxable*gst/100,total=taxable+tax;
+    resultText('moneyResult','Final price\n'+moneyFmt(total)+'\n\nOriginal: '+moneyFmt(amount)+'\nDiscount saved: −'+moneyFmt(saving)+'\nAfter discount: '+moneyFmt(taxable)+'\nGST amount: '+moneyFmt(tax));
+  });
+  $('calcEmi').addEventListener('click',()=>{
+    const principal=num('loanAmount'),annual=num('loanRate'),months=num('loanMonths');
+    if(principal===null||annual===null||months===null||principal<=0||annual<0||months<1||months>600||!Number.isInteger(months)){resultText('emiResult','Enter a valid loan amount, rate and duration (1–600 months).');return;}
+    const r=annual/1200,emi=r===0?principal/months:principal*r*Math.pow(1+r,months)/(Math.pow(1+r,months)-1),paid=emi*months;
+    resultText('emiResult','Estimated monthly EMI\n'+moneyFmt(emi)+'\n\nLoan amount: '+moneyFmt(principal)+'\nTotal repayment: '+moneyFmt(paid)+'\nTotal interest: '+moneyFmt(paid-principal));
+  });
+  const unitMeta={km:{group:'length',factor:1000},m:{group:'length',factor:1},mi:{group:'length',factor:1609.344},ft:{group:'length',factor:.3048},kg:{group:'weight',factor:1000},g:{group:'weight',factor:1},lb:{group:'weight',factor:453.59237},c:{group:'temp'},f:{group:'temp'}};
+  function convertValue(v,from,to){if(unitMeta[from].group!==unitMeta[to].group)throw Error('Choose units from the same category.');if(from==='c'){const x=v*9/5+32;return to==='f'?x:v;}if(from==='f'){const x=(v-32)*5/9;return to==='c'?x:v;}return v*unitMeta[from].factor/unitMeta[to].factor;}
+  $('calcConvert').addEventListener('click',()=>{
+    const v=num('convertValue'),from=$('convertFrom').value,to=$('convertTo').value;
+    if(v===null){resultText('convertResult','Enter a numeric value first.');return;}
+    try{const converted=convertValue(v,from,to);resultText('convertResult',nFmt(v)+' '+from+' =\n'+nFmt(converted)+' '+to);}catch(err){resultText('convertResult',err.message);}
+  });
+
   $('copyText').addEventListener('click',copyResult);
   $('openHistory').addEventListener('click',()=>$('historyPanel').classList.add('open'));$('closeHistory').addEventListener('click',()=>$('historyPanel').classList.remove('open'));
   document.querySelectorAll('[data-memory]').forEach(b=>b.addEventListener('click',()=>memoryAction(b.dataset.memory)));
   try{if(localStorage.getItem(THEME_KEY)==='dark'){$('themeBtn').click();}}catch{}
   renderHistory();show();
   // Read-only test hooks for automated regression checks; no calculator state is changed by exposing these.
-  window.DCCalculatorTest={parse,fmt,pretty};
+  window.DCCalculatorTest={parse,fmt,pretty,setAngleMode:(v)=>{angleMode=v;}};
   if('serviceWorker' in navigator && location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});
 })();
 </script>
