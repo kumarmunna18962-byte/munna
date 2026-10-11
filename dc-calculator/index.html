@@ -400,12 +400,20 @@
     aurora:{bg:'#e9f8f3',panel:'#ffffff',panel2:'#e1f4ed',screen:'#f4fffa',text:'#142d2b',muted:'#678c85',line:'#c7e6dc',key:'#e4f6ef',keyHover:'#d4eee3',fn:'#def7eb',accent:'#0b8f79',accentHi:'#26bfa7',accentInk:'#ffffff'},
     sunset:{bg:'#fff1e8',panel:'#fffaf7',panel2:'#ffeadf',screen:'#fffaf7',text:'#3a2431',muted:'#9b7989',line:'#f3d6dd',key:'#fae6e8',keyHover:'#f6d5de',fn:'#ffe7cc',accent:'#de5d8b',accentHi:'#ff9945',accentInk:'#ffffff'}
   };
+  function applyVipPaletteVars(name){
+    const t=vipPalettes[name];if(!t)return;
+    Object.entries(t).forEach(([key,value])=>{
+      const cssName=key==='panel2'?'panel-2':key.replace(/[A-Z]/g,m=>'-'+m.toLowerCase());
+      document.documentElement.style.setProperty('--'+cssName,value);
+    });
+    document.documentElement.dataset.vipTheme=name;
+  }
   function applyVipTheme(name){
     if(!isVipActive()){openVip();vipToast('VIP themes require an active membership.');return;}
-    const t=vipPalettes[name];if(!t)return;
-    Object.entries(t).forEach(([key,value])=>document.documentElement.style.setProperty('--'+key.replace(/[A-Z]/g,m=>'-'+m.toLowerCase()),value));
+    if(!vipPalettes[name])return;
+    applyVipPaletteVars(name);
     try{localStorage.setItem('dc-calculator-vip-theme',name);}catch{}
-    document.documentElement.dataset.vipTheme=name;vipToast(name.charAt(0).toUpperCase()+name.slice(1)+' VIP theme applied.');show();if(!$('vipGraphPanel').hidden)drawVipGraph();
+    vipToast(name.charAt(0).toUpperCase()+name.slice(1)+' VIP theme applied.');show();if(!$('vipGraphPanel').hidden)drawVipGraph();
   }
   $('openVip').addEventListener('click',openVip);
   $('closeVip').addEventListener('click',closeVip);
@@ -417,7 +425,7 @@
   document.querySelectorAll('[data-vip-theme]').forEach(b=>b.addEventListener('click',()=>applyVipTheme(b.dataset.vipTheme)));
   $('closeVipGraph').addEventListener('click',()=>$('vipGraphPanel').hidden=true);
   $('vipGraphFunction').addEventListener('change',drawVipGraph);
-  window.addEventListener('dc-vip-status',refreshVipUi);
+  window.addEventListener('dc-vip-status',()=>{refreshVipUi();if(isVipActive()){try{const saved=localStorage.getItem('dc-calculator-vip-theme');if(saved&&vipPalettes[saved])applyVipPaletteVars(saved);}catch{}}});
   window.addEventListener('resize',()=>{if(!$('vipGraphPanel').hidden&&isVipActive())drawVipGraph();});
   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('vipOverlay').hidden)closeVip();});
   $('exportHistory').addEventListener('click',exportHistoryCsv);
