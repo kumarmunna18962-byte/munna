@@ -53,6 +53,18 @@
 @media(max-width:760px){.mode-tabs{margin-top:14px;border-radius:14px}.mode-tab{font-size:11px;padding:9px 5px;gap:5px}.scientific-panel{gap:6px;padding-top:8px}.sci-key{min-height:40px;border-radius:12px}.angle-hint{display:none}.tools-overlay{align-items:flex-end;padding:0}.tools-sheet{width:100%;max-height:92dvh;border-radius:28px 28px 0 0;padding:22px 17px calc(17px + env(safe-area-inset-bottom));border-bottom:0}.tools-head h2{font-size:25px}.tool-tabs{margin-top:15px}.tool-tab{padding:10px 11px}.tools-foot{font-size:9px}}
 @media(max-width:360px){.mode-tab{font-size:10px}.tab-glyph{display:none}.scientific-panel{gap:5px}.sci-key{font-size:12px}.tools-sheet{padding-left:13px;padding-right:13px}.tool-card{padding:12px}.form-grid{gap:8px}}
 
+
+.vip-top-btn{display:flex;align-items:center;gap:6px;border:1px solid #f3ce88;border-radius:13px;padding:8px 11px;background:linear-gradient(120deg,#fff4d9,#ffe4a9);color:#7a4d0b;font-size:11px;font-weight:900;letter-spacing:.2px;box-shadow:0 3px 10px #d99a3520}.vip-top-btn svg{width:17px;height:17px}.vip-top-btn:active{transform:scale(.97)}[data-theme="dark"] .vip-top-btn{background:linear-gradient(120deg,#5c431c,#352917);border-color:#91692b;color:#ffdd8b}
+.vip-overlay{position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;padding:18px;background:rgba(13,18,35,.66);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);animation:overlay-in .16s ease}.vip-overlay[hidden]{display:none}.vip-sheet{width:min(100%,680px);max-height:min(92dvh,960px);overflow:auto;background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:30px;padding:26px;box-shadow:0 30px 100px rgba(0,0,0,.34);animation:sheet-in .2s ease-out}
+.vip-head{display:flex;align-items:flex-start;gap:13px}.vip-brand-mark{width:48px;height:48px;display:grid;place-items:center;flex:none;border-radius:16px;background:linear-gradient(135deg,#5468ef,#8b5cf6,#ff9a46);color:white;box-shadow:0 7px 18px #7361e438}.vip-brand-mark svg{width:25px;height:25px}.vip-head-copy{flex:1;min-width:0}.vip-eyebrow{color:#b07a1a;font-size:9px;font-weight:950;letter-spacing:1.8px}.vip-head h2{font-size:26px;line-height:1.12;letter-spacing:-.9px;margin:4px 0 6px}.vip-head p{font-size:12px;color:var(--muted);margin:0;line-height:1.5}
+.vip-status{display:flex;align-items:flex-start;gap:9px;margin:19px 0 15px;padding:12px 13px;background:var(--panel-2);border:1px solid var(--line);border-radius:13px;color:var(--muted);font-size:11px;line-height:1.5}.vip-status.active{background:#e0f8ee;border-color:#b4edcf;color:#126d4b}.vip-status-dot{width:8px;height:8px;flex:none;border-radius:50%;margin-top:4px;background:#f5a623}.vip-status.active .vip-status-dot{background:#16a76b}
+.vip-plan-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.vip-plan{position:relative;overflow:hidden;min-width:0;background:var(--panel-2);border:1px solid var(--line);border-radius:18px;padding:16px}.vip-plan.featured{border-color:#9b8cf8;background:linear-gradient(150deg,#f6f3ff,#fff9f1)}[data-theme="dark"] .vip-plan.featured{background:linear-gradient(150deg,#25233c,#2b2532);border-color:#7669d8}.vip-plan-ribbon{display:inline-block;background:#6c5ce7;color:#fff;font-size:8px;font-weight:950;letter-spacing:.9px;border-radius:6px;padding:5px 7px;margin-bottom:9px}.vip-plan-top{display:flex;align-items:center;justify-content:space-between;gap:7px}.vip-plan-name{font-size:12px;font-weight:900}.vip-plan-icon{color:#b68120;font-size:20px}.vip-price{font-size:17px;font-weight:950;letter-spacing:-.4px;margin:15px 0 7px}.vip-plan-note{font-size:10px;color:var(--muted);line-height:1.5;min-height:32px}.vip-buy-btn{width:100%;display:flex;align-items:center;justify-content:space-between;margin-top:13px;border-radius:11px;padding:11px 12px;background:linear-gradient(120deg,#5669ed,#8755ee);color:#fff;font-size:11px;font-weight:900}.vip-buy-btn span{font-size:16px}
+.vip-section-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:22px 0 11px}.vip-section-heading h3,.vip-graph-head h3,.vip-themes-panel h3{font-size:14px;margin:0 0 4px}.vip-section-heading p,.vip-graph-head p,.vip-themes-panel p{font-size:10px;line-height:1.5;margin:0;color:var(--muted)}.vip-lock{white-space:nowrap;font-size:10px;font-weight:800;padding:6px 8px;border-radius:9px;background:var(--key);color:var(--muted)}
+.vip-feature-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.vip-feature-card{display:flex;align-items:center;gap:9px;min-width:0;position:relative;text-align:left;padding:12px 10px;border-radius:15px;border:1px solid var(--line);background:var(--panel);color:var(--text)}.vip-feature-icon{width:34px;height:34px;display:grid;place-items:center;border-radius:11px;font-size:19px;font-weight:850;flex:none}.vip-feature-icon.indigo{background:#eceaff;color:#5b55de}.vip-feature-icon.blue{background:#e5efff;color:#3671cb}.vip-feature-icon.orange{background:#fff0df;color:#d87931}.vip-feature-copy{min-width:0;display:flex;flex-direction:column;gap:4px}.vip-feature-copy b{font-size:10px;line-height:1.35}.vip-feature-copy small{font-size:9px;line-height:1.4;color:var(--muted)}.vip-feature-lock{font-size:10px;flex:none;margin-left:auto}
+.vip-graph-panel,.vip-themes-panel{margin-top:13px;padding:14px;border:1px solid var(--line);background:var(--panel-2);border-radius:16px}.vip-graph-panel[hidden],.vip-themes-panel[hidden]{display:none}.vip-graph-head{display:flex;align-items:center;justify-content:space-between;gap:8px}.vip-input-label{display:flex;flex-direction:column;gap:6px;color:var(--muted);font-size:10px;font-weight:850;margin:12px 0}.vip-input-label select{border:1px solid var(--line);border-radius:10px;padding:10px;background:var(--panel);color:var(--text);font:600 12px system-ui}.vip-graph-panel canvas{display:block;width:100%;height:auto;max-height:280px;background:var(--panel);border:1px solid var(--line);border-radius:12px}.vip-graph-foot{font-size:9px;color:var(--muted);margin-top:8px}
+.vip-theme-swatches{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:12px}.vip-theme-swatches button{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:8px;display:flex;flex-direction:column;gap:7px;text-align:left;font-size:10px;color:var(--text)}.swatch{height:35px;width:100%;border-radius:8px}.swatch.midnight{background:linear-gradient(120deg,#101827,#4b5e9a,#18223a)}.swatch.aurora{background:linear-gradient(120deg,#0c8676,#31c6ad,#7c68f5)}.swatch.sunset{background:linear-gradient(120deg,#ff8f47,#e65e88,#7458dd)}
+.vip-restore-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:18px;padding-top:13px;border-top:1px solid var(--line)}.vip-restore-row span{font-size:9px;line-height:1.5;color:var(--muted)}.vip-restore-row button{background:transparent;color:var(--accent);font-size:10px;font-weight:900;flex:none}
+@media(max-width:600px){.vip-overlay{padding:0;align-items:flex-end}.vip-sheet{width:100%;max-height:94dvh;border-radius:26px 26px 0 0;padding:20px 15px calc(16px + env(safe-area-inset-bottom));border-bottom:0}.vip-head h2{font-size:23px}.vip-brand-mark{width:42px;height:42px;border-radius:14px}.vip-plan{padding:12px}.vip-price{font-size:15px;margin-top:12px}.vip-plan-note{font-size:9px}.vip-feature-grid{grid-template-columns:1fr}.vip-feature-card{padding:10px}.vip-feature-copy b{font-size:11px}.vip-feature-copy small{font-size:10px}.vip-restore-row{align-items:flex-start}}
 </style>
 </head>
 <body>
@@ -64,6 +76,7 @@
     <div style="flex:1"></div>
     <div class="top-actions">
       <button class="icon-btn mobile-only" id="openHistory" aria-label="Open history" title="History"><svg viewBox="0 0 24 24" fill="none"><path d="M3.4 12a8.6 8.6 0 1 0 2.2-5.8L3.4 8.4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M3.5 4.4v4h4m4.5-1.2v5l3.2 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <button class="vip-top-btn" id="openVip" aria-label="VIP membership" title="VIP membership"><svg viewBox="0 0 24 24" fill="none"><path d="m3 8 4.2 3.2L12 4l4.8 7.2L21 8l-2 11H5L3 8Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M5 21h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>VIP</span></button>
       <button class="icon-btn" id="themeBtn" aria-label="Switch color theme" title="Light/dark theme"><svg id="themeIcon" viewBox="0 0 24 24" fill="none"><path d="M20.2 15.3A8.3 8.3 0 0 1 8.7 3.8 8.6 8.6 0 1 0 20.2 15.3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></button>
     </div>
   </header>
@@ -99,7 +112,7 @@
   </section>
 </section>
 <aside class="history" id="historyPanel" aria-label="Calculation history">
-  <div class="history-head"><div class="history-title"><svg viewBox="0 0 24 24" fill="none"><path d="M3.4 12a8.6 8.6 0 1 0 2.2-5.8L3.4 8.4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M3.5 4.4v4h4m4.5-1.2v5l3.2 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>History <span class="history-count" id="historyCount">0</span></div><div class="history-spacer"></div><button class="clear-history" id="clearHistory">Clear</button><button class="icon-btn history-close mobile-only" id="closeHistory" aria-label="Close history"><svg viewBox="0 0 24 24" fill="none"><path d="m6 6 12 12M18 6 6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button></div>
+  <div class="history-head"><div class="history-title"><svg viewBox="0 0 24 24" fill="none"><path d="M3.4 12a8.6 8.6 0 1 0 2.2-5.8L3.4 8.4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M3.5 4.4v4h4m4.5-1.2v5l3.2 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>History <span class="history-count" id="historyCount">0</span></div><div class="history-spacer"></div><button class="clear-history" id="exportHistory">Export</button><button class="clear-history" id="clearHistory">Clear</button><button class="icon-btn history-close mobile-only" id="closeHistory" aria-label="Close history"><svg viewBox="0 0 24 24" fill="none"><path d="m6 6 12 12M18 6 6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button></div>
   <div class="history-list" id="historyList"></div><div class="history-bottom">Calculations stay on this device.<br>Tip: use your keyboard for faster input.</div>
 </aside>
 </main>
@@ -138,6 +151,34 @@
     <footer class="tools-foot"><span>✓ Calculations happen on your device</span><span>DC Calculator</span></footer>
   </section>
 </div>
+<div class="vip-overlay" id="vipOverlay" hidden>
+  <section class="vip-sheet" role="dialog" aria-modal="true" aria-labelledby="vipTitle">
+    <header class="vip-head">
+      <div class="vip-brand-mark"><svg viewBox="0 0 24 24" fill="none"><path d="m3 8 4.2 3.2L12 4l4.8 7.2L21 8l-2 11H5L3 8Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M5 21h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+      <div class="vip-head-copy"><div class="vip-eyebrow">DC CALCULATOR · PLUS</div><h2 id="vipTitle">Unlock your VIP side</h2><p>Extra tools for people who use numbers every day.</p></div>
+      <button class="icon-btn" id="closeVip" aria-label="Close VIP membership">×</button>
+    </header>
+    <div class="vip-status" id="vipStatus"><span class="vip-status-dot"></span><span id="vipStatusText">Free plan · VIP purchase becomes available in the Android Play Store app after billing setup.</span></div>
+    <div class="vip-plan-grid">
+      <article class="vip-plan"><div class="vip-plan-top"><span class="vip-plan-name">VIP Monthly</span><span class="vip-plan-icon">✦</span></div><div class="vip-price" id="vipMonthlyPrice">Price shown in Google Play</div><div class="vip-plan-note">Renews monthly. Cancel anytime in Google Play.</div><button class="vip-buy-btn" id="buyVipMonthly">Choose monthly <span>→</span></button></article>
+      <article class="vip-plan featured"><div class="vip-plan-ribbon">ANNUAL PLAN</div><div class="vip-plan-top"><span class="vip-plan-name">VIP Annual</span><span class="vip-plan-icon">♛</span></div><div class="vip-price" id="vipYearlyPrice">Price shown in Google Play</div><div class="vip-plan-note">Renews yearly. Cancel anytime in Google Play.</div><button class="vip-buy-btn" id="buyVipYearly">Choose annual <span>→</span></button></article>
+    </div>
+    <div class="vip-section-heading"><div><h3>VIP-only tools</h3><p>These stay locked until a real subscription is active.</p></div><span class="vip-lock" id="vipLockLabel">🔒 Locked</span></div>
+    <div class="vip-feature-grid">
+      <button class="vip-feature-card" data-vip-feature="graph"><span class="vip-feature-icon indigo">∿</span><span class="vip-feature-copy"><b>Graph plotter</b><small>Plot common maths functions</small></span><span class="vip-feature-lock" data-lock="graph">🔒</span></button>
+      <button class="vip-feature-card" data-vip-feature="export"><span class="vip-feature-icon blue">↗</span><span class="vip-feature-copy"><b>Export history</b><small>Save calculations as CSV</small></span><span class="vip-feature-lock" data-lock="export">🔒</span></button>
+      <button class="vip-feature-card" data-vip-feature="themes"><span class="vip-feature-icon orange">✦</span><span class="vip-feature-copy"><b>VIP colour themes</b><small>Midnight, Aurora, Sunset</small></span><span class="vip-feature-lock" data-lock="themes">🔒</span></button>
+    </div>
+    <section id="vipGraphPanel" class="vip-graph-panel" hidden>
+      <div class="vip-graph-head"><div><h3>Graph plotter</h3><p>Choose a function and plot it across x.</p></div><button class="icon-btn" id="closeVipGraph" aria-label="Close graph">×</button></div>
+      <label class="vip-input-label">Function<select id="vipGraphFunction"><option value="square">y = x²</option><option value="sin">y = sin(x)</option><option value="cos">y = cos(x)</option><option value="sqrt">y = √x</option><option value="linear">y = 2x + 1</option><option value="abs">y = |x|</option><option value="log">y = log₁₀(x)</option></select></label>
+      <canvas id="vipGraphCanvas" width="640" height="320" aria-label="Function graph"></canvas><div class="vip-graph-foot">Graph units use x from −10 to 10. Trig functions use radians.</div>
+    </section>
+    <section class="vip-themes-panel" id="vipThemesPanel" hidden><h3>Choose your VIP colour</h3><p>Premium palettes are saved on this device.</p><div class="vip-theme-swatches"><button data-vip-theme="midnight"><span class="swatch midnight"></span><b>Midnight</b></button><button data-vip-theme="aurora"><span class="swatch aurora"></span><b>Aurora</b></button><button data-vip-theme="sunset"><span class="swatch sunset"></span><b>Sunset</b></button></div></section>
+    <div class="vip-restore-row"><span id="vipBillingNote">Purchases are handled by Google Play in the Android app. No bank details are displayed in this app.</span><button id="restoreVip">Restore</button></div>
+  </section>
+</div>
+<div class="toast"</div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <script>
 (() => {
@@ -290,6 +331,96 @@
     try{const converted=convertValue(v,from,to);resultText('convertResult',nFmt(v)+' '+from+' =\n'+nFmt(converted)+' '+to);}catch(err){resultText('convertResult',err.message);}
   });
 
+
+  function playBilling(){try{return window.DCPlayBilling||null;}catch{return null;}}
+  function isVipActive(){const api=playBilling();try{return !!(api&&typeof api.isVip==='function'&&api.isVip()===true);}catch{return false;}}
+  function vipToast(message){toast(message);}
+  function refreshVipUi(){
+    const active=isVipActive(),api=playBilling();
+    $('vipStatus').classList.toggle('active',active);
+    $('vipStatusText').textContent=active?'VIP membership active · VIP-only tools are unlocked on this device.':(api?'Free plan · Choose a plan to continue in Google Play.':'Free plan · Subscription checkout works in the Play Store Android app after its product IDs are configured.');
+    $('vipLockLabel').textContent=active?'✓ VIP active':'🔒 Locked';
+    document.querySelectorAll('[data-lock]').forEach(el=>el.textContent=active?'✓':'🔒');
+    const monthly=api&&typeof api.getPrice==='function'?api.getPrice('dc_vip_monthly'):null;
+    const yearly=api&&typeof api.getPrice==='function'?api.getPrice('dc_vip_yearly'):null;
+    if(monthly)$('vipMonthlyPrice').textContent=monthly;
+    else $('vipMonthlyPrice').textContent='Price shown in Google Play';
+    if(yearly)$('vipYearlyPrice').textContent=yearly;
+    else $('vipYearlyPrice').textContent='Price shown in Google Play';
+    $('vipBillingNote').textContent=api?'Subscriptions are processed by Google Play. Restore checks purchases linked to your Play account.':'No payment is taken here. Google Play product setup is required before membership can be purchased.';
+  }
+  function openVip(){refreshVipUi();$('vipOverlay').hidden=false;}
+  function closeVip(){ $('vipOverlay').hidden=true;$('vipGraphPanel').hidden=true;$('vipThemesPanel').hidden=true; }
+  function chooseVipPlan(productId){
+    const api=playBilling();
+    if(!api||typeof api.launchSubscription!=='function'){vipToast('VIP checkout is not connected yet. Purchase will be available in the official Android app after Play Console product setup.');return;}
+    try{api.launchSubscription(productId);}catch{vipToast('Could not open Google Play checkout. Please try again.');}
+  }
+  function openVipFeature(feature){
+    if(!isVipActive()){openVip();vipToast('This feature is locked. An active VIP subscription is required.');return;}
+    $('vipGraphPanel').hidden=feature!=='graph';
+    $('vipThemesPanel').hidden=feature!=='themes';
+    if(feature==='graph'){drawVipGraph();$('vipGraphPanel').scrollIntoView({block:'nearest',behavior:'smooth'});}
+    if(feature==='themes')$('vipThemesPanel').scrollIntoView({block:'nearest',behavior:'smooth'});
+    if(feature==='export')exportHistoryCsv();
+  }
+  function exportHistoryCsv(){
+    if(!isVipActive()){openVip();vipToast('CSV export is a VIP-only feature.');return;}
+    if(!history.length){vipToast('There is no calculation history to export.');return;}
+    const quote=v=>'"'+String(v).replace(/"/g,'""')+'"';
+    const rows=[['Expression','Result','Timestamp'],...history.map(x=>[x.e,x.n,new Date(x.at||Date.now()).toISOString()])];
+    const csv='\\uFEFF'+rows.map(row=>row.map(quote).join(',')).join('\\r\\n');
+    const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
+    const url=URL.createObjectURL(blob),a=document.createElement('a');
+    a.href=url;a.download='dc-calculator-history.csv';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);
+    vipToast('History CSV exported.');
+  }
+  function drawVipGraph(){
+    const canvas=$('vipGraphCanvas');if(!canvas||$('vipGraphPanel').hidden)return;
+    const rect=canvas.getBoundingClientRect(),ratio=Math.max(1,window.devicePixelRatio||1);
+    const width=Math.max(300,Math.round(rect.width||640)),height=200;
+    canvas.width=Math.round(width*ratio);canvas.height=Math.round(height*ratio);
+    const ctx=canvas.getContext('2d');ctx.setTransform(ratio,0,0,ratio,0,0);
+    const styles=getComputedStyle(document.documentElement),fg=styles.getPropertyValue('--text').trim()||'#192234',grid=styles.getPropertyValue('--line').trim()||'#dfe4ef',accent=styles.getPropertyValue('--accent').trim()||'#5669ed';
+    ctx.clearRect(0,0,width,height);ctx.fillStyle=styles.getPropertyValue('--panel').trim()||'#fff';ctx.fillRect(0,0,width,height);
+    const xMin=-10,xMax=10,yMin=-10,yMax=10,left=32,right=12,top=12,bottom=24,pw=width-left-right,ph=height-top-bottom;
+    const px=x=>left+(x-xMin)/(xMax-xMin)*pw,py=y=>top+(yMax-y)/(yMax-yMin)*ph;
+    ctx.lineWidth=1;ctx.strokeStyle=grid;ctx.font='9px system-ui';ctx.fillStyle=fg;
+    for(let x=-10;x<=10;x+=2){ctx.beginPath();ctx.moveTo(px(x),top);ctx.lineTo(px(x),top+ph);ctx.stroke();ctx.textAlign='center';ctx.fillText(String(x),px(x),height-8);}
+    for(let y=-10;y<=10;y+=2){ctx.beginPath();ctx.moveTo(left,py(y));ctx.lineTo(left+pw,py(y));ctx.stroke();if(y!==0){ctx.textAlign='right';ctx.fillText(String(y),left-5,py(y)+3);}}
+    ctx.strokeStyle=fg;ctx.lineWidth=1.3;ctx.beginPath();ctx.moveTo(px(0),top);ctx.lineTo(px(0),top+ph);ctx.moveTo(left,py(0));ctx.lineTo(left+pw,py(0));ctx.stroke();
+    const fn=$('vipGraphFunction').value;
+    const fns={square:x=>x*x,sin:x=>Math.sin(x),cos:x=>Math.cos(x),sqrt:x=>x<0?NaN:Math.sqrt(x),linear:x=>2*x+1,abs:x=>Math.abs(x),log:x=>x<=0?NaN:Math.log10(x)};
+    ctx.strokeStyle=accent;ctx.lineWidth=2.5;ctx.lineJoin='round';ctx.beginPath();let drawing=false;
+    for(let j=0;j<=width-left-right;j++){const x=xMin+j/pw*(xMax-xMin),y=fns[fn](x);if(!Number.isFinite(y)||y<yMin-1||y>yMax+1){drawing=false;continue;}if(!drawing){ctx.moveTo(px(x),py(y));drawing=true;}else ctx.lineTo(px(x),py(y));}
+    ctx.stroke();
+  }
+  const vipPalettes={
+    midnight:{bg:'#0d1427',panel:'#141f35',panel2:'#1b2942',screen:'#141f35',text:'#edf2ff',muted:'#94a5c4',line:'#2b3a59',key:'#253552',keyHover:'#334768',fn:'#263558',accent:'#7c9bff',accentHi:'#9b7cff',accentInk:'#101827'},
+    aurora:{bg:'#e9f8f3',panel:'#ffffff',panel2:'#e1f4ed',screen:'#f4fffa',text:'#142d2b',muted:'#678c85',line:'#c7e6dc',key:'#e4f6ef',keyHover:'#d4eee3',fn:'#def7eb',accent:'#0b8f79',accentHi:'#26bfa7',accentInk:'#ffffff'},
+    sunset:{bg:'#fff1e8',panel:'#fffaf7',panel2:'#ffeadf',screen:'#fffaf7',text:'#3a2431',muted:'#9b7989',line:'#f3d6dd',key:'#fae6e8',keyHover:'#f6d5de',fn:'#ffe7cc',accent:'#de5d8b',accentHi:'#ff9945',accentInk:'#ffffff'}
+  };
+  function applyVipTheme(name){
+    if(!isVipActive()){openVip();vipToast('VIP themes require an active membership.');return;}
+    const t=vipPalettes[name];if(!t)return;
+    Object.entries(t).forEach(([key,value])=>document.documentElement.style.setProperty('--'+key.replace(/[A-Z]/g,m=>'-'+m.toLowerCase()),value));
+    try{localStorage.setItem('dc-calculator-vip-theme',name);}catch{}
+    document.documentElement.dataset.vipTheme=name;vipToast(name.charAt(0).toUpperCase()+name.slice(1)+' VIP theme applied.');show();if(!$('vipGraphPanel').hidden)drawVipGraph();
+  }
+  $('openVip').addEventListener('click',openVip);
+  $('closeVip').addEventListener('click',closeVip);
+  $('vipOverlay').addEventListener('click',e=>{if(e.target===$('vipOverlay'))closeVip();});
+  $('buyVipMonthly').addEventListener('click',()=>chooseVipPlan('dc_vip_monthly'));
+  $('buyVipYearly').addEventListener('click',()=>chooseVipPlan('dc_vip_yearly'));
+  $('restoreVip').addEventListener('click',()=>{const api=playBilling();if(api&&typeof api.restorePurchases==='function'){api.restorePurchases();setTimeout(refreshVipUi,500);}else vipToast('Restore purchases is available in the official Android app after billing setup.');});
+  document.querySelectorAll('[data-vip-feature]').forEach(b=>b.addEventListener('click',()=>openVipFeature(b.dataset.vipFeature)));
+  document.querySelectorAll('[data-vip-theme]').forEach(b=>b.addEventListener('click',()=>applyVipTheme(b.dataset.vipTheme)));
+  $('closeVipGraph').addEventListener('click',()=>$('vipGraphPanel').hidden=true);
+  $('vipGraphFunction').addEventListener('change',drawVipGraph);
+  window.addEventListener('dc-vip-status',refreshVipUi);
+  window.addEventListener('resize',()=>{if(!$('vipGraphPanel').hidden&&isVipActive())drawVipGraph();});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('vipOverlay').hidden)closeVip();});
+  $('exportHistory').addEventListener('click',exportHistoryCsv);
   $('copyText').addEventListener('click',copyResult);
   $('openHistory').addEventListener('click',()=>$('historyPanel').classList.add('open'));$('closeHistory').addEventListener('click',()=>$('historyPanel').classList.remove('open'));
   document.querySelectorAll('[data-memory]').forEach(b=>b.addEventListener('click',()=>memoryAction(b.dataset.memory)));
