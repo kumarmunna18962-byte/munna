@@ -1,0 +1,63 @@
+name: Build DC Calculator Android App Bundle
+
+on:
+  push:
+    branches:
+      - dc-calculator-android-playstore
+    paths:
+      - "android-playstore/**"
+      - ".github/workflows/dc-calculator-android-aab.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-unsigned-aab:
+    name: Build Android App Bundle
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.13"
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Android 16 SDK
+        run: sdkmanager "platforms;android-36" "build-tools;36.0.0"
+
+      - name: Bundle current calculator UI into Android assets
+        shell: bash
+        run: |
+          mkdir -p android-playstore/app/src/main/assets
+          cp dc-calculator/index.html android-playstore/app/src/main/assets/index.html
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path("android-playstore/app/src/main/assets/index.html")
+          s = p.read_text(encoding="utf-8")
+          s = s.replace('<link rel="manifest" href="./manifest.webmanifest">\\n', '')
+          s = s.replace('<link rel="icon" href="./dc-icon.svg" type="image/svg+xml">\\n', '')
+          p.write_text(s, encoding="utf-8")
+          PY
+
+      - name: Build release AAB (unsigned; no private key is uploaded to CI)
+        run: gradle -p android-playstore --no-daemon clean bundleRelease
+
+      - name: Upload unsigned AAB for private-key signing outside CI
+        uses: actions/upload-artifact@v4
+        with:
+          name: dc-calculator-unsigned-aab
+          path: android-playstore/app/build/outputs/bundle/release/app-release.aab
+          if-no-files-found: error
+          retention-days: 3
