@@ -103,7 +103,7 @@ Deno.serve(async (req: Request) => {
       const email = normalizeEmail(body.email);
       const plan = typeof body.plan === "string" ? body.plan : "";
       const transactionReference = typeof body.payment_reference === "string" ? body.payment_reference.trim() : "";
-      if (!device || !email || !(plan in PLANS)) return response({ error: "Enter a valid email and choose a plan." }, 400);
+      if (!device || !email || !Object.prototype.hasOwnProperty.call(PLANS, plan)) return response({ error: "Enter a valid email and choose a plan." }, 400);
       if (transactionReference.length < 6 || transactionReference.length > 64 || !/^[a-zA-Z0-9 -]+$/.test(transactionReference)) {
         return response({ error: "Enter the transaction/UTR reference (6–64 letters or numbers)." }, 400);
       }
