@@ -507,6 +507,174 @@
   window.addEventListener('resize',()=>{if(!$('vipGraphPanel').hidden&&isVipActive())drawVipGraph();});
   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('vipOverlay').hidden)closeVip();});
   $('exportHistory').addEventListener('click',exportHistoryCsv);
+
+  // VIP membership service. Public key only; the service-role key stays on Supabase.
+  const VIP_API='https://uxrbxpykdxhxvlrwelzo.supabase.co/functions/v1/dc-calculator-vip';
+  const VIP_PUBLIC_KEY='sb_publishable_2_V0S28TVBWDUkC2RS-QbQ_Re_vKC_j';
+  const VIP_DEVICE_KEY='dc-calculator-device-id-v1';
+  let selectedVipPlan='monthly';
+  let vipAdminToken='';
+  let vipState={active:false,plan:null,expiresAt:null,admin:false};
+
+  function getDeviceId(){
+    try{
+      let id=localStorage.getItem(VIP_DEVICE_KEY);
+      if(id&&/^[0-9a-f-]{36}$/i.test(id))return id;
+      id=crypto.randomUUID?crypto.randomUUID():('xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c=>{const r=Math.random()*16|0;return(c==='x'?r:(r&3|8)).toString(16);}));
+      localStorage.setItem(VIP_DEVICE_KEY,id);return id;
+    }catch{
+      // The hosted HTTPS/PWA version normally has localStorage. Keep a session ID fallback if storage is blocked.
+      return (window.__dcVipSessionId ||= (crypto.randomUUID?crypto.randomUUID():String(Date.now())+'-'+Math.random().toString(16).slice(2)));
+    }
+  }
+  async function vipCall(payload,adminToken){
+    const headers={'Content-Type':'application/json','apikey':VIP_PUBLIC_KEY};
+    if(adminToken)headers['x-admin-token']=adminToken;
+    const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),12000);
+    try{
+      const response=await fetch(VIP_API,{method:'POST',headers,body:JSON.stringify(payload),signal:controller.signal});
+      let data={};try{data=await response.json();}catch{}
+      if(!response.ok)throw new Error(data.error||('VIP service returned '+response.status));
+      return data;
+    }finally{clearTimeout(timer);}
+  }
+  function vipFeedback(message,kind=''){
+    const el=$('vipRequestFeedback');el.textContent=message;el.className='vip-feedback'+(kind?' '+kind:'');
+  }
+  function setVipStatusUI(){
+    const el=$('vipStatus');el.classList.toggle('is-active',vipState.active);
+    const strong=el.querySelector('strong'),small=el.querySelector('small');
+    if(vipState.active){
+      strong.textContent=vipState.admin?'Owner admin mode — VIP tools unlocked':'VIP membership active';
+      small.textContent=vipState.expiresAt?'Valid until '+new Date(vipState.expiresAt).toLocaleDateString():(vipState.admin?'Private admin session.':'VIP membership is active on this device.');
+      $('vipExtras').hidden=false;
+      $('vipBtn').classList.add('vip-on');
+    }else{
+      strong.textContent='Free membership';
+      small.textContent='Basic, Scientific, Student tools, GST, EMI and converter remain available.';
+      $('vipExtras').hidden=true;
+      $('vipBtn').classList.remove('vip-on');
+    }
+  }
+  async function refreshVipStatus(){
+    const button=$('refreshVip');if(button)button.disabled=true;
+    try{
+      const result=await vipCall({action:'status',device_id:getDeviceId()});
+      vipState={active:!!result.active,plan:result.plan||null,expiresAt:result.expires_at||null,admin:false};
+      if(vipState.active){
+        const saved=localStorage.getItem('dc-calculator-vip-palette-v1');
+        if(saved&&['ocean','sunset','rose'].includes(saved))document.documentElement.dataset.vipPalette=saved;
+      }
+      setVipStatusUI();
+      return result;
+    }catch{
+      setVipStatusUI();
+      return {active:false,unavailable:true};
+    }finally{if(button)button.disabled=false;}
+  }
+  function openVip(){
+    $('vipOverlay').hidden=false;
+    refreshVipStatus();
+    setTimeout(()=>$('vipEmail').focus({preventScroll:true}),80);
+  }
+  function chooseVipPlan(plan){
+    if(!['monthly','yearly'].includes(plan))return;
+    selectedVipPlan=plan;
+    document.querySelectorAll('[data-vip-plan]').forEach(b=>b.classList.toggle('selected',b.dataset.vipPlan===plan));
+  }
+  function applyVipPalette(name,announce=true){
+    if(!vipState.active){toast('VIP membership is needed for premium themes');openVip();return;}
+    if(name==='original'){delete document.documentElement.dataset.vipPalette;try{localStorage.removeItem('dc-calculator-vip-palette-v1');}catch{}}
+    else if(['ocean','sunset','rose'].includes(name)){document.documentElement.dataset.vipPalette=name;try{localStorage.setItem('dc-calculator-vip-palette-v1',name);}catch{}}
+    else return;
+    const isDark=document.documentElement.dataset.theme==='dark';
+    const meta=document.querySelector('meta[name="theme-color"]');
+    if(meta)meta.content=name==='ocean'?(isDark?'#0a1924':'#edf9fa'):name==='sunset'?(isDark?'#201412':'#fff1e9'):name==='rose'?(isDark?'#1b1221':'#fff0f8'):(isDark?'#0d111b':'#edf0f7');
+    if(announce)toast(name==='original'?'Original colours restored':name.charAt(0).toUpperCase()+name.slice(1)+' theme applied');
+  }
+  function exportVipHistory(){
+    if(!vipState.active){toast('VIP membership is needed for CSV export');openVip();return;}
+    if(!history.length){toast('No calculation history to export');return;}
+    const cell=v=>'"'+String(v??'').replace(/"/g,'""')+'"';
+    const rows=[['Expression','Result','Calculated at'],...history.map(item=>[item.e,item.n,new Date(item.at||Date.now()).toISOString()])];
+    const csv='\\uFEFF'+rows.map(row=>row.map(cell).join(',')).join('\\r\\n');
+    const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
+    const url=URL.createObjectURL(blob),a=document.createElement('a');
+    a.href=url;a.download='dc-calculator-history-'+new Date().toISOString().slice(0,10)+'.csv';
+    document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);toast('History CSV downloaded');
+  }
+  function useVipFormula(formula){
+    if(!vipState.active){toast('VIP membership is needed for the Formula Vault');openVip();return;}
+    expr=formula;justEvaluated=false;$('vipOverlay').hidden=true;show();setScientific(true);toast('Formula loaded');
+  }
+  async function submitVipRequest(){
+    const button=$('submitVipRequest'),email=$('vipEmail').value.trim(),reference=$('vipPaymentRef').value.trim();
+    if(!email||!/^\\S+@\\S+\\.\\S+$/.test(email)){vipFeedback('Enter a valid email address.','error');return;}
+    if(reference.length<6||reference.length>64||!/^[a-zA-Z0-9 -]+$/.test(reference)){vipFeedback('Enter the transaction/UTR reference from your payment.','error');return;}
+    button.disabled=true;vipFeedback('Submitting your request securely…');
+    try{
+      const result=await vipCall({action:'submit',device_id:getDeviceId(),email,plan:selectedVipPlan,payment_reference:reference});
+      vipFeedback('Request received and pending manual verification. Request ID: '+(result.request_id||'saved')+'. Your app stays on Free until payment is verified.','success');
+      $('vipPaymentRef').value='';
+      toast('VIP request submitted');
+    }catch(error){
+      vipFeedback(error.message||'Could not submit request. Check the connection and try again.','error');
+    }finally{button.disabled=false;}
+  }
+  function adminRequestItem(item){
+    const card=document.createElement('div');card.className='vip-pending-item';
+    const title=document.createElement('strong');title.textContent=item.email+' · '+(item.plan==='yearly'?'Yearly':'Monthly');
+    const details=document.createElement('p');details.textContent='₹'+(Number(item.amount_paise||0)/100)+' · Ref: '+item.payment_reference;
+    const time=document.createElement('p');time.textContent='Received '+new Date(item.created_at).toLocaleString();
+    const actions=document.createElement('div');actions.className='vip-pending-actions';
+    const approve=document.createElement('button');approve.type='button';approve.textContent='Approve VIP';
+    const reject=document.createElement('button');reject.type='button';reject.textContent='Reject';reject.className='reject';
+    approve.addEventListener('click',()=>reviewVipRequest(item.id,'approve',approve));
+    reject.addEventListener('click',()=>reviewVipRequest(item.id,'reject',reject));
+    actions.append(approve,reject);card.append(title,details,time,actions);return card;
+  }
+  async function loadVipRequests(){
+    const feedback=$('vipAdminFeedback'),token=$('vipAdminKey').value.trim(),root=$('vipRequestList');
+    if(token.length<32){feedback.textContent='Enter the full private admin key.';return;}
+    feedback.textContent='Checking admin access…';
+    try{
+      const result=await vipCall({action:'admin_list'},token);
+      vipAdminToken=token;
+      vipState={active:true,plan:'admin',expiresAt:null,admin:true};setVipStatusUI();
+      root.replaceChildren();
+      if(!result.requests||!result.requests.length){root.textContent='No pending requests.';}
+      else result.requests.forEach(item=>root.append(adminRequestItem(item)));
+      feedback.textContent=(result.requests||[]).length+' pending request(s). Owner mode is active for this session.';
+    }catch(error){vipAdminToken='';feedback.textContent=error.message||'Admin access failed.';}
+  }
+  async function reviewVipRequest(id,action,button){
+    if(!vipAdminToken)return;
+    button.disabled=true;
+    try{
+      const result=await vipCall({action,request_id:id},vipAdminToken);
+      if(action==='approve'){
+        const expiry=result.expires_at?new Date(result.expires_at).toLocaleDateString():'set';
+        $('vipAdminFeedback').textContent='VIP approved. Valid until '+expiry+'.';
+      }else $('vipAdminFeedback').textContent='Request rejected.';
+      await loadVipRequests();
+      await refreshVipStatus();
+      // Keep the admin session available after refreshing the member state.
+      vipState={active:true,plan:'admin',expiresAt:null,admin:true};setVipStatusUI();
+    }catch(error){$('vipAdminFeedback').textContent=error.message||'Could not review request.';button.disabled=false;}
+  }
+  $('vipBtn').addEventListener('click',openVip);
+  $('closeVip').addEventListener('click',()=>$('vipOverlay').hidden=true);
+  $('vipOverlay').addEventListener('click',e=>{if(e.target===$('vipOverlay'))$('vipOverlay').hidden=true;});
+  $('refreshVip').addEventListener('click',refreshVipStatus);
+  document.querySelectorAll('[data-vip-plan]').forEach(b=>b.addEventListener('click',()=>chooseVipPlan(b.dataset.vipPlan)));
+  $('submitVipRequest').addEventListener('click',submitVipRequest);
+  $('exportHistoryCsv').addEventListener('click',exportVipHistory);
+  document.querySelectorAll('[data-vip-palette]').forEach(b=>b.addEventListener('click',()=>applyVipPalette(b.dataset.vipPalette)));
+  document.querySelectorAll('[data-vip-formula]').forEach(b=>b.addEventListener('click',()=>useVipFormula(b.dataset.vipFormula)));
+  $('loadVipRequests').addEventListener('click',loadVipRequests);
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('vipOverlay').hidden)$('vipOverlay').hidden=true;});
+  try{if(localStorage.getItem('dc-calculator-vip-palette-v1'))document.documentElement.dataset.vipPalette=localStorage.getItem('dc-calculator-vip-palette-v1');}catch{}
+
   $('copyText').addEventListener('click',copyResult);
   $('openHistory').addEventListener('click',()=>$('historyPanel').classList.add('open'));$('closeHistory').addEventListener('click',()=>$('historyPanel').classList.remove('open'));
   document.querySelectorAll('[data-memory]').forEach(b=>b.addEventListener('click',()=>memoryAction(b.dataset.memory)));
