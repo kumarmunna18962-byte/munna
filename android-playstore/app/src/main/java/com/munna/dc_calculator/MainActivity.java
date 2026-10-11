@@ -19,6 +19,7 @@ import android.widget.FrameLayout;
 /** Local/offline Android host for the bundled DC Calculator UI. */
 public final class MainActivity extends Activity {
     private WebView webView;
+    private VipBillingManager vipBillingManager;
     private static final int APP_BG = Color.rgb(237, 240, 247);
 
     @Override protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +60,9 @@ public final class MainActivity extends Activity {
             }
         });
 
+        vipBillingManager = new VipBillingManager(this, webView);
+        webView.addJavascriptInterface(vipBillingManager.javascriptBridge(), "DCPlayBilling");
+
         root.addView(webView, new FrameLayout.LayoutParams(
             FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
         root.setOnApplyWindowInsetsListener((view, insets) -> {
@@ -83,6 +87,11 @@ public final class MainActivity extends Activity {
         else webView.loadUrl("file:///android_asset/index.html");
     }
 
+    @Override protected void onResume() {
+        super.onResume();
+        if (vipBillingManager != null) vipBillingManager.refresh();
+    }
+
     @Override protected void onSaveInstanceState(Bundle outState) {
         if (webView != null) webView.saveState(outState);
         super.onSaveInstanceState(outState);
@@ -93,6 +102,7 @@ public final class MainActivity extends Activity {
     }
 
     @Override protected void onDestroy() {
+        if (vipBillingManager != null) { vipBillingManager.close(); vipBillingManager = null; }
         if (webView != null) {
             webView.stopLoading();
             webView.setWebChromeClient(null);
