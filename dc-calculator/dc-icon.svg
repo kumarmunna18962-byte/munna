@@ -1,1 +1,34 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128"><rect width="128" height="128" rx="30" fill="#176b5b"/><rect x="34" y="17" width="60" height="94" rx="12" fill="none" stroke="#fff" stroke-width="6"/><rect x="45" y="29" width="38" height="15" rx="4" fill="#fff"/><g fill="#fff"><circle cx="49" cy="59" r="4.3"/><circle cx="64" cy="59" r="4.3"/><circle cx="79" cy="59" r="4.3"/><circle cx="49" cy="75" r="4.3"/><circle cx="64" cy="75" r="4.3"/><circle cx="79" cy="75" r="4.3"/><rect x="44.5" y="87" width="39" height="10" rx="4"/></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="40" y1="24" x2="472" y2="500" gradientUnits="userSpaceOnUse"><stop stop-color="#3347C8"/><stop offset=".43" stop-color="#7351ED"/><stop offset=".76" stop-color="#DA65B8"/><stop offset="1" stop-color="#FF9D46"/></linearGradient>
+    <linearGradient id="glass" x1="96" y1="72" x2="414" y2="440" gradientUnits="userSpaceOnUse"><stop stop-color="#27344D"/><stop offset="1" stop-color="#101827"/></linearGradient>
+    <linearGradient id="screen" x1="142" y1="108" x2="366" y2="201" gradientUnits="userSpaceOnUse"><stop stop-color="#F8FAFF"/><stop offset="1" stop-color="#DDE7FF"/></linearGradient>
+    <linearGradient id="eq" x1="287" y1="327" x2="392" y2="423" gradientUnits="userSpaceOnUse"><stop stop-color="#FFA33D"/><stop offset="1" stop-color="#FF683F"/></linearGradient>
+    <linearGradient id="op" x1="292" y1="219" x2="392" y2="314" gradientUnits="userSpaceOnUse"><stop stop-color="#6E83FF"/><stop offset="1" stop-color="#8F5DFF"/></linearGradient>
+    <filter id="shadow" x="45" y="44" width="422" height="436" filterUnits="userSpaceOnUse"><feGaussianBlur stdDeviation="12"/></filter>
+  </defs>
+  <rect width="512" height="512" rx="116" fill="url(#bg)"/>
+  <circle cx="84" cy="72" r="122" fill="#FFFFFF" opacity=".08"/>
+  <circle cx="467" cy="440" r="151" fill="#FFFFFF" opacity=".07"/>
+  <rect x="68" y="57" width="376" height="398" rx="70" fill="#090F1F" opacity=".25" filter="url(#shadow)"/>
+  <rect x="72" y="54" width="368" height="404" rx="68" fill="url(#glass)" stroke="#FFFFFF" stroke-opacity=".28" stroke-width="3"/>
+  <rect x="91" y="74" width="330" height="365" rx="52" fill="#101A2B" stroke="#FFFFFF" stroke-opacity=".10" stroke-width="2"/>
+  <rect x="121" y="103" width="270" height="105" rx="23" fill="url(#screen)"/>
+  <text x="145" y="132" font-family="Arial,Helvetica,sans-serif" font-weight="700" font-size="18" fill="#66738E" letter-spacing="3">DC</text>
+  <text x="367" y="179" text-anchor="end" font-family="Arial,Helvetica,sans-serif" font-weight="700" font-size="46" fill="#1D2A42">123</text>
+  <g>
+    <rect x="120" y="229" width="74" height="75" rx="21" fill="#F7F8FF"/><rect x="207" y="229" width="74" height="75" rx="21" fill="#F7F8FF"/>
+    <rect x="294" y="229" width="98" height="75" rx="21" fill="url(#op)"/>
+    <rect x="120" y="316" width="74" height="75" rx="21" fill="#E5E9FF"/><rect x="207" y="316" width="74" height="75" rx="21" fill="#E5E9FF"/>
+    <rect x="294" y="316" width="98" height="75" rx="21" fill="url(#eq)"/>
+  </g>
+  <g font-family="Arial,Helvetica,sans-serif" font-size="37" font-weight="700" text-anchor="middle" dominant-baseline="central">
+    <text x="157" y="267" fill="#293956">+</text><text x="244" y="266" fill="#293956">−</text>
+    <text x="343" y="267" fill="#FFFFFF">×</text><text x="157" y="354" fill="#293956">÷</text>
+    <text x="244" y="354" fill="#293956">%</text><text x="343" y="354" fill="#FFFFFF">=</text>
+  </g>
+  <rect x="122" y="405" width="269" height="12" rx="6" fill="#FFFFFF" opacity=".13"/>
+  <rect x="122" y="405" width="125" height="12" rx="6" fill="#56D9C5"/>
+  <rect x="251" y="405" width="74" height="12" rx="6" fill="#8E7CFF"/>
+  <rect x="329" y="405" width="62" height="12" rx="6" fill="#FFAE53"/>
+</svg>
