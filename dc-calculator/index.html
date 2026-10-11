@@ -174,7 +174,7 @@
       else if(t.t==='id'){
         p++;
         if(fnNames.has(t.v)){
-          if(tokens[p]?.t!=='(')throw Error('Function needs parentheses');p++;const a=add();if(tokens[p]?.t!==')')throw Error('Bracket');p++;
+          if(tokens[p]?.t!=='(')throw Error('Function needs parentheses');p++;const a={v:add(),pc:false};if(tokens[p]?.t!==')')throw Error('Bracket');p++;
           const rad=angleMode==='DEG'?Math.PI/180:1;let v;
           switch(t.v){
             case'sin':v=Math.sin(norm(a)*rad);break;case'cos':v=Math.cos(norm(a)*rad);break;case'tan':v=Math.tan(norm(a)*rad);break;
