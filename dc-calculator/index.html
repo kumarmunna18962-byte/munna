@@ -857,7 +857,15 @@
 
   renderHistory();show();refreshVipStatus();
   // Read-only test hooks for automated regression checks; no calculator state is changed by exposing these.
-  window.DCCalculatorTest={parse,fmt,pretty,setAngleMode:(v)=>{angleMode=v;}};
+  window.DCCalculatorHandleBack=()=>{
+    if(!$('vaultOverlay').hidden){lockVault(true);return true;}
+    if(!$('vipOverlay').hidden){$('vipOverlay').hidden=true;return true;}
+    if(!$('toolsOverlay').hidden){$('toolsOverlay').hidden=true;return true;}
+    if($('historyPanel').classList.contains('open')){$('historyPanel').classList.remove('open');return true;}
+    if(!$('scientificPanel').hidden){setScientific(false);return true;}
+    return false;
+  };
+    window.DCCalculatorTest={parse,fmt,pretty,setAngleMode:(v)=>{angleMode=v;}};
   if('serviceWorker' in navigator && location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});
 })();
 </script>
