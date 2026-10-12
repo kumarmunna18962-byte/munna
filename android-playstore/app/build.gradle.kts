@@ -4,6 +4,7 @@ plugins { id("com.android.application") }
 
 dependencies {
     implementation("com.android.billingclient:billing:9.1.0")
+    implementation("androidx.biometric:biometric:1.1.0")
 }
 
 // Modern Kotlin stdlib bundles the JDK 7/8 extensions; exclude legacy split jars
@@ -26,8 +27,8 @@ android {
         applicationId = "com.munna.dc_calculator"
         minSdk = 23
         targetSdk = 36
-        versionCode = 3
-        versionName = "1.2.0"
+        versionCode = 4
+        versionName = "1.3.0"
     }
 
     signingConfigs {
