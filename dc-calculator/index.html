@@ -112,6 +112,7 @@
 .vault-empty{display:grid;justify-items:center;gap:6px;padding:23px 10px;color:var(--muted);font-size:10px;text-align:center}.vault-empty>div{font-size:30px;color:#8d82e9}.vault-empty b{font-size:12px;color:var(--text)}.vault-empty[hidden]{display:none}.vault-footer{display:flex;justify-content:space-between;gap:10px;margin-top:14px;padding-top:12px;border-top:1px solid var(--line);font-size:9px;color:var(--muted)}
 @media(max-width:760px){.vault-overlay{align-items:flex-end;padding:0}.vault-sheet{width:100%;max-height:94dvh;border-radius:27px 27px 0 0;padding:21px 17px calc(18px + env(safe-area-inset-bottom));border-bottom:0}}
 
+.native-billing-note{display:grid;gap:5px;margin:13px 0 16px;border:1px solid #d7dafa;background:#f0f1ff;color:#403d86;border-radius:13px;padding:12px 13px;font-size:10px;line-height:1.55}.native-billing-note strong{font-size:11px}.native-billing-note[hidden]{display:none}
 </style>
 </head>
 <body>
@@ -221,8 +222,9 @@
         <span class="plan-badge">BEST VALUE</span><span class="plan-radio"></span><span class="plan-name">Yearly VIP</span><strong>₹1,099</strong><small>365 days · manual payment verification</small>
       </button>
     </div>
-    <div class="vip-payment-note"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3 4.5 6v5.4c0 4.6 3.2 7.8 7.5 9.6 4.3-1.8 7.5-5 7.5-9.6V6L12 3Z" stroke="currentColor" stroke-width="1.6"/><path d="m8.5 12 2.2 2.2 4.8-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><div><strong>Manual payment verification · ₹99 monthly / ₹1,099 yearly</strong><p>This app does not collect or process payment. Get payment instructions directly from the developer through a trusted private channel before paying. After an actual transfer, submit its UTR/reference; the request stays pending until the developer verifies receipt independently. No automatic renewal.</p><small>Never enter a bank/card PIN, password, CVV or OTP. Do not pay anyone who claims this page itself has accepted a payment.</small></div></div>
-    <section class="vip-request">
+    <div class="vip-payment-note" id="vipPaymentNote"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3 4.5 6v5.4c0 4.6 3.2 7.8 7.5 9.6 4.3-1.8 7.5-5 7.5-9.6V6L12 3Z" stroke="currentColor" stroke-width="1.6"/><path d="m8.5 12 2.2 2.2 4.8-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><div><strong>Manual payment verification · ₹99 monthly / ₹1,099 yearly</strong><p>This app does not collect or process payment. Get payment instructions directly from the developer through a trusted private channel before paying. After an actual transfer, submit its UTR/reference; the request stays pending until the developer verifies receipt independently. No automatic renewal.</p><small>Never enter a bank/card PIN, password, CVV or OTP. Do not pay anyone who claims this page itself has accepted a payment.</small></div></div>
+    <div class="native-billing-note" id="nativeBillingNote" hidden><strong>Play Store purchase unavailable</strong><span>Google Play Billing has not been configured for this Android release. No membership payment can be made from this app version. The browser version's manual process is separate and tied to that browser/device.</span></div>
+    <section class="vip-request" id="vipRequest">
       <h3>Request VIP activation</h3>
       <div class="vip-field-grid"><label>Email for your receipt<input type="email" id="vipEmail" maxlength="254" autocomplete="email" placeholder="you@example.com"></label><label>Transaction / UTR reference<input type="text" id="vipPaymentRef" maxlength="64" autocomplete="off" placeholder="Reference from your payment"></label></div>
       <button type="button" class="vip-primary" id="submitVipRequest">Submit payment reference <span>→</span></button>
@@ -766,6 +768,15 @@
   $('openHistory').addEventListener('click',()=>$('historyPanel').classList.add('open'));$('closeHistory').addEventListener('click',()=>$('historyPanel').classList.remove('open'));
   document.querySelectorAll('[data-memory]').forEach(b=>b.addEventListener('click',()=>memoryAction(b.dataset.memory)));
   try{if(localStorage.getItem(THEME_KEY)==='dark'){$('themeBtn').click();}}catch{}
+
+  // Android local-file build must not offer off-app/manual payments from inside a Play-distributed app.
+  if(location.protocol==='file:'){
+    $('vipRequest').hidden=true;
+    $('vipPaymentNote').hidden=true;
+    $('nativeBillingNote').hidden=false;
+    document.querySelectorAll('[data-vip-plan] small').forEach(el=>{el.textContent='Purchase unavailable in this Android build';});
+  }
+
   renderHistory();show();refreshVipStatus();
   // Read-only test hooks for automated regression checks; no calculator state is changed by exposing these.
   window.DCCalculatorTest={parse,fmt,pretty,setAngleMode:(v)=>{angleMode=v;}};
