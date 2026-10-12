@@ -45,12 +45,15 @@ jobs:
         run: |
           mkdir -p android-playstore/app/src/main/assets
           cp dc-calculator/index.html android-playstore/app/src/main/assets/index.html
+          cp dc-calculator/privacy-policy.html android-playstore/app/src/main/assets/privacy-policy.html
+          cp dc-calculator/dc-icon.svg android-playstore/app/src/main/assets/dc-icon.svg
           python3 - <<'PY'
           from pathlib import Path
+          import re
           p = Path("android-playstore/app/src/main/assets/index.html")
           s = p.read_text(encoding="utf-8")
-          s = s.replace('<link rel="manifest" href="./manifest.webmanifest">\\n', '')
-          s = s.replace('<link rel="icon" href="./dc-icon.svg" type="image/svg+xml">\\n', '')
+          s = re.sub(r'<link rel="manifest"[^>]*>\s*', '', s)
+          s = re.sub(r'<link rel="icon"[^>]*>\s*', '', s)
           p.write_text(s, encoding="utf-8")
           PY
 
