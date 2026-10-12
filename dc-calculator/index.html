@@ -245,7 +245,7 @@
       <div class="vip-admin-actions"><button type="button" class="vip-secondary" id="loadVipRequests">Load pending requests</button><span id="vipAdminFeedback" role="status"></span></div>
       <div class="vip-request-list" id="vipRequestList"></div>
     </details>
-    <footer class="vip-foot"><span>✓ VIP lasts for the purchased period</span><span>Renewal is manual · No auto-charge</span></footer>
+    <footer class="vip-foot"><span>✓ VIP lasts for the purchased period</span><span>Renewal is manual · No auto-charge</span><a href="./privacy-policy.html" class="vip-privacy-link">Privacy</a></footer>
   </section>
 </div>
 <div class="vault-overlay" id="vaultOverlay" hidden>
@@ -525,7 +525,7 @@
   function openVip(){
     $('vipOverlay').hidden=false;
     configureVipPaymentUi();refreshVipStatus();
-    setTimeout(()=>$('vipEmail').focus({preventScroll:true}),80);
+    if(!nativeBillingApi())setTimeout(()=>$('vipEmail').focus({preventScroll:true}),80);
   }
   function chooseVipPlan(plan){
     if(!['monthly','yearly'].includes(plan))return;
