@@ -106,7 +106,8 @@
 .vault-setup h3{font-size:18px;margin:0 0 6px}.vault-copy{font-size:11px;line-height:1.6;color:var(--muted);max-width:390px;margin:0 auto 17px}
 .vault-input-label{display:block;text-align:left;font-size:10px;color:var(--muted);font-weight:800;margin:11px 0}.vault-input-label input{display:block;width:100%;box-sizing:border-box;margin-top:6px;padding:13px 14px;border-radius:12px;border:1px solid var(--line);background:var(--panel-2);color:var(--text);font:600 13px system-ui,sans-serif;outline:0}.vault-input-label input:focus{border-color:#6872e8;box-shadow:0 0 0 3px #6872e822}
 .vault-action{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;padding:13px 15px;border-radius:13px;background:linear-gradient(110deg,#5367ed,#7d54ee);color:white;font-size:11px;font-weight:850;box-shadow:0 5px 14px rgba(86,89,225,.2)}.vault-action:disabled{opacity:.55}.vault-action span{font-size:19px;font-weight:500}.vault-error{min-height:18px;color:#d93655;font-size:10px;line-height:1.45;margin:8px 0}.vault-footnote{font-size:9px;line-height:1.6;color:var(--muted);margin:8px 0 0}
-.vault-contents[hidden]{display:none}.vault-storage-info{display:flex;align-items:center;gap:9px;padding:12px;border-radius:14px;background:var(--panel-2);border:1px solid var(--line)}.vault-storage-info>div{flex:1;min-width:0;display:grid;gap:4px}.vault-storage-info b{font-size:10px}.vault-storage-info span{font-size:9px;line-height:1.4;color:var(--muted)}.vault-count{white-space:nowrap}
+.vault-contents[hidden]{display:none}.vault-note-box{display:grid;gap:9px;padding:14px;margin:12px 0;border:1px solid var(--line);border-radius:18px;background:var(--panel-2)}.vault-note-box label{font-size:12px;font-weight:750;color:var(--muted)}.vault-note-box input,.vault-note-box textarea{width:100%;border:1px solid var(--line);border-radius:12px;padding:11px 12px;background:var(--panel);color:var(--text);font:inherit;outline:none}.vault-note-box input:focus,.vault-note-box textarea:focus{border-color:var(--accent)}.vault-note-box textarea{resize:vertical;min-height:90px}
+.vault-storage-info{display:flex;align-items:center;gap:9px;padding:12px;border-radius:14px;background:var(--panel-2);border:1px solid var(--line)}.vault-storage-info>div{flex:1;min-width:0;display:grid;gap:4px}.vault-storage-info b{font-size:10px}.vault-storage-info span{font-size:9px;line-height:1.4;color:var(--muted)}.vault-count{white-space:nowrap}
 .vault-add-btn{display:flex;align-items:center;gap:10px;width:100%;padding:12px;border:1px dashed #8984e7;background:color-mix(in srgb,#7665ed 6%,var(--panel));border-radius:14px;margin:12px 0;color:var(--text);text-align:left}.add-plus{width:37px;height:37px;border-radius:11px;background:#ece9ff;color:#6354d8;display:grid;place-items:center;font-size:22px}.vault-add-btn span:last-child{display:grid;gap:4px}.vault-add-btn b{font-size:11px}.vault-add-btn small{font-size:9px;color:var(--muted)}
 .vault-items{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.vault-item{min-width:0;border:1px solid var(--line);border-radius:13px;overflow:hidden;background:var(--panel-2)}.vault-thumb{height:105px;background:var(--key);display:grid;place-items:center;color:var(--muted);overflow:hidden}.vault-thumb img{width:100%;height:100%;object-fit:cover}.vault-doc-icon{font-size:28px}.vault-item-info{padding:8px}.vault-item-name{font-size:10px;font-weight:750;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.vault-item-meta{font-size:9px;color:var(--muted);margin-top:4px}.vault-item-actions{display:flex;gap:5px;margin-top:7px}.vault-item-actions button{flex:1;padding:7px 5px;border-radius:8px;font-size:9px;font-weight:750;color:var(--accent);background:var(--panel);border:1px solid var(--line)}.vault-item-actions button:last-child{color:#cb4357}
 .vault-empty{display:grid;justify-items:center;gap:6px;padding:23px 10px;color:var(--muted);font-size:10px;text-align:center}.vault-empty>div{font-size:30px;color:#8d82e9}.vault-empty b{font-size:12px;color:var(--text)}.vault-empty[hidden]{display:none}.vault-footer{display:flex;justify-content:space-between;gap:10px;margin-top:14px;padding-top:12px;border-top:1px solid var(--line);font-size:9px;color:var(--muted)}
@@ -267,6 +268,13 @@
     </div>
     <div class="vault-contents" id="vaultContents" hidden>
       <div class="vault-storage-info"><span class="vault-emblem small">🔐</span><div><b>Encrypted on this device</b><span>Names, photos and file contents are encrypted before storage.</span></div><span class="vault-count" id="vaultFileCount">0 files</span></div>
+      <section class="vault-note-box" aria-label="Encrypted private note">
+        <label for="vaultNoteTitle">Private note title</label>
+        <input id="vaultNoteTitle" maxlength="100" placeholder="e.g. Personal notes">
+        <label for="vaultNoteText">Private note</label>
+        <textarea id="vaultNoteText" maxlength="20000" rows="4" placeholder="Write a private note. It is encrypted before saving on this device."></textarea>
+        <button id="vaultSaveNote" class="vault-add-btn" type="button"><span class="add-plus">＋</span><span><b>Save encrypted note</b><small>Stored in your private vault on this device</small></span></button>
+      </section>
       <input id="vaultFiles" type="file" multiple accept="image/*,.pdf,.txt,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.zip" hidden>
       <button id="vaultAddFiles" class="vault-add-btn" type="button"><span class="add-plus">＋</span><span><b>Add photos or files</b><small>Maximum 20 MB per file</small></span></button>
       <div id="vaultItems" class="vault-items"></div>
@@ -731,6 +739,24 @@
       actions.append(download,remove);body.append(name,meta,actions);card.append(thumb,body);root.append(card);
     }
   }
+  async function saveVaultNote(){
+    if(!vaultKey||!vipState.active){toast('Unlock the active VIP vault first');return;}
+    const title=$('vaultNoteTitle').value.trim()||'Private note';
+    const note=$('vaultNoteText').value;
+    if(!note.trim()){toast('Write a note before saving');return;}
+    const button=$('vaultSaveNote');button.disabled=true;
+    try{
+      const meta=new TextEncoder().encode(JSON.stringify({name:title.replace(/[\\/<>:"|?*]/g,'_').slice(0,100)+'.txt',type:'text/plain;charset=utf-8',lastModified:Date.now()}));
+      const body=new TextEncoder().encode(note),packed=new Uint8Array(4+meta.length+body.length);
+      new DataView(packed.buffer).setUint32(0,meta.length);packed.set(meta,4);packed.set(body,4+meta.length);
+      const iv=crypto.getRandomValues(new Uint8Array(12));
+      const ciphertext=await crypto.subtle.encrypt({name:'AES-GCM',iv},vaultKey,packed);
+      await vaultPut('entries',{id:crypto.randomUUID?crypto.randomUUID():String(Date.now())+'-'+Math.random().toString(36).slice(2),iv:Array.from(iv),ciphertext:Array.from(new Uint8Array(ciphertext)),createdAt:Date.now()});
+      $('vaultNoteTitle').value='';$('vaultNoteText').value='';
+      await renderVaultFiles();toast('Private note encrypted and saved');
+    }catch(err){toast(err.message||'Could not save encrypted note');}
+    finally{button.disabled=false;}
+  }
   async function addVaultFiles(files){
     if(!vaultKey||!vipState.active){toast('Unlock the active VIP vault first');return;}
     const btn=$('vaultAddFiles');btn.disabled=true;let saved=0;
@@ -761,6 +787,7 @@
   $('vaultPassConfirm').addEventListener('keydown',e=>{if(e.key==='Enter')unlockOrCreateVault();});
   $('vaultAddFiles').addEventListener('click',()=>{if(vaultKey&&vipState.active)$('vaultFiles').click();else toast('Unlock the vault first');});
   $('vaultFiles').addEventListener('change',e=>addVaultFiles(e.target.files));
+  $('vaultSaveNote').addEventListener('click',saveVaultNote);
   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('vaultOverlay').hidden)lockVault(true);});
 
   $('openVip').addEventListener('click',openVip);
