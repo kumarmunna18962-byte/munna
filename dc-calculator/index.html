@@ -593,6 +593,175 @@
   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('vipOverlay').hidden)$('vipOverlay').hidden=true;});
   try{if(localStorage.getItem('dc-calculator-vip-palette-v1'))document.documentElement.dataset.vipPalette=localStorage.getItem('dc-calculator-vip-palette-v1');}catch{}
 
+
+  // VIP-only encrypted local vault. File names/content are encrypted before IndexedDB writes.
+  const VAULT_DB_NAME='dc-calculator-vault-v1';
+  const VAULT_CONFIG_KEY='vault-config';
+  const VAULT_VERIFY_TEXT='DC_CALCULATOR_PRIVATE_VAULT_OK_V1';
+  const VAULT_MAX_BYTES=20*1024*1024;
+  let vaultDbPromise=null,vaultKey=null,vaultOpenItems=new Map();
+
+  function openVaultDb(){
+    if(vaultDbPromise)return vaultDbPromise;
+    vaultDbPromise=new Promise((resolve,reject)=>{
+      if(!('indexedDB' in window)){reject(new Error('This browser does not support local vault storage.'));return;}
+      const req=indexedDB.open(VAULT_DB_NAME,1);
+      req.onupgradeneeded=()=>{const db=req.result;if(!db.objectStoreNames.contains('config'))db.createObjectStore('config',{keyPath:'key'});if(!db.objectStoreNames.contains('entries'))db.createObjectStore('entries',{keyPath:'id'});};
+      req.onsuccess=()=>resolve(req.result);
+      req.onerror=()=>reject(req.error||new Error('Could not open local vault storage.'));
+      req.onblocked=()=>reject(new Error('Vault database is blocked by another tab. Close other calculator tabs and retry.'));
+    });
+    return vaultDbPromise;
+  }
+  async function vaultGet(store,key){
+    const db=await openVaultDb();
+    return new Promise((resolve,reject)=>{const tx=db.transaction(store,'readonly'),req=tx.objectStore(store).get(key);req.onsuccess=()=>resolve(req.result||null);req.onerror=()=>reject(req.error||new Error('Vault read failed.'));tx.onabort=()=>reject(tx.error||new Error('Vault read was interrupted.'));});
+  }
+  async function vaultGetAll(){
+    const db=await openVaultDb();
+    return new Promise((resolve,reject)=>{const tx=db.transaction('entries','readonly'),req=tx.objectStore('entries').getAll();req.onsuccess=()=>resolve(req.result||[]);req.onerror=()=>reject(req.error||new Error('Could not read vault files.'));tx.onabort=()=>reject(tx.error||new Error('Vault read was interrupted.'));});
+  }
+  async function vaultPut(store,value){
+    const db=await openVaultDb();
+    return new Promise((resolve,reject)=>{const tx=db.transaction(store,'readwrite');tx.objectStore(store).put(value);tx.oncomplete=()=>resolve(true);tx.onerror=()=>reject(tx.error||new Error('Vault save failed.'));tx.onabort=()=>reject(tx.error||new Error('Vault save was interrupted.'));});
+  }
+  async function vaultDelete(id){
+    const db=await openVaultDb();
+    return new Promise((resolve,reject)=>{const tx=db.transaction('entries','readwrite');tx.objectStore('entries').delete(id);tx.oncomplete=()=>resolve(true);tx.onerror=()=>reject(tx.error||new Error('Could not delete the encrypted file.'));tx.onabort=()=>reject(tx.error||new Error('Delete was interrupted.'));});
+  }
+  async function deriveVaultKey(passphrase,salt){
+    if(!crypto.subtle)throw new Error('Secure encryption requires the HTTPS version of DC Calculator.');
+    const material=await crypto.subtle.importKey('raw',new TextEncoder().encode(passphrase),'PBKDF2',false,['deriveKey']);
+    return crypto.subtle.deriveKey({name:'PBKDF2',salt,iterations:310000,hash:'SHA-256'},material,{name:'AES-GCM',length:256},false,['encrypt','decrypt']);
+  }
+  function vaultShowError(message){$('vaultError').textContent=message||'';}
+  function vaultShowLocked(hasConfig){
+    $('vaultSetup').hidden=false;$('vaultContents').hidden=true;$('vaultLock').hidden=true;
+    $('vaultSetupHeading').textContent=hasConfig?'Unlock your vault':'Create your vault';
+    $('vaultSetupCopy').textContent=hasConfig?'Enter the passphrase you created for this device. It is not stored anywhere.':'Set a separate passphrase of at least 8 characters. Files are encrypted locally before they are saved.';
+    $('vaultConfirmLabel').hidden=hasConfig;
+    $('vaultUnlock').innerHTML=hasConfig?'Unlock encrypted vault <span>→</span>':'Create encrypted vault <span>→</span>';
+    $('vaultPass').value='';$('vaultPassConfirm').value='';$('vaultPass').setAttribute('autocomplete',hasConfig?'current-password':'new-password');
+    vaultShowError('');
+  }
+  function clearVaultMemory(){
+    for(const item of vaultOpenItems.values())if(item.url)URL.revokeObjectURL(item.url);
+    vaultOpenItems.clear();vaultKey=null;
+    $('vaultItems').replaceChildren();$('vaultFileCount').textContent='0 files';$('vaultEmpty').hidden=false;
+  }
+  async function openVaultDialog(){
+    if(!vipState.active){toast('An active VIP membership is required for the Private Vault');return;}
+    $('vaultOverlay').hidden=false;clearVaultMemory();vaultShowLocked(false);
+    try{const cfg=await vaultGet('config',VAULT_CONFIG_KEY);vaultShowLocked(!!cfg);setTimeout(()=>$('vaultPass').focus({preventScroll:true}),90);}
+    catch(err){vaultShowError(err.message||'Could not open encrypted storage.');}
+  }
+  async function unlockOrCreateVault(){
+    const button=$('vaultUnlock'),pass=$('vaultPass').value,confirm=$('vaultPassConfirm').value;
+    button.disabled=true;vaultShowError('');
+    try{
+      if(!vipState.active)throw new Error('Your VIP membership is not active. Refresh membership status and try again.');
+      if(pass.length<8||pass.length>128)throw new Error('Use a passphrase between 8 and 128 characters.');
+      let cfg=await vaultGet('config',VAULT_CONFIG_KEY);
+      if(!cfg){
+        if(pass!==confirm)throw new Error('The two passphrases do not match.');
+        const salt=crypto.getRandomValues(new Uint8Array(16)),key=await deriveVaultKey(pass,salt),iv=crypto.getRandomValues(new Uint8Array(12));
+        const check=await crypto.subtle.encrypt({name:'AES-GCM',iv},key,new TextEncoder().encode(VAULT_VERIFY_TEXT));
+        cfg={key:VAULT_CONFIG_KEY,salt:Array.from(salt),checkIv:Array.from(iv),checkCipher:Array.from(new Uint8Array(check)),createdAt:Date.now()};
+        await vaultPut('config',cfg);vaultKey=key;toast('Encrypted vault created');
+      }else{
+        const key=await deriveVaultKey(pass,new Uint8Array(cfg.salt));
+        let test='';
+        try{const clear=await crypto.subtle.decrypt({name:'AES-GCM',iv:new Uint8Array(cfg.checkIv)},key,new Uint8Array(cfg.checkCipher));test=new TextDecoder().decode(clear);}catch{throw new Error('Incorrect passphrase. Your files remain encrypted.');}
+        if(test!==VAULT_VERIFY_TEXT)throw new Error('Incorrect passphrase. Your files remain encrypted.');
+        vaultKey=key;
+      }
+      $('vaultSetup').hidden=true;$('vaultContents').hidden=false;$('vaultLock').hidden=false;
+      $('vaultPass').value='';$('vaultPassConfirm').value='';
+      await renderVaultFiles();
+    }catch(err){vaultKey=null;vaultShowError(err&&err.message?err.message:'Could not unlock the vault. Try again.');}
+    finally{button.disabled=false;}
+  }
+  function lockVault(closeOverlay=false){
+    clearVaultMemory();
+    $('vaultPass').value='';$('vaultPassConfirm').value='';
+    if(closeOverlay){$('vaultOverlay').hidden=true;}
+    else{vaultShowLocked(true);}
+  }
+  function formatVaultBytes(bytes){
+    if(bytes<1024)return bytes+' B';
+    if(bytes<1024*1024)return (bytes/1024).toFixed(1)+' KB';
+    return (bytes/(1024*1024)).toFixed(1)+' MB';
+  }
+  async function decryptVaultItem(record){
+    const clear=await crypto.subtle.decrypt({name:'AES-GCM',iv:new Uint8Array(record.iv)},vaultKey,new Uint8Array(record.ciphertext));
+    const packed=new Uint8Array(clear);
+    if(packed.length<4)throw new Error('Encrypted file data is damaged.');
+    const metaLength=new DataView(packed.buffer,packed.byteOffset,packed.byteLength).getUint32(0);
+    if(metaLength<2||metaLength>packed.length-4)throw new Error('Encrypted file metadata is damaged.');
+    const meta=JSON.parse(new TextDecoder().decode(packed.slice(4,4+metaLength)));
+    const bytes=packed.slice(4+metaLength);
+    const blob=new Blob([bytes],{type:typeof meta.type==='string'?meta.type:'application/octet-stream'});
+    return {id:record.id,name:String(meta.name||'Private file').slice(0,240),type:typeof meta.type==='string'?meta.type:'application/octet-stream',size:bytes.length,blob,url:URL.createObjectURL(blob),createdAt:record.createdAt||Date.now()};
+  }
+  async function renderVaultFiles(){
+    if(!vaultKey)return;
+    const root=$('vaultItems');root.replaceChildren();
+    for(const item of vaultOpenItems.values())if(item.url)URL.revokeObjectURL(item.url);
+    vaultOpenItems.clear();
+    const records=await vaultGetAll();
+    for(const record of records){
+      try{const item=await decryptVaultItem(record);vaultOpenItems.set(item.id,item);}
+      catch{toast('One vault item could not be decrypted. It has not been changed.');}
+    }
+    $('vaultFileCount').textContent=vaultOpenItems.size+' '+(vaultOpenItems.size===1?'file':'files');
+    $('vaultEmpty').hidden=vaultOpenItems.size>0;
+    for(const item of vaultOpenItems.values()){
+      const card=document.createElement('article');card.className='vault-item';
+      const thumb=document.createElement('div');thumb.className='vault-thumb';
+      if(item.type.startsWith('image/')){const img=document.createElement('img');img.src=item.url;img.alt='Encrypted private photo preview';img.loading='lazy';thumb.append(img);}
+      else{const icon=document.createElement('div');icon.className='vault-doc-icon';icon.textContent=item.type==='application/pdf'?'📄':'🔐';thumb.append(icon);}
+      const body=document.createElement('div');body.className='vault-item-info';
+      const name=document.createElement('div');name.className='vault-item-name';name.title=item.name;name.textContent=item.name;
+      const meta=document.createElement('div');meta.className='vault-item-meta';meta.textContent=formatVaultBytes(item.size)+' · '+new Date(item.createdAt).toLocaleDateString();
+      const actions=document.createElement('div');actions.className='vault-item-actions';
+      const download=document.createElement('button');download.type='button';download.textContent='Download';download.addEventListener('click',()=>{const a=document.createElement('a');a.href=item.url;a.download=item.name.replace(/[\\/<>:"|?*]/g,'_')||'private-file';document.body.append(a);a.click();a.remove();});
+      const remove=document.createElement('button');remove.type='button';remove.textContent='Delete';remove.addEventListener('click',async()=>{if(!window.confirm('Delete this encrypted file from this device? This cannot be undone.'))return;remove.disabled=true;try{await vaultDelete(item.id);if(item.url)URL.revokeObjectURL(item.url);vaultOpenItems.delete(item.id);await renderVaultFiles();toast('Encrypted file deleted');}catch(err){remove.disabled=false;toast(err.message||'Could not delete file');}});
+      actions.append(download,remove);body.append(name,meta,actions);card.append(thumb,body);root.append(card);
+    }
+  }
+  async function addVaultFiles(files){
+    if(!vaultKey||!vipState.active){toast('Unlock the active VIP vault first');return;}
+    const btn=$('vaultAddFiles');btn.disabled=true;let saved=0;
+    try{
+      for(const file of Array.from(files||[])){
+        if(file.size>VAULT_MAX_BYTES){toast(file.name+' is over the 20 MB limit');continue;}
+        const meta=new TextEncoder().encode(JSON.stringify({name:file.name,type:file.type||'application/octet-stream',lastModified:file.lastModified||Date.now()}));
+        const fileBytes=new Uint8Array(await file.arrayBuffer()),packed=new Uint8Array(4+meta.length+fileBytes.length);
+        new DataView(packed.buffer).setUint32(0,meta.length);packed.set(meta,4);packed.set(fileBytes,4+meta.length);
+        const iv=crypto.getRandomValues(new Uint8Array(12)),ciphertext=await crypto.subtle.encrypt({name:'AES-GCM',iv},vaultKey,packed);
+        const id=crypto.randomUUID?crypto.randomUUID():String(Date.now())+'-'+Math.random().toString(16).slice(2);
+        await vaultPut('entries',{id,iv:Array.from(iv),ciphertext,createdAt:Date.now()});saved++;
+      }
+      await renderVaultFiles();if(saved)toast(saved+' file(s) encrypted and saved on this device');
+    }catch(err){toast(err&&err.message?err.message:'Could not encrypt the selected files.');}
+    finally{btn.disabled=false;$('vaultFiles').value='';}
+  }
+  $('openVipVault').addEventListener('click',async()=>{
+    if(!vipState.admin){await refreshVipStatus();}
+    if(!vipState.active){toast('An active VIP membership is required for the Private Vault');return;}
+    await openVaultDialog();
+  });
+  $('vaultBack').addEventListener('click',()=>lockVault(true));
+  $('vaultLock').addEventListener('click',()=>lockVault(false));
+  $('vaultOverlay').addEventListener('click',e=>{if(e.target===$('vaultOverlay'))lockVault(true);});
+  $('vaultUnlock').addEventListener('click',unlockOrCreateVault);
+  $('vaultPass').addEventListener('keydown',e=>{if(e.key==='Enter')unlockOrCreateVault();});
+  $('vaultPassConfirm').addEventListener('keydown',e=>{if(e.key==='Enter')unlockOrCreateVault();});
+  $('vaultAddFiles').addEventListener('click',()=>{if(vaultKey&&vipState.active)$('vaultFiles').click();else toast('Unlock the vault first');});
+  $('vaultFiles').addEventListener('change',e=>addVaultFiles(e.target.files));
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('vaultOverlay').hidden)lockVault(true);});
+
+  $('openVip').addEventListener('click',openVip);
   $('copyText').addEventListener('click',copyResult);
   $('openHistory').addEventListener('click',()=>$('historyPanel').classList.add('open'));$('closeHistory').addEventListener('click',()=>$('historyPanel').classList.remove('open'));
   document.querySelectorAll('[data-memory]').forEach(b=>b.addEventListener('click',()=>memoryAction(b.dataset.memory)));
