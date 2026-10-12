@@ -125,7 +125,6 @@
     <div style="flex:1"></div>
     <div class="top-actions">
       <button class="icon-btn mobile-only" id="openHistory" aria-label="Open history" title="History"><svg viewBox="0 0 24 24" fill="none"><path d="M3.4 12a8.6 8.6 0 1 0 2.2-5.8L3.4 8.4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M3.5 4.4v4h4m4.5-1.2v5l3.2 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-      <button class="vip-top-btn" id="openVip" aria-label="VIP membership" title="VIP membership"><svg viewBox="0 0 24 24" fill="none"><path d="m3 8 4.2 3.2L12 4l4.8 7.2L21 8l-2 11H5L3 8Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M5 21h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>VIP</span></button>
       <button class="icon-btn vip-launch" id="vipBtn" aria-label="VIP membership" title="VIP membership"><svg viewBox="0 0 24 24" fill="none"><path d="m12 3 2.1 4.4 4.9.7-3.5 3.4.8 4.9-4.3-2.3-4.3 2.3.8-4.9L5 8.1l4.9-.7L12 3Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M7 18.5h10" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg><span>VIP</span></button>
       <button class="icon-btn" id="themeBtn" aria-label="Switch color theme" title="Light/dark theme"><svg id="themeIcon" viewBox="0 0 24 24" fill="none"><path d="M20.2 15.3A8.3 8.3 0 0 1 8.7 3.8 8.6 8.6 0 1 0 20.2 15.3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></button>
     </div>
@@ -224,7 +223,7 @@
       </button>
     </div>
     <div class="vip-payment-note" id="vipPaymentNote"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3 4.5 6v5.4c0 4.6 3.2 7.8 7.5 9.6 4.3-1.8 7.5-5 7.5-9.6V6L12 3Z" stroke="currentColor" stroke-width="1.6"/><path d="m8.5 12 2.2 2.2 4.8-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><div><strong>Manual payment verification · ₹99 monthly / ₹1,099 yearly</strong><p>This app does not collect or process payment. Get payment instructions directly from the developer through a trusted private channel before paying. After an actual transfer, submit its UTR/reference; the request stays pending until the developer verifies receipt independently. No automatic renewal.</p><small>Never enter a bank/card PIN, password, CVV or OTP. Do not pay anyone who claims this page itself has accepted a payment.</small></div></div>
-    <div class="native-billing-note" id="nativeBillingNote" hidden><strong>Play Store purchase unavailable</strong><span>Google Play Billing has not been configured for this Android release. No membership payment can be made from this app version. The browser version's manual process is separate and tied to that browser/device.</span></div>
+    <div class="native-billing-note" id="nativeBillingNote" hidden><strong>Google Play subscription</strong><span>Android purchases are handled by Google Play. Checkout opens only when the monthly and yearly products are configured in Play Console. This screen never collects card details, UPI PINs or bank passwords. If checkout says the plan is unavailable, no payment was taken.</span></div>
     <section class="vip-request" id="vipRequest">
       <h3>Request VIP activation</h3>
       <div class="vip-field-grid"><label>Email for your receipt<input type="email" id="vipEmail" maxlength="254" autocomplete="email" placeholder="you@example.com"></label><label>Transaction / UTR reference<input type="text" id="vipPaymentRef" maxlength="64" autocomplete="off" placeholder="Reference from your payment"></label></div>
@@ -264,7 +263,7 @@
       <label class="vault-input-label" id="vaultConfirmLabel">Confirm passphrase<input id="vaultPassConfirm" type="password" autocomplete="new-password" minlength="8" maxlength="128" placeholder="Enter it again"></label>
       <button class="vault-action" id="vaultUnlock" type="button">Create encrypted vault <span>→</span></button>
       <p class="vault-error" id="vaultError" role="status" aria-live="polite"></p>
-      <p class="vault-footnote">Web version uses your passphrase, not fingerprint unlock. Forgetting your passphrase or clearing browser data can permanently lose the encrypted files. Keep a secure backup of originals.</p>
+      <p class="vault-footnote">The browser version uses your passphrase. The Android app also asks for your phone’s fingerprint, face or screen-lock credential before vault access. Forgetting your passphrase or clearing browser/app data can permanently lose encrypted files. Keep a secure backup of originals.</p>
     </div>
     <div class="vault-contents" id="vaultContents" hidden>
       <div class="vault-storage-info"><span class="vault-emblem small">🔐</span><div><b>Encrypted on this device</b><span>Names, photos and file contents are encrypted before storage.</span></div><span class="vault-count" id="vaultFileCount">0 files</span></div>
@@ -469,22 +468,42 @@
   function vipFeedback(message,kind=''){
     const el=$('vipRequestFeedback');el.textContent=message;el.className='vip-feedback'+(kind?' '+kind:'');
   }
+  function nativeBillingApi(){try{return window.DCPlayBilling||null;}catch{return null;}}
+  function configureVipPaymentUi(){
+    const native=!!nativeBillingApi();
+    $('nativeBillingNote').hidden=!native;
+    $('vipPaymentNote').hidden=native;
+    $('vipRequest').hidden=native;
+    const admin=document.querySelector('.vip-admin');if(admin)admin.hidden=native;
+  }
   function setVipStatusUI(){
     const el=$('vipStatus');el.classList.toggle('is-active',vipState.active);
     const strong=el.querySelector('strong'),small=el.querySelector('small');
     if(vipState.active){
       strong.textContent=vipState.admin?'Owner admin mode — VIP tools unlocked':'VIP membership active';
       small.textContent=vipState.expiresAt?'Valid until '+new Date(vipState.expiresAt).toLocaleDateString():(vipState.admin?'Private admin session.':'VIP membership is active on this device.');
-      $('vipExtras').hidden=false;
-      $('vipBtn').classList.add('vip-on');
+      $('vipExtras').hidden=false;$('vipBtn').classList.add('vip-on');
     }else{
       strong.textContent='Free membership';
       small.textContent='Basic, Scientific, Student tools, GST, EMI and converter remain available.';
-      $('vipExtras').hidden=true;
-      $('vipBtn').classList.remove('vip-on');
+      $('vipExtras').hidden=true;$('vipBtn').classList.remove('vip-on');
     }
+    configureVipPaymentUi();
   }
   async function refreshVipStatus(){
+    const native=nativeBillingApi();
+    if(native){
+      try{
+        let active=false;try{active=native.isVip()===true;}catch{}
+        vipState={active,plan:active?'play-store':null,expiresAt:null,admin:false};
+        for(const [plan,id] of [['monthly','dc_vip_monthly'],['yearly','dc_vip_yearly']]){
+          try{const price=native.getPrice(id);if(price){const button=document.querySelector('[data-vip-plan="'+plan+'"]');const strong=button&&button.querySelector('strong');if(strong)strong.textContent=price;}}catch{}
+        }
+        setVipStatusUI();return {active,source:'google-play'};
+      }catch{
+        vipState={active:false,plan:null,expiresAt:null,admin:false};setVipStatusUI();return {active:false,unavailable:true};
+      }
+    }
     const button=$('refreshVip');if(button)button.disabled=true;
     try{
       const result=await vipCall({action:'status',device_id:getDeviceId()});
@@ -493,20 +512,29 @@
         const saved=localStorage.getItem('dc-calculator-vip-palette-v1');
         if(saved&&['ocean','sunset','rose'].includes(saved))document.documentElement.dataset.vipPalette=saved;
       }
-      setVipStatusUI();
-      return result;
+      setVipStatusUI();return result;
     }catch{
-      setVipStatusUI();
+      const el=$('vipStatus');el.classList.remove('is-active');
+      const strong=el.querySelector('strong'),small=el.querySelector('small');
+      strong.textContent='Membership status unavailable';
+      small.textContent='Could not reach the membership service. Your calculator still works; check your connection and refresh.';
+      $('vipExtras').hidden=true;$('vipBtn').classList.remove('vip-on');configureVipPaymentUi();
       return {active:false,unavailable:true};
     }finally{if(button)button.disabled=false;}
   }
   function openVip(){
     $('vipOverlay').hidden=false;
-    refreshVipStatus();
+    configureVipPaymentUi();refreshVipStatus();
     setTimeout(()=>$('vipEmail').focus({preventScroll:true}),80);
   }
   function chooseVipPlan(plan){
     if(!['monthly','yearly'].includes(plan))return;
+    const native=nativeBillingApi();
+    if(native){
+      try{native.launchSubscription(plan==='monthly'?'dc_vip_monthly':'dc_vip_yearly');}
+      catch{toast('Could not open Google Play checkout. Please try again.');}
+      return;
+    }
     selectedVipPlan=plan;
     document.querySelectorAll('[data-vip-plan]').forEach(b=>b.classList.toggle('selected',b.dataset.vipPlan===plan));
   }
@@ -590,6 +618,11 @@
       vipState={active:true,plan:'admin',expiresAt:null,admin:true};setVipStatusUI();
     }catch(error){$('vipAdminFeedback').textContent=error.message||'Could not review request.';button.disabled=false;}
   }
+  window.addEventListener('dc-vip-status',event=>{
+    if(!nativeBillingApi())return;
+    const active=!!(event&&event.detail&&event.detail.vip);
+    vipState={active,plan:active?'play-store':null,expiresAt:null,admin:false};setVipStatusUI();
+  });
   $('vipBtn').addEventListener('click',openVip);
   $('closeVip').addEventListener('click',()=>$('vipOverlay').hidden=true);
   $('vipOverlay').addEventListener('click',e=>{if(e.target===$('vipOverlay'))$('vipOverlay').hidden=true;});
@@ -665,11 +698,29 @@
     try{const cfg=await vaultGet('config',VAULT_CONFIG_KEY);vaultShowLocked(!!cfg);setTimeout(()=>$('vaultPass').focus({preventScroll:true}),90);}
     catch(err){vaultShowError(err.message||'Could not open encrypted storage.');}
   }
+  let nativeVaultAuthCounter=0;
+  const nativeVaultAuthPending=new Map();
+  window.onDCCalculatorVaultAuthResult=(requestId,success)=>{
+    const resolve=nativeVaultAuthPending.get(String(requestId));
+    if(resolve){nativeVaultAuthPending.delete(String(requestId));resolve(!!success);}
+  };
+  function requestNativeVaultAuth(){
+    const bridge=(()=>{try{return window.DCCalculatorNative||null;}catch{return null;}})();
+    if(!bridge||typeof bridge.authenticateVault!=='function')return Promise.resolve(true);
+    return new Promise(resolve=>{
+      const id=String(++nativeVaultAuthCounter);
+      const timer=setTimeout(()=>{nativeVaultAuthPending.delete(id);resolve(false);},120000);
+      nativeVaultAuthPending.set(id,ok=>{clearTimeout(timer);resolve(!!ok);});
+      try{bridge.authenticateVault(id);}catch{clearTimeout(timer);nativeVaultAuthPending.delete(id);resolve(false);}
+    });
+  }
   async function unlockOrCreateVault(){
     const button=$('vaultUnlock'),pass=$('vaultPass').value,confirm=$('vaultPassConfirm').value;
     button.disabled=true;vaultShowError('');
     try{
       if(!vipState.active)throw new Error('Your VIP membership is not active. Refresh membership status and try again.');
+      const deviceAuthOk=await requestNativeVaultAuth();
+      if(!deviceAuthOk)throw new Error('Phone authentication was cancelled or failed. The vault stayed locked.');
       if(pass.length<8||pass.length>128)throw new Error('Use a passphrase between 8 and 128 characters.');
       let cfg=await vaultGet('config',VAULT_CONFIG_KEY);
       if(!cfg){
