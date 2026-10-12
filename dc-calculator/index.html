@@ -96,6 +96,22 @@
 [data-theme="dark"][data-vip-palette="rose"]{--bg:#1b1221;--panel:#26182d;--panel-2:#32203d;--screen:#26182d;--text:#fff0fb;--muted:#c0a4c0;--line:#4a3153;--key:#422b4b;--key-hover:#56345f;--fn:#472846;--accent:#f389bd;--accent-hi:#af93ff;--accent-ink:#2e1327}
 @media(max-width:760px){.vip-overlay{align-items:flex-end;padding:0}.vip-sheet{width:100%;max-height:96dvh;border-radius:26px 26px 0 0;padding:18px 15px calc(17px + env(safe-area-inset-bottom));border-bottom:0}.vip-heading h2{font-size:24px}.vip-perks{gap:6px}.vip-perk{padding:10px 9px}.vip-perk strong{font-size:10px}.vip-perk small{font-size:8px}.vip-plan{padding:12px 9px;gap:5px 7px}.vip-plan strong{font-size:17px}.vip-field-grid{grid-template-columns:1fr}.vip-foot{font-size:8px}.vip-extra-card.theme-extra{align-items:flex-start;flex-direction:column}.vip-palette-list{justify-content:flex-start}.vip-launch{padding:0 8px}}
 @media(max-width:370px){.vip-heading p{font-size:10px}.vip-emblem{width:42px;height:42px}.vip-plan strong{font-size:15px}.vip-perk{padding:8px 7px}.vip-perk small{font-size:8px}.formula-vault{gap:5px}}
+
+.vault-extra{border-color:#8c7af0;background:linear-gradient(110deg,color-mix(in srgb,#7863f0 7%,var(--panel)),var(--panel))}
+.vault-overlay{position:fixed;inset:0;z-index:70;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(12,17,32,.72);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.vault-overlay[hidden]{display:none}
+.vault-sheet{width:min(100%,560px);max-height:min(92dvh,850px);overflow:auto;background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:27px;padding:23px;box-shadow:0 30px 90px rgba(0,0,0,.34);animation:sheet-in .2s ease-out}
+.vault-top{display:flex;align-items:center;gap:10px;margin-bottom:14px}.vault-top>div{flex:1;min-width:0}.vault-top h2{margin:4px 0;font-size:24px;letter-spacing:-.7px}
+.vault-setup{padding:10px 5px 5px;text-align:center}.vault-emblem{width:61px;height:61px;border-radius:20px;background:linear-gradient(135deg,#e3e7ff,#f1e4ff);display:grid;place-items:center;font-size:28px;margin:6px auto 14px}.vault-emblem.small{width:39px;height:39px;border-radius:13px;font-size:18px;margin:0;flex:none}
+.vault-setup h3{font-size:18px;margin:0 0 6px}.vault-copy{font-size:11px;line-height:1.6;color:var(--muted);max-width:390px;margin:0 auto 17px}
+.vault-input-label{display:block;text-align:left;font-size:10px;color:var(--muted);font-weight:800;margin:11px 0}.vault-input-label input{display:block;width:100%;box-sizing:border-box;margin-top:6px;padding:13px 14px;border-radius:12px;border:1px solid var(--line);background:var(--panel-2);color:var(--text);font:600 13px system-ui,sans-serif;outline:0}.vault-input-label input:focus{border-color:#6872e8;box-shadow:0 0 0 3px #6872e822}
+.vault-action{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;padding:13px 15px;border-radius:13px;background:linear-gradient(110deg,#5367ed,#7d54ee);color:white;font-size:11px;font-weight:850;box-shadow:0 5px 14px rgba(86,89,225,.2)}.vault-action:disabled{opacity:.55}.vault-action span{font-size:19px;font-weight:500}.vault-error{min-height:18px;color:#d93655;font-size:10px;line-height:1.45;margin:8px 0}.vault-footnote{font-size:9px;line-height:1.6;color:var(--muted);margin:8px 0 0}
+.vault-contents[hidden]{display:none}.vault-storage-info{display:flex;align-items:center;gap:9px;padding:12px;border-radius:14px;background:var(--panel-2);border:1px solid var(--line)}.vault-storage-info>div{flex:1;min-width:0;display:grid;gap:4px}.vault-storage-info b{font-size:10px}.vault-storage-info span{font-size:9px;line-height:1.4;color:var(--muted)}.vault-count{white-space:nowrap}
+.vault-add-btn{display:flex;align-items:center;gap:10px;width:100%;padding:12px;border:1px dashed #8984e7;background:color-mix(in srgb,#7665ed 6%,var(--panel));border-radius:14px;margin:12px 0;color:var(--text);text-align:left}.add-plus{width:37px;height:37px;border-radius:11px;background:#ece9ff;color:#6354d8;display:grid;place-items:center;font-size:22px}.vault-add-btn span:last-child{display:grid;gap:4px}.vault-add-btn b{font-size:11px}.vault-add-btn small{font-size:9px;color:var(--muted)}
+.vault-items{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.vault-item{min-width:0;border:1px solid var(--line);border-radius:13px;overflow:hidden;background:var(--panel-2)}.vault-thumb{height:105px;background:var(--key);display:grid;place-items:center;color:var(--muted);overflow:hidden}.vault-thumb img{width:100%;height:100%;object-fit:cover}.vault-doc-icon{font-size:28px}.vault-item-info{padding:8px}.vault-item-name{font-size:10px;font-weight:750;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.vault-item-meta{font-size:9px;color:var(--muted);margin-top:4px}.vault-item-actions{display:flex;gap:5px;margin-top:7px}.vault-item-actions button{flex:1;padding:7px 5px;border-radius:8px;font-size:9px;font-weight:750;color:var(--accent);background:var(--panel);border:1px solid var(--line)}.vault-item-actions button:last-child{color:#cb4357}
+.vault-empty{display:grid;justify-items:center;gap:6px;padding:23px 10px;color:var(--muted);font-size:10px;text-align:center}.vault-empty>div{font-size:30px;color:#8d82e9}.vault-empty b{font-size:12px;color:var(--text)}.vault-empty[hidden]{display:none}.vault-footer{display:flex;justify-content:space-between;gap:10px;margin-top:14px;padding-top:12px;border-top:1px solid var(--line);font-size:9px;color:var(--muted)}
+@media(max-width:760px){.vault-overlay{align-items:flex-end;padding:0}.vault-sheet{width:100%;max-height:94dvh;border-radius:27px 27px 0 0;padding:21px 17px calc(18px + env(safe-area-inset-bottom));border-bottom:0}}
+
 </style>
 </head>
 <body>
@@ -199,10 +215,10 @@
     <h3 class="vip-section-title">Choose a membership</h3>
     <div class="vip-plans">
       <button type="button" class="vip-plan selected" data-vip-plan="monthly">
-        <span class="plan-radio"></span><span class="plan-name">Monthly VIP</span><strong>₹29</strong><small>30 days · one-time payment</small>
+        <span class="plan-radio"></span><span class="plan-name">Monthly VIP</span><strong>₹99</strong><small>30 days · manual payment verification</small>
       </button>
       <button type="button" class="vip-plan" data-vip-plan="yearly">
-        <span class="plan-badge">BEST VALUE</span><span class="plan-radio"></span><span class="plan-name">Yearly VIP</span><strong>₹199</strong><small>365 days · one-time payment</small>
+        <span class="plan-badge">BEST VALUE</span><span class="plan-radio"></span><span class="plan-name">Yearly VIP</span><strong>₹1,099</strong><small>365 days · manual payment verification</small>
       </button>
     </div>
     <div class="vip-payment-note"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3 4.5 6v5.4c0 4.6 3.2 7.8 7.5 9.6 4.3-1.8 7.5-5 7.5-9.6V6L12 3Z" stroke="currentColor" stroke-width="1.6"/><path d="m8.5 12 2.2 2.2 4.8-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><div><strong>Manual payment verification</strong><p>Payment details are shared privately by the developer. Submit the transaction/UTR reference only after you have paid. VIP activates after the payment is checked; no automatic renewal.</p><small>Never enter your bank PIN, card PIN, password or OTP here.</small></div></div>
@@ -218,6 +234,7 @@
       <div class="vip-extra-card theme-extra"><div><strong>Premium colour packs</strong><small>Apply a fresh look. Your original DC icon stays unchanged.</small></div><div class="vip-palette-list"><button type="button" data-vip-palette="ocean"><i class="palette-dot ocean-dot"></i>Ocean</button><button type="button" data-vip-palette="sunset"><i class="palette-dot sunset-dot"></i>Sunset</button><button type="button" data-vip-palette="rose"><i class="palette-dot rose-dot"></i>Rose</button><button type="button" data-vip-palette="original"><i class="palette-dot original-dot"></i>Original</button></div></div>
       <div class="vip-extra-card"><div><strong>Formula vault</strong><small>Tap a formula to load it into the calculator.</small></div></div>
       <div class="formula-vault"><button type="button" data-vip-formula="sqrt(2)">√2 <small>Square root</small></button><button type="button" data-vip-formula="sin(30)">sin 30° <small>Trigonometry</small></button><button type="button" data-vip-formula="log(1000)">log 1000 <small>Logarithm</small></button><button type="button" data-vip-formula="pi*2">2π <small>Circle constant</small></button><button type="button" data-vip-formula="(1+0.05)^12">Compound growth <small>5% monthly example</small></button></div>
+      <div class="vip-extra-card vault-extra"><div><strong>Private Vault</strong><small>VIP-only local vault: encrypt your private photos and files on this device.</small></div><button type="button" class="vip-secondary" id="openVipVault">Open vault</button></div>
     </section>
     <details class="vip-admin">
       <summary>Developer: review membership requests</summary>
@@ -227,6 +244,33 @@
       <div class="vip-request-list" id="vipRequestList"></div>
     </details>
     <footer class="vip-foot"><span>✓ VIP lasts for the purchased period</span><span>Renewal is manual · No auto-charge</span></footer>
+  </section>
+</div>
+<div class="vault-overlay" id="vaultOverlay" hidden>
+  <section class="vault-sheet" role="dialog" aria-modal="true" aria-labelledby="vaultTitle">
+    <header class="vault-top">
+      <button class="icon-btn" id="vaultBack" type="button" aria-label="Back to VIP">←</button>
+      <div><div class="vip-kicker">VIP PRIVATE STORAGE</div><h2 id="vaultTitle">Private Vault</h2></div>
+      <button class="icon-btn" id="vaultLock" type="button" aria-label="Lock vault" hidden>🔒</button>
+    </header>
+    <div class="vault-setup" id="vaultSetup">
+      <div class="vault-emblem">🔐</div>
+      <h3 id="vaultSetupHeading">Create your vault</h3>
+      <p class="vault-copy" id="vaultSetupCopy">Set a separate passphrase (at least 8 characters). Files are encrypted on this device before being saved. The passphrase is never stored.</p>
+      <label class="vault-input-label">Vault passphrase<input id="vaultPass" type="password" autocomplete="new-password" minlength="8" maxlength="128" placeholder="At least 8 characters"></label>
+      <label class="vault-input-label" id="vaultConfirmLabel">Confirm passphrase<input id="vaultPassConfirm" type="password" autocomplete="new-password" minlength="8" maxlength="128" placeholder="Enter it again"></label>
+      <button class="vault-action" id="vaultUnlock" type="button">Create encrypted vault <span>→</span></button>
+      <p class="vault-error" id="vaultError" role="status" aria-live="polite"></p>
+      <p class="vault-footnote">Web version uses your passphrase, not fingerprint unlock. Forgetting your passphrase or clearing browser data can permanently lose the encrypted files. Keep a secure backup of originals.</p>
+    </div>
+    <div class="vault-contents" id="vaultContents" hidden>
+      <div class="vault-storage-info"><span class="vault-emblem small">🔐</span><div><b>Encrypted on this device</b><span>Names, photos and file contents are encrypted before storage.</span></div><span class="vault-count" id="vaultFileCount">0 files</span></div>
+      <input id="vaultFiles" type="file" multiple accept="image/*,.pdf,.txt,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.zip" hidden>
+      <button id="vaultAddFiles" class="vault-add-btn" type="button"><span class="add-plus">＋</span><span><b>Add photos or files</b><small>Maximum 20 MB per file</small></span></button>
+      <div id="vaultItems" class="vault-items"></div>
+      <div class="vault-empty" id="vaultEmpty"><div>▧</div><b>Your vault is empty</b><span>Add a file to encrypt it on this device.</span></div>
+    </div>
+    <footer class="vault-footer"><span>🔒 AES-GCM 256-bit</span><span>Local only · No upload</span></footer>
   </section>
 </div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
