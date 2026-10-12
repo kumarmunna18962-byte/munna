@@ -2,7 +2,7 @@
   "name": "DC Calculator",
   "short_name": "DC Calculator",
   "description": "A polished everyday calculator with history and memory.",
-  "start_url": "./index.html",
+  "start_url": "./DC_Calculator.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
