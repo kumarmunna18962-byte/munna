@@ -15,6 +15,10 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
+import androidx.biometric.BiometricPrompt;
+import androidx.core.content.ContextCompat;
+import org.json.JSONObject;
+import java.util.concurrent.Executor;
 
 /** Local/offline Android host for the bundled DC Calculator UI. */
 public final class MainActivity extends Activity {
@@ -62,6 +66,7 @@ public final class MainActivity extends Activity {
 
         vipBillingManager = new VipBillingManager(this, webView);
         webView.addJavascriptInterface(vipBillingManager.javascriptBridge(), "DCPlayBilling");
+        webView.addJavascriptInterface(new VaultBridge(), "DCCalculatorNative");
 
         root.addView(webView, new FrameLayout.LayoutParams(
             FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
@@ -98,7 +103,68 @@ public final class MainActivity extends Activity {
     }
 
     @Override public void onBackPressed() {
+        if (webView != null) {
+            webView.evaluateJavascript(
+                "(function(){if(window.DCCalculatorHandleBack){return !!window.DCCalculatorHandleBack();}return false;})()",
+                value -> {
+                    if (!"true".equals(value)) {
+                        if (webView != null && webView.canGoBack()) webView.goBack();
+                        else MainActivity.super.onBackPressed();
+                    }
+                });
+            return;
+        }
         super.onBackPressed();
+    }
+
+    /** Native device-authentication gate for the locally encrypted VIP vault.
+     * The vault passphrase remains required after this system prompt succeeds. */
+    public final class VaultBridge {
+        @JavascriptInterface
+        public void authenticateVault(String requestId) {
+            if (requestId == null || !requestId.matches("[0-9]{1,12}")) return;
+            runOnUiThread(() -> {
+                if (webView == null || isFinishing()) {
+                    deliverVaultAuth(requestId, false);
+                    return;
+                }
+                Executor executor = ContextCompat.getMainExecutor(MainActivity.this);
+                BiometricPrompt.AuthenticationCallback callback = new BiometricPrompt.AuthenticationCallback() {
+                    @Override public void onAuthenticationSucceeded(BiometricPrompt.AuthenticationResult result) {
+                        deliverVaultAuth(requestId, true);
+                    }
+                    @Override public void onAuthenticationError(int errorCode, CharSequence errString) {
+                        deliverVaultAuth(requestId, false);
+                    }
+                };
+                BiometricPrompt prompt = new BiometricPrompt(MainActivity.this, executor, callback);
+                BiometricPrompt.PromptInfo.Builder builder = new BiometricPrompt.PromptInfo.Builder()
+                    .setTitle("Unlock DC Calculator Private Vault")
+                    .setSubtitle("Confirm with your phone's biometric or screen lock");
+                if (Build.VERSION.SDK_INT >= 30) {
+                    builder.setAllowedAuthenticators(
+                        androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG
+                        | androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL);
+                } else {
+                    // Older Android versions use the compatible legacy device-credential option.
+                    builder.setDeviceCredentialAllowed(true);
+                }
+                prompt.authenticate(builder.build());
+            });
+        }
+
+        private void deliverVaultAuth(String requestId, boolean success) {
+            final WebView current = webView;
+            if (current == null) return;
+            final String quotedId = JSONObject.quote(requestId);
+            current.post(() -> {
+                if (webView == current) {
+                    current.evaluateJavascript(
+                        "if(window.onDCCalculatorVaultAuthResult){window.onDCCalculatorVaultAuthResult("
+                            + quotedId + "," + success + ");}", null);
+                }
+            });
+        }
     }
 
     @Override protected void onDestroy() {
