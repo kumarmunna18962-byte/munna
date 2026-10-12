@@ -5,38 +5,30 @@
 <meta name="theme-color" content="#edf0f7">
 <title>DC Calculator — Privacy Policy</title>
 <style>
-body{font:16px/1.65 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:#edf0f7;color:#192234;margin:0;padding:24px}
-main{max-width:780px;margin:28px auto;background:#fff;border:1px solid #dfe4ef;border-radius:24px;padding:clamp(22px,5vw,42px);box-shadow:0 15px 45px #26305018}
-h1{line-height:1.2}h2{margin-top:28px}p,li{color:#424c5f}
-.brand{display:inline-block;border-radius:12px;padding:8px 12px;background:linear-gradient(135deg,#5468ef,#8357f4,#ff9145);color:#fff;font-weight:700}
-</style>
-</head>
+body{font:16px/1.7 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:#edf0f7;color:#192234;margin:0;padding:22px}
+main{max-width:800px;margin:25px auto;background:#fff;border:1px solid #dfe4ef;border-radius:24px;padding:clamp(22px,5vw,42px);box-shadow:0 15px 45px #26305018}
+h1{line-height:1.2}h2{margin-top:28px;font-size:19px}p,li{color:#424c5f}.brand{display:inline-block;border-radius:12px;padding:8px 12px;background:linear-gradient(135deg,#5468ef,#8357f4,#ff9145);color:#fff;font-weight:800}
+</style></head>
 <body><main>
 <div class="brand">DC Calculator</div>
 <h1>Privacy Policy</h1>
 <p><strong>Last updated: 12 October 2026</strong></p>
-<p>DC Calculator is a calculator web app with optional VIP membership requests and an optional passphrase-protected private vault. The calculator and vault work on the current device; VIP status checks and submitted membership requests use a secure Supabase service.</p>
-
+<p>This policy applies to the DC Calculator website/PWA and the standalone Android app. Calculator features run on the user's device. VIP membership features use the additional data flows described below.</p>
 <h2>Calculator data</h2>
-<p>Calculation history, calculator memory, colour theme and related preferences are stored in your browser's local storage on your device. They are not uploaded as part of normal calculation use. You can clear history in the app or remove site data in your browser settings.</p>
-
+<p>Calculation history, calculator memory, and theme preferences are stored locally on the device/browser. They are not uploaded to DC Calculator servers by the calculator.</p>
+<h2>VIP membership requests on the website</h2>
+<p>Until an automated payment gateway is configured, the website does not take or process a payment. If a user independently makes an actual transfer after receiving payment instructions from the developer, the VIP request form may send their email address, chosen plan, an installation identifier hash, and the payment reference/UTR to the DC Calculator VIP service for manual review. A request stays pending until the developer checks receipt; submitting a reference does not by itself activate VIP. Do not enter a bank/card PIN, password, CVV, OTP or full bank account details in the app.</p>
+<h2>Google Play subscriptions</h2>
+<p>In the Android app, subscriptions are intended to be processed through Google Play Billing once monthly and yearly subscription products are configured in Play Console. Google Play manages checkout and subscription payments under its own terms and privacy policy. If checkout says a product is unavailable, the app has not taken a payment. The app does not collect or store a user's card details.</p>
 <h2>Private Vault</h2>
-<p>If you are an active VIP member, the Private Vault can store your selected photos and files in this browser's IndexedDB storage. Before saving, the app encrypts file contents and file names with AES-GCM 256-bit encryption using a key derived from your separate vault passphrase with PBKDF2-SHA-256. The vault data is not uploaded to our servers. The passphrase is not stored by the app.</p>
-<p>Use a strong, unique passphrase and keep separate copies of important originals. If you forget the passphrase, clear browser data, uninstall a browser/PWA, or lose the device, the encrypted files may be unrecoverable. This web version does not provide fingerprint or face unlock; it uses the passphrase you create.</p>
-
-<h2>VIP membership requests</h2>
-<p>The current VIP request workflow is manual; this app does not process card, UPI or bank payments automatically. If you submit a membership request after making a transfer arranged privately with the developer, we send the email address you entered, selected plan, transaction/UTR reference and app-install identifier to the Supabase service. The service hashes the install identifier before storing it. The request remains pending until the developer independently checks receipt and approves or rejects it.</p>
-<p>Do not enter banking passwords, card PINs, CVV, OTPs, or other authentication secrets. The app does not ask for them. The developer may review the submitted email, plan and payment reference to verify a pending request. There is no automatic renewal in this manual workflow.</p>
-
-<h2>Service providers and retention</h2>
-<p>Supabase hosts the VIP membership status and request records. Those records are retained for membership verification, abuse prevention, and request review. Encrypted vault files remain in the local browser database until you delete them or clear that browser's site data. A transaction reference and email you submit for membership are server-side records and are not removed by clearing local browser data.</p>
-
-<h2>Children and advertising</h2>
-<p>DC Calculator does not require an account for ordinary calculator use. The current version does not include an advertising SDK or analytics SDK. The app does not knowingly collect personal information from children beyond the information a user voluntarily enters into a VIP request.</p>
-
-<h2>Security limits</h2>
-<p>Encryption protects vault files at rest within browser storage, but no web app can guarantee protection if the device or browser is compromised, malicious extensions can read the page, or someone watches you unlock the vault. Lock the vault when you finish and protect your device account.</p>
-
-<h2>Changes and contact</h2>
-<p>This policy will be updated if data practices change. For privacy questions or a membership request, contact the app developer through the official channel that provided the app to you.</p>
+<p>The optional VIP Private Vault encrypts files and note contents on the device using a passphrase-derived AES-GCM encryption key before saving encrypted records to local browser/app storage. File names and file type metadata are encrypted along with the contents. The vault does not upload vault photos or files to DC Calculator servers. On the Android app, device authentication (fingerprint, face or device screen-lock credential where supported) is an additional access check; the vault passphrase is still required. The browser version uses the vault passphrase.</p>
+<p>Keep backups of original files. Forgetting the vault passphrase or clearing/uninstalling the local app/browser data can permanently remove access to encrypted vault content. The developer cannot reset or recover a vault passphrase.</p>
+<h2>Data retention and deletion</h2>
+<p>Local calculator and vault data can be removed by clearing the app/browser data or uninstalling the app; vault content should be backed up first. VIP request and membership records are retained for membership review, validity, and basic payment records. For a membership-data correction or deletion request, contact the developer through the support contact published on the official app page.</p>
+<h2>Permissions and sharing</h2>
+<p>The standalone calculator does not need contacts, location, microphone, camera or SMS permissions. Internet access is used for website membership-status/request features and Google Play Billing in the Android version. DC Calculator does not sell personal information or include advertising/analytics SDKs in this version.</p>
+<h2>Children</h2>
+<p>DC Calculator is a general-purpose calculator and does not knowingly collect personal information from children beyond information a user actively enters into a VIP membership request.</p>
+<h2>Changes</h2>
+<p>This policy will be updated if app features or data practices change. Do not use VIP payments while the app's checkout screen says payments are unavailable.</p>
 </main></body></html>
