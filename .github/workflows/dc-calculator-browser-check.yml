@@ -1,0 +1,28 @@
+name: DC Calculator Browser Regression
+
+on:
+  push:
+    branches: [dc-calculator-shareable]
+    paths:
+      - "dc-calculator/**"
+      - ".github/scripts/dc-calculator-browser-check.cjs"
+      - ".github/workflows/dc-calculator-browser-check.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install Playwright
+        run: npm install --no-save playwright
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Run browser tests
+        run: node .github/scripts/dc-calculator-browser-check.cjs
