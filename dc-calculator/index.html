@@ -65,6 +65,55 @@
 .vip-theme-swatches{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:12px}.vip-theme-swatches button{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:8px;display:flex;flex-direction:column;gap:7px;text-align:left;font-size:10px;color:var(--text)}.swatch{height:35px;width:100%;border-radius:8px}.swatch.midnight{background:linear-gradient(120deg,#101827,#4b5e9a,#18223a)}.swatch.aurora{background:linear-gradient(120deg,#0c8676,#31c6ad,#7c68f5)}.swatch.sunset{background:linear-gradient(120deg,#ff8f47,#e65e88,#7458dd)}
 .vip-restore-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:18px;padding-top:13px;border-top:1px solid var(--line)}.vip-restore-row span{font-size:9px;line-height:1.5;color:var(--muted)}.vip-restore-row button{background:transparent;color:var(--accent);font-size:10px;font-weight:900;flex:none}
 @media(max-width:600px){.vip-overlay{padding:0;align-items:flex-end}.vip-sheet{width:100%;max-height:94dvh;border-radius:26px 26px 0 0;padding:20px 15px calc(16px + env(safe-area-inset-bottom));border-bottom:0}.vip-head h2{font-size:23px}.vip-brand-mark{width:42px;height:42px;border-radius:14px}.vip-plan{padding:12px}.vip-price{font-size:15px;margin-top:12px}.vip-plan-note{font-size:9px}.vip-feature-grid{grid-template-columns:1fr}.vip-feature-card{padding:10px}.vip-feature-copy b{font-size:11px}.vip-feature-copy small{font-size:10px}.vip-restore-row{align-items:flex-start}}
+
+/* VIP membership layer — additive styles; original calculator icon and tools remain unchanged. */
+.vip-launch{display:flex;align-items:center;justify-content:center;gap:5px;width:auto;padding:0 10px;color:#6a50da;background:linear-gradient(135deg,#f1eaff,#fff2e2);font-size:11px;font-weight:850;letter-spacing:.2px;border:1px solid #e2d9ff}
+.vip-launch svg{width:18px;height:18px}.vip-launch span{display:block}
+[data-theme="dark"] .vip-launch{color:#d4c9ff;background:linear-gradient(135deg,#32264d,#443126);border-color:#514165}
+.vip-overlay{position:fixed;inset:0;z-index:65;display:flex;align-items:center;justify-content:center;padding:18px;background:rgba(10,14,28,.64);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);animation:overlay-in .16s ease}
+.vip-overlay[hidden]{display:none}
+.vip-sheet{width:min(100%,720px);max-height:min(94dvh,1000px);overflow:auto;background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:28px;padding:clamp(17px,3vw,28px);box-shadow:0 30px 90px rgba(0,0,0,.34);animation:sheet-in .2s ease-out}
+.vip-head{display:flex;align-items:flex-start;gap:13px}.vip-emblem{width:48px;height:48px;flex:none;border-radius:17px;display:grid;place-items:center;background:linear-gradient(135deg,#5368ed,#8357f4 58%,#ff9145);color:#fff;box-shadow:0 7px 18px rgba(95,84,225,.27)}.vip-emblem svg{width:27px;height:27px}
+.vip-heading{flex:1;min-width:0}.vip-kicker{font-size:9px;letter-spacing:1.8px;font-weight:900;color:var(--accent)}.vip-heading h2{font-size:clamp(23px,4vw,30px);letter-spacing:-1.1px;margin:4px 0 6px;line-height:1.12}.vip-heading p{font-size:11px;line-height:1.5;color:var(--muted);margin:0}
+.vip-status{display:flex;align-items:center;gap:10px;margin:18px 0 13px;padding:12px 13px;border:1px solid var(--line);border-radius:15px;background:var(--panel-2)}.vip-status-dot{width:9px;height:9px;border-radius:50%;background:#9aa3b8;box-shadow:0 0 0 4px rgba(154,163,184,.12);flex:none}.vip-status strong{display:block;font-size:12px}.vip-status small{display:block;margin-top:3px;font-size:10px;color:var(--muted);line-height:1.45}.vip-status>div{flex:1;min-width:0}.vip-status button{background:transparent;color:var(--accent);font-size:10px;font-weight:850;padding:8px;border-radius:9px}.vip-status.is-active{border-color:#a9e3c5;background:linear-gradient(110deg,#e6fff1,var(--panel))}.vip-status.is-active .vip-status-dot{background:#1eaa6d;box-shadow:0 0 0 4px rgba(30,170,109,.12)}
+.vip-perks{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.vip-perk{min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:12px;border:1px solid var(--line);border-radius:14px;background:linear-gradient(135deg,var(--panel-2),var(--panel))}.perk-icon{width:28px;height:28px;display:grid;place-items:center;background:#eeebff;color:#6055dc;border-radius:9px;font-weight:900}.vip-perk strong{font-size:11px}.vip-perk small{font-size:9px;color:var(--muted);line-height:1.4}
+.vip-section-title{font-size:13px;margin:19px 0 10px;letter-spacing:-.15px}.vip-plans{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.vip-plan{position:relative;display:grid;grid-template-columns:16px 1fr auto;grid-template-rows:auto auto;align-items:center;gap:5px 9px;padding:14px 12px;border:1px solid var(--line);border-radius:16px;background:var(--panel);color:var(--text);text-align:left;min-width:0}.vip-plan.selected{border-color:#7060ec;box-shadow:0 0 0 2px rgba(112,96,236,.12);background:linear-gradient(135deg,var(--panel),#f4f0ff)}[data-theme="dark"] .vip-plan.selected{background:linear-gradient(135deg,var(--panel),#29243e)}.plan-radio{width:14px;height:14px;border-radius:50%;border:1.6px solid var(--muted);grid-row:1/3}.vip-plan.selected .plan-radio{border:4px solid #6658e8}.plan-name{font-size:11px;font-weight:850}.vip-plan strong{font-size:19px;letter-spacing:-.5px;grid-column:3;grid-row:1/3}.vip-plan small{grid-column:2;font-size:9px;color:var(--muted);line-height:1.4}.plan-badge{position:absolute;right:9px;top:-8px;padding:4px 7px;border-radius:7px;background:#ff9b45;color:#fff;font-size:8px;font-weight:900;letter-spacing:.5px}
+.vip-payment-note{display:flex;gap:10px;margin-top:13px;padding:12px;border:1px solid #e9dffc;border-radius:14px;background:#f7f2ff;color:#2a2440}.vip-payment-note>svg{width:23px;height:23px;flex:none;color:#6b52d8}.vip-payment-note strong{font-size:11px}.vip-payment-note p{font-size:10px;line-height:1.5;margin:4px 0;color:#5e5771}.vip-payment-note small{font-size:9px;line-height:1.4;color:#8c4e40;display:block}[data-theme="dark"] .vip-payment-note{background:#292138;border-color:#44375e;color:#eee5ff}[data-theme="dark"] .vip-payment-note p{color:#c4b9dc}[data-theme="dark"] .vip-payment-note small{color:#ffb7a6}
+.vip-request{margin-top:17px;padding-top:15px;border-top:1px solid var(--line)}.vip-request h3,.vip-extras h3{font-size:13px;margin:0 0 10px}.vip-field-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.vip-field-grid label,.vip-admin label{display:flex;flex-direction:column;gap:6px;font-size:10px;font-weight:800;color:var(--muted);min-width:0}.vip-field-grid input,.vip-admin input{width:100%;min-width:0;padding:11px 12px;border:1px solid var(--line);border-radius:11px;background:var(--panel-2);color:var(--text);font:500 12px system-ui,sans-serif;outline:none}.vip-field-grid input:focus,.vip-admin input:focus{border-color:#7862e8;box-shadow:0 0 0 3px rgba(120,98,232,.12)}
+.vip-primary{width:100%;display:flex;align-items:center;justify-content:space-between;padding:13px 15px;margin-top:11px;border-radius:13px;background:linear-gradient(135deg,#5368ed,#7854ef);color:#fff;font-size:11px;font-weight:850;box-shadow:0 7px 15px rgba(87,82,225,.22)}.vip-primary span{font-size:17px;font-weight:500}.vip-primary:disabled{opacity:.6;cursor:wait}
+.vip-feedback{font-size:10px;line-height:1.5;margin-top:8px;color:var(--muted);overflow-wrap:anywhere}.vip-feedback.success{color:#16835e}.vip-feedback.error{color:var(--danger)}
+.vip-extras{margin-top:17px;padding-top:16px;border-top:1px solid var(--line)}.vip-extras[hidden]{display:none}.vip-extras-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}.vip-extras-head h3{font-size:17px;margin:4px 0}.vip-active-pill{border-radius:999px;padding:6px 9px;background:#dff8ea;color:#167c53;font-size:8px;font-weight:900;letter-spacing:.9px}
+.vip-extra-card{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:9px;padding:12px;border:1px solid var(--line);border-radius:14px;background:var(--panel-2)}.vip-extra-card strong{display:block;font-size:11px}.vip-extra-card small{display:block;font-size:9px;color:var(--muted);line-height:1.45;margin-top:4px}.vip-secondary{flex:none;border:1px solid #cfc8ff;border-radius:10px;background:#f1eeff;color:#5a4bd8;padding:9px 11px;font-size:10px;font-weight:850}[data-theme="dark"] .vip-secondary{background:#302747;border-color:#4b3e6b;color:#d8ceff}
+.vip-palette-list{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end}.vip-palette-list button{display:flex;align-items:center;gap:5px;border:1px solid var(--line);border-radius:999px;background:var(--panel);color:var(--text);padding:6px 8px;font-size:9px;font-weight:750}.palette-dot{display:block;width:10px;height:10px;border-radius:50%}.ocean-dot{background:linear-gradient(135deg,#08a6a6,#4169e1)}.sunset-dot{background:linear-gradient(135deg,#ff6b52,#ffb24a)}.rose-dot{background:linear-gradient(135deg,#ed7198,#8968ed)}.original-dot{background:linear-gradient(135deg,#5468ed,#ff9145)}
+.formula-vault{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin-top:9px}.formula-vault button{padding:10px;border:1px solid var(--line);border-radius:11px;text-align:left;background:var(--panel);color:var(--text);font-size:12px;font-weight:850}.formula-vault small{display:block;color:var(--muted);font-size:9px;font-weight:500;margin-top:4px}
+.vip-admin{margin-top:19px;border-top:1px solid var(--line);padding-top:13px}.vip-admin summary{font-size:10px;font-weight:850;color:var(--muted);cursor:pointer}.vip-admin p{font-size:10px;color:var(--muted);line-height:1.5}.vip-admin label{margin:9px 0}.vip-admin-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.vip-admin-actions span{font-size:10px;color:var(--muted)}.vip-request-list{display:grid;gap:8px;margin-top:10px}.vip-pending-item{border:1px solid var(--line);border-radius:12px;padding:12px;background:var(--panel-2)}.vip-pending-item strong{font-size:11px}.vip-pending-item p{margin:4px 0;font-size:10px;overflow-wrap:anywhere}.vip-pending-actions{display:flex;gap:7px;margin-top:8px}.vip-pending-actions button{flex:1;border-radius:9px;padding:8px;font-size:10px;font-weight:850;background:#e0f8ec;color:#147c52}.vip-pending-actions button.reject{background:#ffe8ed;color:#b72e49}
+.vip-foot{display:flex;justify-content:space-between;gap:12px;margin-top:18px;padding-top:13px;border-top:1px solid var(--line);font-size:9px;color:var(--muted);line-height:1.5}
+:root[data-vip-palette="ocean"]{--accent:#0c9eaf;--accent-hi:#4269e8;--fn:#dcf7f5}
+:root[data-vip-palette="sunset"]{--accent:#f06a4f;--accent-hi:#ff9a43;--fn:#ffe8dc}
+:root[data-vip-palette="rose"]{--accent:#d85d99;--accent-hi:#8d67e9;--fn:#fbe6f4}
+[data-theme="dark"][data-vip-palette="ocean"]{--bg:#0a1924;--panel:#102430;--panel-2:#172f3b;--screen:#102430;--text:#eafcff;--muted:#9cb9c5;--line:#284754;--key:#203b48;--key-hover:#2d4e5d;--fn:#1b454c;--accent:#42cad4;--accent-hi:#6689ff;--accent-ink:#081a24}
+[data-theme="dark"][data-vip-palette="sunset"]{--bg:#201412;--panel:#2b1c1b;--panel-2:#382423;--screen:#2b1c1b;--text:#fff0e8;--muted:#d0a8a0;--line:#533632;--key:#48302e;--key-hover:#5b3a35;--fn:#54302b;--accent:#ff947c;--accent-hi:#ffc071;--accent-ink:#321711}
+[data-theme="dark"][data-vip-palette="rose"]{--bg:#1b1221;--panel:#26182d;--panel-2:#32203d;--screen:#26182d;--text:#fff0fb;--muted:#c0a4c0;--line:#4a3153;--key:#422b4b;--key-hover:#56345f;--fn:#472846;--accent:#f389bd;--accent-hi:#af93ff;--accent-ink:#2e1327}
+@media(max-width:760px){.vip-overlay{align-items:flex-end;padding:0}.vip-sheet{width:100%;max-height:96dvh;border-radius:26px 26px 0 0;padding:18px 15px calc(17px + env(safe-area-inset-bottom));border-bottom:0}.vip-heading h2{font-size:24px}.vip-perks{gap:6px}.vip-perk{padding:10px 9px}.vip-perk strong{font-size:10px}.vip-perk small{font-size:8px}.vip-plan{padding:12px 9px;gap:5px 7px}.vip-plan strong{font-size:17px}.vip-field-grid{grid-template-columns:1fr}.vip-foot{font-size:8px}.vip-extra-card.theme-extra{align-items:flex-start;flex-direction:column}.vip-palette-list{justify-content:flex-start}.vip-launch{padding:0 8px}}
+@media(max-width:370px){.vip-heading p{font-size:10px}.vip-emblem{width:42px;height:42px}.vip-plan strong{font-size:15px}.vip-perk{padding:8px 7px}.vip-perk small{font-size:8px}.formula-vault{gap:5px}}
+
+.vault-extra{border-color:#8c7af0;background:linear-gradient(110deg,color-mix(in srgb,#7863f0 7%,var(--panel)),var(--panel))}
+.vault-overlay{position:fixed;inset:0;z-index:70;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(12,17,32,.72);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.vault-overlay[hidden]{display:none}
+.vault-sheet{width:min(100%,560px);max-height:min(92dvh,850px);overflow:auto;background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:27px;padding:23px;box-shadow:0 30px 90px rgba(0,0,0,.34);animation:sheet-in .2s ease-out}
+.vault-top{display:flex;align-items:center;gap:10px;margin-bottom:14px}.vault-top>div{flex:1;min-width:0}.vault-top h2{margin:4px 0;font-size:24px;letter-spacing:-.7px}
+.vault-setup{padding:10px 5px 5px;text-align:center}.vault-emblem{width:61px;height:61px;border-radius:20px;background:linear-gradient(135deg,#e3e7ff,#f1e4ff);display:grid;place-items:center;font-size:28px;margin:6px auto 14px}.vault-emblem.small{width:39px;height:39px;border-radius:13px;font-size:18px;margin:0;flex:none}
+.vault-setup h3{font-size:18px;margin:0 0 6px}.vault-copy{font-size:11px;line-height:1.6;color:var(--muted);max-width:390px;margin:0 auto 17px}
+.vault-input-label{display:block;text-align:left;font-size:10px;color:var(--muted);font-weight:800;margin:11px 0}.vault-input-label input{display:block;width:100%;box-sizing:border-box;margin-top:6px;padding:13px 14px;border-radius:12px;border:1px solid var(--line);background:var(--panel-2);color:var(--text);font:600 13px system-ui,sans-serif;outline:0}.vault-input-label input:focus{border-color:#6872e8;box-shadow:0 0 0 3px #6872e822}
+.vault-action{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;padding:13px 15px;border-radius:13px;background:linear-gradient(110deg,#5367ed,#7d54ee);color:white;font-size:11px;font-weight:850;box-shadow:0 5px 14px rgba(86,89,225,.2)}.vault-action:disabled{opacity:.55}.vault-action span{font-size:19px;font-weight:500}.vault-error{min-height:18px;color:#d93655;font-size:10px;line-height:1.45;margin:8px 0}.vault-footnote{font-size:9px;line-height:1.6;color:var(--muted);margin:8px 0 0}
+.vault-contents[hidden]{display:none}.vault-note-box{display:grid;gap:9px;padding:14px;margin:12px 0;border:1px solid var(--line);border-radius:18px;background:var(--panel-2)}.vault-note-box label{font-size:12px;font-weight:750;color:var(--muted)}.vault-note-box input,.vault-note-box textarea{width:100%;border:1px solid var(--line);border-radius:12px;padding:11px 12px;background:var(--panel);color:var(--text);font:inherit;outline:none}.vault-note-box input:focus,.vault-note-box textarea:focus{border-color:var(--accent)}.vault-note-box textarea{resize:vertical;min-height:90px}
+.vault-storage-info{display:flex;align-items:center;gap:9px;padding:12px;border-radius:14px;background:var(--panel-2);border:1px solid var(--line)}.vault-storage-info>div{flex:1;min-width:0;display:grid;gap:4px}.vault-storage-info b{font-size:10px}.vault-storage-info span{font-size:9px;line-height:1.4;color:var(--muted)}.vault-count{white-space:nowrap}
+.vault-add-btn{display:flex;align-items:center;gap:10px;width:100%;padding:12px;border:1px dashed #8984e7;background:color-mix(in srgb,#7665ed 6%,var(--panel));border-radius:14px;margin:12px 0;color:var(--text);text-align:left}.add-plus{width:37px;height:37px;border-radius:11px;background:#ece9ff;color:#6354d8;display:grid;place-items:center;font-size:22px}.vault-add-btn span:last-child{display:grid;gap:4px}.vault-add-btn b{font-size:11px}.vault-add-btn small{font-size:9px;color:var(--muted)}
+.vault-items{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.vault-item{min-width:0;border:1px solid var(--line);border-radius:13px;overflow:hidden;background:var(--panel-2)}.vault-thumb{height:105px;background:var(--key);display:grid;place-items:center;color:var(--muted);overflow:hidden}.vault-thumb img{width:100%;height:100%;object-fit:cover}.vault-doc-icon{font-size:28px}.vault-item-info{padding:8px}.vault-item-name{font-size:10px;font-weight:750;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.vault-item-meta{font-size:9px;color:var(--muted);margin-top:4px}.vault-item-actions{display:flex;gap:5px;margin-top:7px}.vault-item-actions button{flex:1;padding:7px 5px;border-radius:8px;font-size:9px;font-weight:750;color:var(--accent);background:var(--panel);border:1px solid var(--line)}.vault-item-actions button:last-child{color:#cb4357}
+.vault-empty{display:grid;justify-items:center;gap:6px;padding:23px 10px;color:var(--muted);font-size:10px;text-align:center}.vault-empty>div{font-size:30px;color:#8d82e9}.vault-empty b{font-size:12px;color:var(--text)}.vault-empty[hidden]{display:none}.vault-footer{display:flex;justify-content:space-between;gap:10px;margin-top:14px;padding-top:12px;border-top:1px solid var(--line);font-size:9px;color:var(--muted)}
+@media(max-width:760px){.vault-overlay{align-items:flex-end;padding:0}.vault-sheet{width:100%;max-height:94dvh;border-radius:27px 27px 0 0;padding:21px 17px calc(18px + env(safe-area-inset-bottom));border-bottom:0}}
+
+.native-billing-note{display:grid;gap:5px;margin:13px 0 16px;border:1px solid #d7dafa;background:#f0f1ff;color:#403d86;border-radius:13px;padding:12px 13px;font-size:10px;line-height:1.55}.native-billing-note strong{font-size:11px}.native-billing-note[hidden]{display:none}
 </style>
 </head>
 <body>
@@ -76,7 +125,7 @@
     <div style="flex:1"></div>
     <div class="top-actions">
       <button class="icon-btn mobile-only" id="openHistory" aria-label="Open history" title="History"><svg viewBox="0 0 24 24" fill="none"><path d="M3.4 12a8.6 8.6 0 1 0 2.2-5.8L3.4 8.4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M3.5 4.4v4h4m4.5-1.2v5l3.2 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-      <button class="vip-top-btn" id="openVip" aria-label="VIP membership" title="VIP membership"><svg viewBox="0 0 24 24" fill="none"><path d="m3 8 4.2 3.2L12 4l4.8 7.2L21 8l-2 11H5L3 8Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M5 21h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>VIP</span></button>
+      <button class="icon-btn vip-launch" id="vipBtn" aria-label="VIP membership" title="VIP membership"><svg viewBox="0 0 24 24" fill="none"><path d="m12 3 2.1 4.4 4.9.7-3.5 3.4.8 4.9-4.3-2.3-4.3 2.3.8-4.9L5 8.1l4.9-.7L12 3Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M7 18.5h10" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg><span>VIP</span></button>
       <button class="icon-btn" id="themeBtn" aria-label="Switch color theme" title="Light/dark theme"><svg id="themeIcon" viewBox="0 0 24 24" fill="none"><path d="M20.2 15.3A8.3 8.3 0 0 1 8.7 3.8 8.6 8.6 0 1 0 20.2 15.3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></button>
     </div>
   </header>
@@ -154,31 +203,85 @@
 <div class="vip-overlay" id="vipOverlay" hidden>
   <section class="vip-sheet" role="dialog" aria-modal="true" aria-labelledby="vipTitle">
     <header class="vip-head">
-      <div class="vip-brand-mark"><svg viewBox="0 0 24 24" fill="none"><path d="m3 8 4.2 3.2L12 4l4.8 7.2L21 8l-2 11H5L3 8Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M5 21h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></div>
-      <div class="vip-head-copy"><div class="vip-eyebrow">DC CALCULATOR · PLUS</div><h2 id="vipTitle">Unlock your VIP side</h2><p>Extra tools for people who use numbers every day.</p></div>
+      <div class="vip-emblem"><svg viewBox="0 0 24 24" fill="none"><path d="m12 3 2.1 4.4 4.9.7-3.5 3.4.8 4.9-4.3-2.3-4.3 2.3.8-4.9L5 8.1l4.9-.7L12 3Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M7 18.5h10" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></div>
+      <div class="vip-heading"><div class="vip-kicker">DC CALCULATOR PLUS</div><h2 id="vipTitle">Unlock your VIP side</h2><p>Keep every existing calculator feature. Add extra power tools and premium looks.</p></div>
       <button class="icon-btn" id="closeVip" aria-label="Close VIP membership">×</button>
     </header>
-    <div class="vip-status" id="vipStatus"><span class="vip-status-dot"></span><span id="vipStatusText">Free plan · VIP purchase becomes available in the Android Play Store app after billing setup.</span></div>
-    <div class="vip-plan-grid">
-      <article class="vip-plan"><div class="vip-plan-top"><span class="vip-plan-name">VIP Monthly</span><span class="vip-plan-icon">✦</span></div><div class="vip-price" id="vipMonthlyPrice">Price shown in Google Play</div><div class="vip-plan-note">Renews monthly. Cancel anytime in Google Play.</div><button class="vip-buy-btn" id="buyVipMonthly">Choose monthly <span>→</span></button></article>
-      <article class="vip-plan featured"><div class="vip-plan-ribbon">ANNUAL PLAN</div><div class="vip-plan-top"><span class="vip-plan-name">VIP Annual</span><span class="vip-plan-icon">♛</span></div><div class="vip-price" id="vipYearlyPrice">Price shown in Google Play</div><div class="vip-plan-note">Renews yearly. Cancel anytime in Google Play.</div><button class="vip-buy-btn" id="buyVipYearly">Choose annual <span>→</span></button></article>
+    <div class="vip-status" id="vipStatus"><span class="vip-status-dot"></span><div><strong>Free membership</strong><small>Basic, Scientific, Student tools, GST, EMI and converter remain available.</small></div><button id="refreshVip" type="button">Refresh</button></div>
+    <div class="vip-perks">
+      <div class="vip-perk"><span class="perk-icon">↗</span><strong>CSV backup</strong><small>Export calculation history</small></div>
+      <div class="vip-perk"><span class="perk-icon">✦</span><strong>Premium themes</strong><small>Extra colour collections</small></div>
+      <div class="vip-perk"><span class="perk-icon">ƒx</span><strong>Formula vault</strong><small>Ready-to-use formulas</small></div>
     </div>
-    <div class="vip-section-heading"><div><h3>VIP-only tools</h3><p>These stay locked until a real subscription is active.</p></div><span class="vip-lock" id="vipLockLabel">🔒 Locked</span></div>
-    <div class="vip-feature-grid">
-      <button class="vip-feature-card" data-vip-feature="graph"><span class="vip-feature-icon indigo">∿</span><span class="vip-feature-copy"><b>Graph plotter</b><small>Plot common maths functions</small></span><span class="vip-feature-lock" data-lock="graph">🔒</span></button>
-      <button class="vip-feature-card" data-vip-feature="export"><span class="vip-feature-icon blue">↗</span><span class="vip-feature-copy"><b>Export history</b><small>Save calculations as CSV</small></span><span class="vip-feature-lock" data-lock="export">🔒</span></button>
-      <button class="vip-feature-card" data-vip-feature="themes"><span class="vip-feature-icon orange">✦</span><span class="vip-feature-copy"><b>VIP colour themes</b><small>Midnight, Aurora, Sunset</small></span><span class="vip-feature-lock" data-lock="themes">🔒</span></button>
+    <h3 class="vip-section-title">Choose a membership</h3>
+    <div class="vip-plans">
+      <button type="button" class="vip-plan selected" data-vip-plan="monthly">
+        <span class="plan-radio"></span><span class="plan-name">Monthly VIP</span><strong>₹99</strong><small>30 days · manual payment verification</small>
+      </button>
+      <button type="button" class="vip-plan" data-vip-plan="yearly">
+        <span class="plan-badge">BEST VALUE</span><span class="plan-radio"></span><span class="plan-name">Yearly VIP</span><strong>₹1,099</strong><small>365 days · manual payment verification</small>
+      </button>
     </div>
-    <section id="vipGraphPanel" class="vip-graph-panel" hidden>
-      <div class="vip-graph-head"><div><h3>Graph plotter</h3><p>Choose a function and plot it across x.</p></div><button class="icon-btn" id="closeVipGraph" aria-label="Close graph">×</button></div>
-      <label class="vip-input-label">Function<select id="vipGraphFunction"><option value="square">y = x²</option><option value="sin">y = sin(x)</option><option value="cos">y = cos(x)</option><option value="sqrt">y = √x</option><option value="linear">y = 2x + 1</option><option value="abs">y = |x|</option><option value="log">y = log₁₀(x)</option></select></label>
-      <canvas id="vipGraphCanvas" width="640" height="320" aria-label="Function graph"></canvas><div class="vip-graph-foot">Graph units use x from −10 to 10. Trig functions use radians.</div>
+    <div class="vip-payment-note" id="vipPaymentNote"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3 4.5 6v5.4c0 4.6 3.2 7.8 7.5 9.6 4.3-1.8 7.5-5 7.5-9.6V6L12 3Z" stroke="currentColor" stroke-width="1.6"/><path d="m8.5 12 2.2 2.2 4.8-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><div><strong>Manual payment verification · ₹99 monthly / ₹1,099 yearly</strong><p>This app does not collect or process payment. Get payment instructions directly from the developer through a trusted private channel before paying. After an actual transfer, submit its UTR/reference; the request stays pending until the developer verifies receipt independently. No automatic renewal.</p><small>Never enter a bank/card PIN, password, CVV or OTP. Do not pay anyone who claims this page itself has accepted a payment.</small></div></div>
+    <div class="native-billing-note" id="nativeBillingNote" hidden><strong>Google Play subscription</strong><span>Android purchases are handled by Google Play. Checkout opens only when the monthly and yearly products are configured in Play Console. This screen never collects card details, UPI PINs or bank passwords. If checkout says the plan is unavailable, no payment was taken.</span></div>
+    <section class="vip-request" id="vipRequest">
+      <h3>Request VIP activation</h3>
+      <div class="vip-field-grid"><label>Email for your receipt<input type="email" id="vipEmail" maxlength="254" autocomplete="email" placeholder="you@example.com"></label><label>Transaction / UTR reference<input type="text" id="vipPaymentRef" maxlength="64" autocomplete="off" placeholder="Reference from your payment"></label></div>
+      <button type="button" class="vip-primary" id="submitVipRequest">Submit payment reference <span>→</span></button>
+      <div class="vip-feedback" id="vipRequestFeedback" role="status" aria-live="polite"></div>
     </section>
-    <section class="vip-themes-panel" id="vipThemesPanel" hidden><h3>Choose your VIP colour</h3><p>Premium palettes are saved on this device.</p><div class="vip-theme-swatches"><button data-vip-theme="midnight"><span class="swatch midnight"></span><b>Midnight</b></button><button data-vip-theme="aurora"><span class="swatch aurora"></span><b>Aurora</b></button><button data-vip-theme="sunset"><span class="swatch sunset"></span><b>Sunset</b></button></div></section>
-    <div class="vip-restore-row"><span id="vipBillingNote">Purchases are handled by Google Play in the Android app. No bank details are displayed in this app.</span><button id="restoreVip">Restore</button></div>
+    <section class="vip-extras" id="vipExtras" hidden>
+      <div class="vip-extras-head"><div><div class="vip-kicker">MEMBER EXTRAS</div><h3>Your VIP toolkit</h3></div><span class="vip-active-pill">VIP ACTIVE</span></div>
+      <div class="vip-extra-card"><div><strong>History backup</strong><small>Download recent calculations as a CSV file.</small></div><button type="button" class="vip-secondary" id="exportHistoryCsv">Export CSV</button></div>
+      <div class="vip-extra-card theme-extra"><div><strong>Premium colour packs</strong><small>Apply a fresh look. Your original DC icon stays unchanged.</small></div><div class="vip-palette-list"><button type="button" data-vip-palette="ocean"><i class="palette-dot ocean-dot"></i>Ocean</button><button type="button" data-vip-palette="sunset"><i class="palette-dot sunset-dot"></i>Sunset</button><button type="button" data-vip-palette="rose"><i class="palette-dot rose-dot"></i>Rose</button><button type="button" data-vip-palette="original"><i class="palette-dot original-dot"></i>Original</button></div></div>
+      <div class="vip-extra-card"><div><strong>Formula vault</strong><small>Tap a formula to load it into the calculator.</small></div></div>
+      <div class="formula-vault"><button type="button" data-vip-formula="sqrt(2)">√2 <small>Square root</small></button><button type="button" data-vip-formula="sin(30)">sin 30° <small>Trigonometry</small></button><button type="button" data-vip-formula="log(1000)">log 1000 <small>Logarithm</small></button><button type="button" data-vip-formula="pi*2">2π <small>Circle constant</small></button><button type="button" data-vip-formula="(1+0.05)^12">Compound growth <small>5% monthly example</small></button></div>
+      <div class="vip-extra-card vault-extra"><div><strong>Private Vault</strong><small>VIP-only local vault: encrypt your private photos and files on this device.</small></div><button type="button" class="vip-secondary" id="openVipVault">Open vault</button></div>
+    </section>
+    <details class="vip-admin">
+      <summary>Developer: review membership requests</summary>
+      <p>Enter the private admin key to review transaction references. Keep this key secret.</p>
+      <label>Private admin key<input type="password" id="vipAdminKey" autocomplete="off" spellcheck="false" placeholder="Admin key (not saved)"></label>
+      <div class="vip-admin-actions"><button type="button" class="vip-secondary" id="loadVipRequests">Load pending requests</button><span id="vipAdminFeedback" role="status"></span></div>
+      <div class="vip-request-list" id="vipRequestList"></div>
+    </details>
+    <footer class="vip-foot"><span>✓ VIP lasts for the purchased period</span><span>Renewal is manual · No auto-charge</span><a href="./privacy-policy.html" class="vip-privacy-link">Privacy</a></footer>
   </section>
 </div>
-<div class="toast"</div>
+<div class="vault-overlay" id="vaultOverlay" hidden>
+  <section class="vault-sheet" role="dialog" aria-modal="true" aria-labelledby="vaultTitle">
+    <header class="vault-top">
+      <button class="icon-btn" id="vaultBack" type="button" aria-label="Back to VIP">←</button>
+      <div><div class="vip-kicker">VIP PRIVATE STORAGE</div><h2 id="vaultTitle">Private Vault</h2></div>
+      <button class="icon-btn" id="vaultLock" type="button" aria-label="Lock vault" hidden>🔒</button>
+    </header>
+    <div class="vault-setup" id="vaultSetup">
+      <div class="vault-emblem">🔐</div>
+      <h3 id="vaultSetupHeading">Create your vault</h3>
+      <p class="vault-copy" id="vaultSetupCopy">Set a separate passphrase (at least 8 characters). Files are encrypted on this device before being saved. The passphrase is never stored.</p>
+      <label class="vault-input-label">Vault passphrase<input id="vaultPass" type="password" autocomplete="new-password" minlength="8" maxlength="128" placeholder="At least 8 characters"></label>
+      <label class="vault-input-label" id="vaultConfirmLabel">Confirm passphrase<input id="vaultPassConfirm" type="password" autocomplete="new-password" minlength="8" maxlength="128" placeholder="Enter it again"></label>
+      <button class="vault-action" id="vaultUnlock" type="button">Create encrypted vault <span>→</span></button>
+      <p class="vault-error" id="vaultError" role="status" aria-live="polite"></p>
+      <p class="vault-footnote">The browser version uses your passphrase. The Android app also asks for your phone’s fingerprint, face or screen-lock credential before vault access. Forgetting your passphrase or clearing browser/app data can permanently lose encrypted files. Keep a secure backup of originals.</p>
+    </div>
+    <div class="vault-contents" id="vaultContents" hidden>
+      <div class="vault-storage-info"><span class="vault-emblem small">🔐</span><div><b>Encrypted on this device</b><span>Names, photos and file contents are encrypted before storage.</span></div><span class="vault-count" id="vaultFileCount">0 files</span></div>
+      <section class="vault-note-box" aria-label="Encrypted private note">
+        <label for="vaultNoteTitle">Private note title</label>
+        <input id="vaultNoteTitle" maxlength="100" placeholder="e.g. Personal notes">
+        <label for="vaultNoteText">Private note</label>
+        <textarea id="vaultNoteText" maxlength="20000" rows="4" placeholder="Write a private note. It is encrypted before saving on this device."></textarea>
+        <button id="vaultSaveNote" class="vault-add-btn" type="button"><span class="add-plus">＋</span><span><b>Save encrypted note</b><small>Stored in your private vault on this device</small></span></button>
+      </section>
+      <input id="vaultFiles" type="file" multiple accept="image/*,.pdf,.txt,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.zip" hidden>
+      <button id="vaultAddFiles" class="vault-add-btn" type="button"><span class="add-plus">＋</span><span><b>Add photos or files</b><small>Maximum 20 MB per file</small></span></button>
+      <div id="vaultItems" class="vault-items"></div>
+      <div class="vault-empty" id="vaultEmpty"><div>▧</div><b>Your vault is empty</b><span>Add a file to encrypt it on this device.</span></div>
+    </div>
+    <footer class="vault-footer"><span>🔒 AES-GCM 256-bit</span><span>Local only · No upload</span></footer>
+  </section>
+</div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <script>
 (() => {
@@ -332,108 +435,427 @@
   });
 
 
-  function playBilling(){try{return window.DCPlayBilling||null;}catch{return null;}}
-  function isVipActive(){const api=playBilling();try{return !!(api&&typeof api.isVip==='function'&&api.isVip()===true);}catch{return false;}}
-  function vipToast(message){toast(message);}
-  function refreshVipUi(){
-    const active=isVipActive(),api=playBilling();
-    $('vipStatus').classList.toggle('active',active);
-    $('vipStatusText').textContent=active?'VIP membership active · VIP-only tools are unlocked on this device.':(api?'Free plan · Choose a plan to continue in Google Play.':'Free plan · Subscription checkout works in the Play Store Android app after its product IDs are configured.');
-    $('vipLockLabel').textContent=active?'✓ VIP active':'🔒 Locked';
-    document.querySelectorAll('[data-lock]').forEach(el=>el.textContent=active?'✓':'🔒');
-    const monthly=api&&typeof api.getPrice==='function'?api.getPrice('dc_vip_monthly'):null;
-    const yearly=api&&typeof api.getPrice==='function'?api.getPrice('dc_vip_yearly'):null;
-    if(monthly)$('vipMonthlyPrice').textContent=monthly;
-    else $('vipMonthlyPrice').textContent='Price shown in Google Play';
-    if(yearly)$('vipYearlyPrice').textContent=yearly;
-    else $('vipYearlyPrice').textContent='Price shown in Google Play';
-    $('vipBillingNote').textContent=api?'Subscriptions are processed by Google Play. Restore checks purchases linked to your Play account.':'No payment is taken here. Google Play product setup is required before membership can be purchased.';
+  // VIP membership service. Public key only; the service-role key stays on Supabase.
+  const VIP_API='https://uxrbxpykdxhxvlrwelzo.supabase.co/functions/v1/dc-calculator-vip';
+  const VIP_PUBLIC_KEY='sb_publishable_2_V0S28TVBWDUkC2RS-QbQ_Re_vKC_j';
+  const VIP_DEVICE_KEY='dc-calculator-device-id-v1';
+  let selectedVipPlan='monthly';
+  let vipAdminToken='';
+  let vipState={active:false,plan:null,expiresAt:null,admin:false};
+
+  function getDeviceId(){
+    try{
+      let id=localStorage.getItem(VIP_DEVICE_KEY);
+      if(id&&/^[0-9a-f-]{36}$/i.test(id))return id;
+      id=crypto.randomUUID?crypto.randomUUID():('xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c=>{const r=Math.random()*16|0;return(c==='x'?r:(r&3|8)).toString(16);}));
+      localStorage.setItem(VIP_DEVICE_KEY,id);return id;
+    }catch{
+      // The hosted HTTPS/PWA version normally has localStorage. Keep a session ID fallback if storage is blocked.
+      return (window.__dcVipSessionId ||= (crypto.randomUUID?crypto.randomUUID():String(Date.now())+'-'+Math.random().toString(16).slice(2)));
+    }
   }
-  function openVip(){refreshVipUi();$('vipOverlay').hidden=false;}
-  function closeVip(){ $('vipOverlay').hidden=true;$('vipGraphPanel').hidden=true;$('vipThemesPanel').hidden=true; }
-  function chooseVipPlan(productId){
-    const api=playBilling();
-    if(!api||typeof api.launchSubscription!=='function'){vipToast('VIP checkout is not connected yet. Purchase will be available in the official Android app after Play Console product setup.');return;}
-    try{api.launchSubscription(productId);}catch{vipToast('Could not open Google Play checkout. Please try again.');}
+  async function vipCall(payload,adminToken){
+    const headers={'Content-Type':'application/json','apikey':VIP_PUBLIC_KEY};
+    if(adminToken)headers['x-admin-token']=adminToken;
+    const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),12000);
+    try{
+      const response=await fetch(VIP_API,{method:'POST',headers,body:JSON.stringify(payload),signal:controller.signal});
+      let data={};try{data=await response.json();}catch{}
+      if(!response.ok)throw new Error(data.error||('VIP service returned '+response.status));
+      return data;
+    }finally{clearTimeout(timer);}
   }
-  function openVipFeature(feature){
-    if(!isVipActive()){openVip();vipToast('This feature is locked. An active VIP subscription is required.');return;}
-    $('vipGraphPanel').hidden=feature!=='graph';
-    $('vipThemesPanel').hidden=feature!=='themes';
-    if(feature==='graph'){drawVipGraph();$('vipGraphPanel').scrollIntoView({block:'nearest',behavior:'smooth'});}
-    if(feature==='themes')$('vipThemesPanel').scrollIntoView({block:'nearest',behavior:'smooth'});
-    if(feature==='export')exportHistoryCsv();
+  function vipFeedback(message,kind=''){
+    const el=$('vipRequestFeedback');el.textContent=message;el.className='vip-feedback'+(kind?' '+kind:'');
   }
-  function exportHistoryCsv(){
-    if(!isVipActive()){openVip();vipToast('CSV export is a VIP-only feature.');return;}
-    if(!history.length){vipToast('There is no calculation history to export.');return;}
-    const quote=v=>'"'+String(v).replace(/"/g,'""')+'"';
-    const rows=[['Expression','Result','Timestamp'],...history.map(x=>[x.e,x.n,new Date(x.at||Date.now()).toISOString()])];
-    const csv='\\uFEFF'+rows.map(row=>row.map(quote).join(',')).join('\\r\\n');
+  function nativeBillingApi(){try{return window.DCPlayBilling||null;}catch{return null;}}
+  function configureVipPaymentUi(){
+    const native=!!nativeBillingApi();
+    $('nativeBillingNote').hidden=!native;
+    $('vipPaymentNote').hidden=native;
+    $('vipRequest').hidden=native;
+    const admin=document.querySelector('.vip-admin');if(admin)admin.hidden=native;
+  }
+  function setVipStatusUI(){
+    const el=$('vipStatus');el.classList.toggle('is-active',vipState.active);
+    const strong=el.querySelector('strong'),small=el.querySelector('small');
+    if(vipState.active){
+      strong.textContent=vipState.admin?'Owner admin mode — VIP tools unlocked':'VIP membership active';
+      small.textContent=vipState.expiresAt?'Valid until '+new Date(vipState.expiresAt).toLocaleDateString():(vipState.admin?'Private admin session.':'VIP membership is active on this device.');
+      $('vipExtras').hidden=false;$('vipBtn').classList.add('vip-on');
+    }else{
+      strong.textContent='Free membership';
+      small.textContent='Basic, Scientific, Student tools, GST, EMI and converter remain available.';
+      $('vipExtras').hidden=true;$('vipBtn').classList.remove('vip-on');
+    }
+    configureVipPaymentUi();
+  }
+  async function refreshVipStatus(){
+    const native=nativeBillingApi();
+    if(native){
+      try{
+        let active=false;try{active=native.isVip()===true;}catch{}
+        vipState={active,plan:active?'play-store':null,expiresAt:null,admin:false};
+        for(const [plan,id] of [['monthly','dc_vip_monthly'],['yearly','dc_vip_yearly']]){
+          try{const price=native.getPrice(id);if(price){const button=document.querySelector('[data-vip-plan="'+plan+'"]');const strong=button&&button.querySelector('strong');if(strong)strong.textContent=price;}}catch{}
+        }
+        setVipStatusUI();return {active,source:'google-play'};
+      }catch{
+        vipState={active:false,plan:null,expiresAt:null,admin:false};setVipStatusUI();return {active:false,unavailable:true};
+      }
+    }
+    const button=$('refreshVip');if(button)button.disabled=true;
+    try{
+      const result=await vipCall({action:'status',device_id:getDeviceId()});
+      vipState={active:!!result.active,plan:result.plan||null,expiresAt:result.expires_at||null,admin:false};
+      if(vipState.active){
+        const saved=localStorage.getItem('dc-calculator-vip-palette-v1');
+        if(saved&&['ocean','sunset','rose'].includes(saved))document.documentElement.dataset.vipPalette=saved;
+      }
+      setVipStatusUI();return result;
+    }catch{
+      const el=$('vipStatus');el.classList.remove('is-active');
+      const strong=el.querySelector('strong'),small=el.querySelector('small');
+      strong.textContent='Membership status unavailable';
+      small.textContent='Could not reach the membership service. Your calculator still works; check your connection and refresh.';
+      $('vipExtras').hidden=true;$('vipBtn').classList.remove('vip-on');configureVipPaymentUi();
+      return {active:false,unavailable:true};
+    }finally{if(button)button.disabled=false;}
+  }
+  function openVip(){
+    $('vipOverlay').hidden=false;
+    configureVipPaymentUi();refreshVipStatus();
+    if(!nativeBillingApi())setTimeout(()=>$('vipEmail').focus({preventScroll:true}),80);
+  }
+  function chooseVipPlan(plan){
+    if(!['monthly','yearly'].includes(plan))return;
+    const native=nativeBillingApi();
+    if(native){
+      try{native.launchSubscription(plan==='monthly'?'dc_vip_monthly':'dc_vip_yearly');}
+      catch{toast('Could not open Google Play checkout. Please try again.');}
+      return;
+    }
+    selectedVipPlan=plan;
+    document.querySelectorAll('[data-vip-plan]').forEach(b=>b.classList.toggle('selected',b.dataset.vipPlan===plan));
+  }
+  function applyVipPalette(name,announce=true){
+    if(!vipState.active){toast('VIP membership is needed for premium themes');openVip();return;}
+    if(name==='original'){delete document.documentElement.dataset.vipPalette;try{localStorage.removeItem('dc-calculator-vip-palette-v1');}catch{}}
+    else if(['ocean','sunset','rose'].includes(name)){document.documentElement.dataset.vipPalette=name;try{localStorage.setItem('dc-calculator-vip-palette-v1',name);}catch{}}
+    else return;
+    const isDark=document.documentElement.dataset.theme==='dark';
+    const meta=document.querySelector('meta[name="theme-color"]');
+    if(meta)meta.content=name==='ocean'?(isDark?'#0a1924':'#edf9fa'):name==='sunset'?(isDark?'#201412':'#fff1e9'):name==='rose'?(isDark?'#1b1221':'#fff0f8'):(isDark?'#0d111b':'#edf0f7');
+    if(announce)toast(name==='original'?'Original colours restored':name.charAt(0).toUpperCase()+name.slice(1)+' theme applied');
+  }
+  function exportVipHistory(){
+    if(!vipState.active){toast('VIP membership is needed for CSV export');openVip();return;}
+    if(!history.length){toast('No calculation history to export');return;}
+    const cell=v=>'"'+String(v??'').replace(/"/g,'""')+'"';
+    const rows=[['Expression','Result','Calculated at'],...history.map(item=>[item.e,item.n,new Date(item.at||Date.now()).toISOString()])];
+    const csv='\\uFEFF'+rows.map(row=>row.map(cell).join(',')).join('\\r\\n');
     const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
     const url=URL.createObjectURL(blob),a=document.createElement('a');
-    a.href=url;a.download='dc-calculator-history.csv';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);
-    vipToast('History CSV exported.');
+    a.href=url;a.download='dc-calculator-history-'+new Date().toISOString().slice(0,10)+'.csv';
+    document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);toast('History CSV downloaded');
   }
-  function drawVipGraph(){
-    const canvas=$('vipGraphCanvas');if(!canvas||$('vipGraphPanel').hidden)return;
-    const rect=canvas.getBoundingClientRect(),ratio=Math.max(1,window.devicePixelRatio||1);
-    const width=Math.max(300,Math.round(rect.width||640)),height=200;
-    canvas.width=Math.round(width*ratio);canvas.height=Math.round(height*ratio);
-    const ctx=canvas.getContext('2d');ctx.setTransform(ratio,0,0,ratio,0,0);
-    const styles=getComputedStyle(document.documentElement),fg=styles.getPropertyValue('--text').trim()||'#192234',grid=styles.getPropertyValue('--line').trim()||'#dfe4ef',accent=styles.getPropertyValue('--accent').trim()||'#5669ed';
-    ctx.clearRect(0,0,width,height);ctx.fillStyle=styles.getPropertyValue('--panel').trim()||'#fff';ctx.fillRect(0,0,width,height);
-    const xMin=-10,xMax=10,yMin=-10,yMax=10,left=32,right=12,top=12,bottom=24,pw=width-left-right,ph=height-top-bottom;
-    const px=x=>left+(x-xMin)/(xMax-xMin)*pw,py=y=>top+(yMax-y)/(yMax-yMin)*ph;
-    ctx.lineWidth=1;ctx.strokeStyle=grid;ctx.font='9px system-ui';ctx.fillStyle=fg;
-    for(let x=-10;x<=10;x+=2){ctx.beginPath();ctx.moveTo(px(x),top);ctx.lineTo(px(x),top+ph);ctx.stroke();ctx.textAlign='center';ctx.fillText(String(x),px(x),height-8);}
-    for(let y=-10;y<=10;y+=2){ctx.beginPath();ctx.moveTo(left,py(y));ctx.lineTo(left+pw,py(y));ctx.stroke();if(y!==0){ctx.textAlign='right';ctx.fillText(String(y),left-5,py(y)+3);}}
-    ctx.strokeStyle=fg;ctx.lineWidth=1.3;ctx.beginPath();ctx.moveTo(px(0),top);ctx.lineTo(px(0),top+ph);ctx.moveTo(left,py(0));ctx.lineTo(left+pw,py(0));ctx.stroke();
-    const fn=$('vipGraphFunction').value;
-    const fns={square:x=>x*x,sin:x=>Math.sin(x),cos:x=>Math.cos(x),sqrt:x=>x<0?NaN:Math.sqrt(x),linear:x=>2*x+1,abs:x=>Math.abs(x),log:x=>x<=0?NaN:Math.log10(x)};
-    ctx.strokeStyle=accent;ctx.lineWidth=2.5;ctx.lineJoin='round';ctx.beginPath();let drawing=false;
-    for(let j=0;j<=width-left-right;j++){const x=xMin+j/pw*(xMax-xMin),y=fns[fn](x);if(!Number.isFinite(y)||y<yMin-1||y>yMax+1){drawing=false;continue;}if(!drawing){ctx.moveTo(px(x),py(y));drawing=true;}else ctx.lineTo(px(x),py(y));}
-    ctx.stroke();
+  function useVipFormula(formula){
+    if(!vipState.active){toast('VIP membership is needed for the Formula Vault');openVip();return;}
+    expr=formula;justEvaluated=false;$('vipOverlay').hidden=true;show();setScientific(true);toast('Formula loaded');
   }
-  const vipPalettes={
-    midnight:{bg:'#0d1427',panel:'#141f35',panel2:'#1b2942',screen:'#141f35',text:'#edf2ff',muted:'#94a5c4',line:'#2b3a59',key:'#253552',keyHover:'#334768',fn:'#263558',accent:'#7c9bff',accentHi:'#9b7cff',accentInk:'#101827'},
-    aurora:{bg:'#e9f8f3',panel:'#ffffff',panel2:'#e1f4ed',screen:'#f4fffa',text:'#142d2b',muted:'#678c85',line:'#c7e6dc',key:'#e4f6ef',keyHover:'#d4eee3',fn:'#def7eb',accent:'#0b8f79',accentHi:'#26bfa7',accentInk:'#ffffff'},
-    sunset:{bg:'#fff1e8',panel:'#fffaf7',panel2:'#ffeadf',screen:'#fffaf7',text:'#3a2431',muted:'#9b7989',line:'#f3d6dd',key:'#fae6e8',keyHover:'#f6d5de',fn:'#ffe7cc',accent:'#de5d8b',accentHi:'#ff9945',accentInk:'#ffffff'}
-  };
-  function applyVipPaletteVars(name){
-    const t=vipPalettes[name];if(!t)return;
-    Object.entries(t).forEach(([key,value])=>{
-      const cssName=key==='panel2'?'panel-2':key.replace(/[A-Z]/g,m=>'-'+m.toLowerCase());
-      document.documentElement.style.setProperty('--'+cssName,value);
+  async function submitVipRequest(){
+    const button=$('submitVipRequest'),email=$('vipEmail').value.trim(),reference=$('vipPaymentRef').value.trim();
+    if(!email||!/^\\S+@\\S+\\.\\S+$/.test(email)){vipFeedback('Enter a valid email address.','error');return;}
+    if(reference.length<6||reference.length>64||!/^[a-zA-Z0-9 -]+$/.test(reference)){vipFeedback('Enter the transaction/UTR reference from your payment.','error');return;}
+    button.disabled=true;vipFeedback('Submitting your request securely…');
+    try{
+      const result=await vipCall({action:'submit',device_id:getDeviceId(),email,plan:selectedVipPlan,payment_reference:reference});
+      vipFeedback('Request received and pending manual verification. Request ID: '+(result.request_id||'saved')+'. Your app stays on Free until payment is verified.','success');
+      $('vipPaymentRef').value='';
+      toast('VIP request submitted');
+    }catch(error){
+      vipFeedback(error.message||'Could not submit request. Check the connection and try again.','error');
+    }finally{button.disabled=false;}
+  }
+  function adminRequestItem(item){
+    const card=document.createElement('div');card.className='vip-pending-item';
+    const title=document.createElement('strong');title.textContent=item.email+' · '+(item.plan==='yearly'?'Yearly':'Monthly');
+    const details=document.createElement('p');details.textContent='₹'+(Number(item.amount_paise||0)/100)+' · Ref: '+item.payment_reference;
+    const time=document.createElement('p');time.textContent='Received '+new Date(item.created_at).toLocaleString();
+    const actions=document.createElement('div');actions.className='vip-pending-actions';
+    const approve=document.createElement('button');approve.type='button';approve.textContent='Approve VIP';
+    const reject=document.createElement('button');reject.type='button';reject.textContent='Reject';reject.className='reject';
+    approve.addEventListener('click',()=>reviewVipRequest(item.id,'approve',approve));
+    reject.addEventListener('click',()=>reviewVipRequest(item.id,'reject',reject));
+    actions.append(approve,reject);card.append(title,details,time,actions);return card;
+  }
+  async function loadVipRequests(){
+    const feedback=$('vipAdminFeedback'),token=$('vipAdminKey').value.trim(),root=$('vipRequestList');
+    if(token.length<32){feedback.textContent='Enter the full private admin key.';return;}
+    feedback.textContent='Checking admin access…';
+    try{
+      const result=await vipCall({action:'admin_list'},token);
+      vipAdminToken=token;
+      vipState={active:true,plan:'admin',expiresAt:null,admin:true};setVipStatusUI();
+      root.replaceChildren();
+      if(!result.requests||!result.requests.length){root.textContent='No pending requests.';}
+      else result.requests.forEach(item=>root.append(adminRequestItem(item)));
+      feedback.textContent=(result.requests||[]).length+' pending request(s). Owner mode is active for this session.';
+    }catch(error){vipAdminToken='';feedback.textContent=error.message||'Admin access failed.';}
+  }
+  async function reviewVipRequest(id,action,button){
+    if(!vipAdminToken)return;
+    button.disabled=true;
+    try{
+      const result=await vipCall({action,request_id:id},vipAdminToken);
+      if(action==='approve'){
+        const expiry=result.expires_at?new Date(result.expires_at).toLocaleDateString():'set';
+        $('vipAdminFeedback').textContent='VIP approved. Valid until '+expiry+'.';
+      }else $('vipAdminFeedback').textContent='Request rejected.';
+      await loadVipRequests();
+      await refreshVipStatus();
+      // Keep the admin session available after refreshing the member state.
+      vipState={active:true,plan:'admin',expiresAt:null,admin:true};setVipStatusUI();
+    }catch(error){$('vipAdminFeedback').textContent=error.message||'Could not review request.';button.disabled=false;}
+  }
+  window.addEventListener('dc-vip-status',event=>{
+    if(!nativeBillingApi())return;
+    const active=!!(event&&event.detail&&event.detail.vip);
+    vipState={active,plan:active?'play-store':null,expiresAt:null,admin:false};setVipStatusUI();
+  });
+  $('vipBtn').addEventListener('click',openVip);
+  $('closeVip').addEventListener('click',()=>$('vipOverlay').hidden=true);
+  $('vipOverlay').addEventListener('click',e=>{if(e.target===$('vipOverlay'))$('vipOverlay').hidden=true;});
+  $('refreshVip').addEventListener('click',refreshVipStatus);
+  document.querySelectorAll('[data-vip-plan]').forEach(b=>b.addEventListener('click',()=>chooseVipPlan(b.dataset.vipPlan)));
+  $('submitVipRequest').addEventListener('click',submitVipRequest);
+  $('exportHistoryCsv').addEventListener('click',exportVipHistory);
+  document.querySelectorAll('[data-vip-palette]').forEach(b=>b.addEventListener('click',()=>applyVipPalette(b.dataset.vipPalette)));
+  document.querySelectorAll('[data-vip-formula]').forEach(b=>b.addEventListener('click',()=>useVipFormula(b.dataset.vipFormula)));
+  $('loadVipRequests').addEventListener('click',loadVipRequests);
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('vipOverlay').hidden)$('vipOverlay').hidden=true;});
+  try{if(localStorage.getItem('dc-calculator-vip-palette-v1'))document.documentElement.dataset.vipPalette=localStorage.getItem('dc-calculator-vip-palette-v1');}catch{}
+
+
+  // VIP-only encrypted local vault. File names/content are encrypted before IndexedDB writes.
+  const VAULT_DB_NAME='dc-calculator-vault-v1';
+  const VAULT_CONFIG_KEY='vault-config';
+  const VAULT_VERIFY_TEXT='DC_CALCULATOR_PRIVATE_VAULT_OK_V1';
+  const VAULT_MAX_BYTES=20*1024*1024;
+  let vaultDbPromise=null,vaultKey=null,vaultOpenItems=new Map();
+
+  function openVaultDb(){
+    if(vaultDbPromise)return vaultDbPromise;
+    vaultDbPromise=new Promise((resolve,reject)=>{
+      if(!('indexedDB' in window)){reject(new Error('This browser does not support local vault storage.'));return;}
+      const req=indexedDB.open(VAULT_DB_NAME,1);
+      req.onupgradeneeded=()=>{const db=req.result;if(!db.objectStoreNames.contains('config'))db.createObjectStore('config',{keyPath:'key'});if(!db.objectStoreNames.contains('entries'))db.createObjectStore('entries',{keyPath:'id'});};
+      req.onsuccess=()=>resolve(req.result);
+      req.onerror=()=>reject(req.error||new Error('Could not open local vault storage.'));
+      req.onblocked=()=>reject(new Error('Vault database is blocked by another tab. Close other calculator tabs and retry.'));
     });
-    document.documentElement.dataset.vipTheme=name;
+    return vaultDbPromise;
   }
-  function applyVipTheme(name){
-    if(!isVipActive()){openVip();vipToast('VIP themes require an active membership.');return;}
-    if(!vipPalettes[name])return;
-    applyVipPaletteVars(name);
-    try{localStorage.setItem('dc-calculator-vip-theme',name);}catch{}
-    vipToast(name.charAt(0).toUpperCase()+name.slice(1)+' VIP theme applied.');show();if(!$('vipGraphPanel').hidden)drawVipGraph();
+  async function vaultGet(store,key){
+    const db=await openVaultDb();
+    return new Promise((resolve,reject)=>{const tx=db.transaction(store,'readonly'),req=tx.objectStore(store).get(key);req.onsuccess=()=>resolve(req.result||null);req.onerror=()=>reject(req.error||new Error('Vault read failed.'));tx.onabort=()=>reject(tx.error||new Error('Vault read was interrupted.'));});
   }
+  async function vaultGetAll(){
+    const db=await openVaultDb();
+    return new Promise((resolve,reject)=>{const tx=db.transaction('entries','readonly'),req=tx.objectStore('entries').getAll();req.onsuccess=()=>resolve(req.result||[]);req.onerror=()=>reject(req.error||new Error('Could not read vault files.'));tx.onabort=()=>reject(tx.error||new Error('Vault read was interrupted.'));});
+  }
+  async function vaultPut(store,value){
+    const db=await openVaultDb();
+    return new Promise((resolve,reject)=>{const tx=db.transaction(store,'readwrite');tx.objectStore(store).put(value);tx.oncomplete=()=>resolve(true);tx.onerror=()=>reject(tx.error||new Error('Vault save failed.'));tx.onabort=()=>reject(tx.error||new Error('Vault save was interrupted.'));});
+  }
+  async function vaultDelete(id){
+    const db=await openVaultDb();
+    return new Promise((resolve,reject)=>{const tx=db.transaction('entries','readwrite');tx.objectStore('entries').delete(id);tx.oncomplete=()=>resolve(true);tx.onerror=()=>reject(tx.error||new Error('Could not delete the encrypted file.'));tx.onabort=()=>reject(tx.error||new Error('Delete was interrupted.'));});
+  }
+  async function deriveVaultKey(passphrase,salt){
+    if(!crypto.subtle)throw new Error('Secure encryption requires the HTTPS version of DC Calculator.');
+    const material=await crypto.subtle.importKey('raw',new TextEncoder().encode(passphrase),'PBKDF2',false,['deriveKey']);
+    return crypto.subtle.deriveKey({name:'PBKDF2',salt,iterations:310000,hash:'SHA-256'},material,{name:'AES-GCM',length:256},false,['encrypt','decrypt']);
+  }
+  function vaultShowError(message){$('vaultError').textContent=message||'';}
+  function vaultShowLocked(hasConfig){
+    $('vaultSetup').hidden=false;$('vaultContents').hidden=true;$('vaultLock').hidden=true;
+    $('vaultSetupHeading').textContent=hasConfig?'Unlock your vault':'Create your vault';
+    $('vaultSetupCopy').textContent=hasConfig?'Enter the passphrase you created for this device. It is not stored anywhere.':'Set a separate passphrase of at least 8 characters. Files are encrypted locally before they are saved.';
+    $('vaultConfirmLabel').hidden=hasConfig;
+    $('vaultUnlock').innerHTML=hasConfig?'Unlock encrypted vault <span>→</span>':'Create encrypted vault <span>→</span>';
+    $('vaultPass').value='';$('vaultPassConfirm').value='';$('vaultPass').setAttribute('autocomplete',hasConfig?'current-password':'new-password');
+    vaultShowError('');
+  }
+  function clearVaultMemory(){
+    for(const item of vaultOpenItems.values())if(item.url)URL.revokeObjectURL(item.url);
+    vaultOpenItems.clear();vaultKey=null;
+    $('vaultItems').replaceChildren();$('vaultFileCount').textContent='0 files';$('vaultEmpty').hidden=false;
+  }
+  async function openVaultDialog(){
+    if(!vipState.active){toast('An active VIP membership is required for the Private Vault');return;}
+    $('vaultOverlay').hidden=false;clearVaultMemory();vaultShowLocked(false);
+    try{const cfg=await vaultGet('config',VAULT_CONFIG_KEY);vaultShowLocked(!!cfg);setTimeout(()=>$('vaultPass').focus({preventScroll:true}),90);}
+    catch(err){vaultShowError(err.message||'Could not open encrypted storage.');}
+  }
+  let nativeVaultAuthCounter=0;
+  const nativeVaultAuthPending=new Map();
+  window.onDCCalculatorVaultAuthResult=(requestId,success)=>{
+    const resolve=nativeVaultAuthPending.get(String(requestId));
+    if(resolve){nativeVaultAuthPending.delete(String(requestId));resolve(!!success);}
+  };
+  function requestNativeVaultAuth(){
+    const bridge=(()=>{try{return window.DCCalculatorNative||null;}catch{return null;}})();
+    if(!bridge||typeof bridge.authenticateVault!=='function')return Promise.resolve(true);
+    return new Promise(resolve=>{
+      const id=String(++nativeVaultAuthCounter);
+      const timer=setTimeout(()=>{nativeVaultAuthPending.delete(id);resolve(false);},120000);
+      nativeVaultAuthPending.set(id,ok=>{clearTimeout(timer);resolve(!!ok);});
+      try{bridge.authenticateVault(id);}catch{clearTimeout(timer);nativeVaultAuthPending.delete(id);resolve(false);}
+    });
+  }
+  async function unlockOrCreateVault(){
+    const button=$('vaultUnlock'),pass=$('vaultPass').value,confirm=$('vaultPassConfirm').value;
+    button.disabled=true;vaultShowError('');
+    try{
+      if(!vipState.active)throw new Error('Your VIP membership is not active. Refresh membership status and try again.');
+      const deviceAuthOk=await requestNativeVaultAuth();
+      if(!deviceAuthOk)throw new Error('Phone authentication was cancelled or failed. The vault stayed locked.');
+      if(pass.length<8||pass.length>128)throw new Error('Use a passphrase between 8 and 128 characters.');
+      let cfg=await vaultGet('config',VAULT_CONFIG_KEY);
+      if(!cfg){
+        if(pass!==confirm)throw new Error('The two passphrases do not match.');
+        const salt=crypto.getRandomValues(new Uint8Array(16)),key=await deriveVaultKey(pass,salt),iv=crypto.getRandomValues(new Uint8Array(12));
+        const check=await crypto.subtle.encrypt({name:'AES-GCM',iv},key,new TextEncoder().encode(VAULT_VERIFY_TEXT));
+        cfg={key:VAULT_CONFIG_KEY,salt:Array.from(salt),checkIv:Array.from(iv),checkCipher:Array.from(new Uint8Array(check)),createdAt:Date.now()};
+        await vaultPut('config',cfg);vaultKey=key;toast('Encrypted vault created');
+      }else{
+        const key=await deriveVaultKey(pass,new Uint8Array(cfg.salt));
+        let test='';
+        try{const clear=await crypto.subtle.decrypt({name:'AES-GCM',iv:new Uint8Array(cfg.checkIv)},key,new Uint8Array(cfg.checkCipher));test=new TextDecoder().decode(clear);}catch{throw new Error('Incorrect passphrase. Your files remain encrypted.');}
+        if(test!==VAULT_VERIFY_TEXT)throw new Error('Incorrect passphrase. Your files remain encrypted.');
+        vaultKey=key;
+      }
+      $('vaultSetup').hidden=true;$('vaultContents').hidden=false;$('vaultLock').hidden=false;
+      $('vaultPass').value='';$('vaultPassConfirm').value='';
+      await renderVaultFiles();
+    }catch(err){vaultKey=null;vaultShowError(err&&err.message?err.message:'Could not unlock the vault. Try again.');}
+    finally{button.disabled=false;}
+  }
+  function lockVault(closeOverlay=false){
+    clearVaultMemory();
+    $('vaultPass').value='';$('vaultPassConfirm').value='';
+    if(closeOverlay){$('vaultOverlay').hidden=true;}
+    else{vaultShowLocked(true);}
+  }
+  function formatVaultBytes(bytes){
+    if(bytes<1024)return bytes+' B';
+    if(bytes<1024*1024)return (bytes/1024).toFixed(1)+' KB';
+    return (bytes/(1024*1024)).toFixed(1)+' MB';
+  }
+  async function decryptVaultItem(record){
+    const clear=await crypto.subtle.decrypt({name:'AES-GCM',iv:new Uint8Array(record.iv)},vaultKey,new Uint8Array(record.ciphertext));
+    const packed=new Uint8Array(clear);
+    if(packed.length<4)throw new Error('Encrypted file data is damaged.');
+    const metaLength=new DataView(packed.buffer,packed.byteOffset,packed.byteLength).getUint32(0);
+    if(metaLength<2||metaLength>packed.length-4)throw new Error('Encrypted file metadata is damaged.');
+    const meta=JSON.parse(new TextDecoder().decode(packed.slice(4,4+metaLength)));
+    const bytes=packed.slice(4+metaLength);
+    const blob=new Blob([bytes],{type:typeof meta.type==='string'?meta.type:'application/octet-stream'});
+    return {id:record.id,name:String(meta.name||'Private file').slice(0,240),type:typeof meta.type==='string'?meta.type:'application/octet-stream',size:bytes.length,blob,url:URL.createObjectURL(blob),createdAt:record.createdAt||Date.now()};
+  }
+  async function renderVaultFiles(){
+    if(!vaultKey)return;
+    const root=$('vaultItems');root.replaceChildren();
+    for(const item of vaultOpenItems.values())if(item.url)URL.revokeObjectURL(item.url);
+    vaultOpenItems.clear();
+    const records=await vaultGetAll();
+    for(const record of records){
+      try{const item=await decryptVaultItem(record);vaultOpenItems.set(item.id,item);}
+      catch{toast('One vault item could not be decrypted. It has not been changed.');}
+    }
+    $('vaultFileCount').textContent=vaultOpenItems.size+' '+(vaultOpenItems.size===1?'file':'files');
+    $('vaultEmpty').hidden=vaultOpenItems.size>0;
+    for(const item of vaultOpenItems.values()){
+      const card=document.createElement('article');card.className='vault-item';
+      const thumb=document.createElement('div');thumb.className='vault-thumb';
+      if(item.type.startsWith('image/')){const img=document.createElement('img');img.src=item.url;img.alt='Encrypted private photo preview';img.loading='lazy';thumb.append(img);}
+      else{const icon=document.createElement('div');icon.className='vault-doc-icon';icon.textContent=item.type==='application/pdf'?'📄':'🔐';thumb.append(icon);}
+      const body=document.createElement('div');body.className='vault-item-info';
+      const name=document.createElement('div');name.className='vault-item-name';name.title=item.name;name.textContent=item.name;
+      const meta=document.createElement('div');meta.className='vault-item-meta';meta.textContent=formatVaultBytes(item.size)+' · '+new Date(item.createdAt).toLocaleDateString();
+      const actions=document.createElement('div');actions.className='vault-item-actions';
+      const download=document.createElement('button');download.type='button';download.textContent='Download';download.addEventListener('click',()=>{const a=document.createElement('a');a.href=item.url;a.download=item.name.replace(/[\\/<>:"|?*]/g,'_')||'private-file';document.body.append(a);a.click();a.remove();});
+      const remove=document.createElement('button');remove.type='button';remove.textContent='Delete';remove.addEventListener('click',async()=>{if(!window.confirm('Delete this encrypted file from this device? This cannot be undone.'))return;remove.disabled=true;try{await vaultDelete(item.id);if(item.url)URL.revokeObjectURL(item.url);vaultOpenItems.delete(item.id);await renderVaultFiles();toast('Encrypted file deleted');}catch(err){remove.disabled=false;toast(err.message||'Could not delete file');}});
+      actions.append(download,remove);body.append(name,meta,actions);card.append(thumb,body);root.append(card);
+    }
+  }
+  async function saveVaultNote(){
+    if(!vaultKey||!vipState.active){toast('Unlock the active VIP vault first');return;}
+    const title=$('vaultNoteTitle').value.trim()||'Private note';
+    const note=$('vaultNoteText').value;
+    if(!note.trim()){toast('Write a note before saving');return;}
+    const button=$('vaultSaveNote');button.disabled=true;
+    try{
+      const meta=new TextEncoder().encode(JSON.stringify({name:title.replace(/[\\/<>:"|?*]/g,'_').slice(0,100)+'.txt',type:'text/plain;charset=utf-8',lastModified:Date.now()}));
+      const body=new TextEncoder().encode(note),packed=new Uint8Array(4+meta.length+body.length);
+      new DataView(packed.buffer).setUint32(0,meta.length);packed.set(meta,4);packed.set(body,4+meta.length);
+      const iv=crypto.getRandomValues(new Uint8Array(12));
+      const ciphertext=await crypto.subtle.encrypt({name:'AES-GCM',iv},vaultKey,packed);
+      await vaultPut('entries',{id:crypto.randomUUID?crypto.randomUUID():String(Date.now())+'-'+Math.random().toString(36).slice(2),iv:Array.from(iv),ciphertext:Array.from(new Uint8Array(ciphertext)),createdAt:Date.now()});
+      $('vaultNoteTitle').value='';$('vaultNoteText').value='';
+      await renderVaultFiles();toast('Private note encrypted and saved');
+    }catch(err){toast(err.message||'Could not save encrypted note');}
+    finally{button.disabled=false;}
+  }
+  async function addVaultFiles(files){
+    if(!vaultKey||!vipState.active){toast('Unlock the active VIP vault first');return;}
+    const btn=$('vaultAddFiles');btn.disabled=true;let saved=0;
+    try{
+      for(const file of Array.from(files||[])){
+        if(file.size>VAULT_MAX_BYTES){toast(file.name+' is over the 20 MB limit');continue;}
+        const meta=new TextEncoder().encode(JSON.stringify({name:file.name,type:file.type||'application/octet-stream',lastModified:file.lastModified||Date.now()}));
+        const fileBytes=new Uint8Array(await file.arrayBuffer()),packed=new Uint8Array(4+meta.length+fileBytes.length);
+        new DataView(packed.buffer).setUint32(0,meta.length);packed.set(meta,4);packed.set(fileBytes,4+meta.length);
+        const iv=crypto.getRandomValues(new Uint8Array(12)),ciphertext=await crypto.subtle.encrypt({name:'AES-GCM',iv},vaultKey,packed);
+        const id=crypto.randomUUID?crypto.randomUUID():String(Date.now())+'-'+Math.random().toString(16).slice(2);
+        await vaultPut('entries',{id,iv:Array.from(iv),ciphertext,createdAt:Date.now()});saved++;
+      }
+      await renderVaultFiles();if(saved)toast(saved+' file(s) encrypted and saved on this device');
+    }catch(err){toast(err&&err.message?err.message:'Could not encrypt the selected files.');}
+    finally{btn.disabled=false;$('vaultFiles').value='';}
+  }
+  $('openVipVault').addEventListener('click',async()=>{
+    if(!vipState.admin){await refreshVipStatus();}
+    if(!vipState.active){toast('An active VIP membership is required for the Private Vault');return;}
+    await openVaultDialog();
+  });
+  $('vaultBack').addEventListener('click',()=>lockVault(true));
+  $('vaultLock').addEventListener('click',()=>lockVault(false));
+  $('vaultOverlay').addEventListener('click',e=>{if(e.target===$('vaultOverlay'))lockVault(true);});
+  $('vaultUnlock').addEventListener('click',unlockOrCreateVault);
+  $('vaultPass').addEventListener('keydown',e=>{if(e.key==='Enter')unlockOrCreateVault();});
+  $('vaultPassConfirm').addEventListener('keydown',e=>{if(e.key==='Enter')unlockOrCreateVault();});
+  $('vaultAddFiles').addEventListener('click',()=>{if(vaultKey&&vipState.active)$('vaultFiles').click();else toast('Unlock the vault first');});
+  $('vaultFiles').addEventListener('change',e=>addVaultFiles(e.target.files));
+  $('vaultSaveNote').addEventListener('click',saveVaultNote);
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('vaultOverlay').hidden)lockVault(true);});
+
   $('openVip').addEventListener('click',openVip);
-  $('closeVip').addEventListener('click',closeVip);
-  $('vipOverlay').addEventListener('click',e=>{if(e.target===$('vipOverlay'))closeVip();});
-  $('buyVipMonthly').addEventListener('click',()=>chooseVipPlan('dc_vip_monthly'));
-  $('buyVipYearly').addEventListener('click',()=>chooseVipPlan('dc_vip_yearly'));
-  $('restoreVip').addEventListener('click',()=>{const api=playBilling();if(api&&typeof api.restorePurchases==='function'){api.restorePurchases();setTimeout(refreshVipUi,500);}else vipToast('Restore purchases is available in the official Android app after billing setup.');});
-  document.querySelectorAll('[data-vip-feature]').forEach(b=>b.addEventListener('click',()=>openVipFeature(b.dataset.vipFeature)));
-  document.querySelectorAll('[data-vip-theme]').forEach(b=>b.addEventListener('click',()=>applyVipTheme(b.dataset.vipTheme)));
-  $('closeVipGraph').addEventListener('click',()=>$('vipGraphPanel').hidden=true);
-  $('vipGraphFunction').addEventListener('change',drawVipGraph);
-  window.addEventListener('dc-vip-status',()=>{refreshVipUi();if(isVipActive()){try{const saved=localStorage.getItem('dc-calculator-vip-theme');if(saved&&vipPalettes[saved])applyVipPaletteVars(saved);}catch{}}});
-  window.addEventListener('resize',()=>{if(!$('vipGraphPanel').hidden&&isVipActive())drawVipGraph();});
-  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('vipOverlay').hidden)closeVip();});
-  $('exportHistory').addEventListener('click',exportHistoryCsv);
   $('copyText').addEventListener('click',copyResult);
   $('openHistory').addEventListener('click',()=>$('historyPanel').classList.add('open'));$('closeHistory').addEventListener('click',()=>$('historyPanel').classList.remove('open'));
   document.querySelectorAll('[data-memory]').forEach(b=>b.addEventListener('click',()=>memoryAction(b.dataset.memory)));
   try{if(localStorage.getItem(THEME_KEY)==='dark'){$('themeBtn').click();}}catch{}
-  renderHistory();show();
+
+  // Android local-file build must not offer off-app/manual payments from inside a Play-distributed app.
+  if(location.protocol==='file:'){
+    $('vipRequest').hidden=true;
+    $('vipPaymentNote').hidden=true;
+    $('nativeBillingNote').hidden=false;
+    document.querySelectorAll('[data-vip-plan] small').forEach(el=>{el.textContent='Purchase unavailable in this Android build';});
+  }
+
+  renderHistory();show();refreshVipStatus();
   // Read-only test hooks for automated regression checks; no calculator state is changed by exposing these.
   window.DCCalculatorTest={parse,fmt,pretty,setAngleMode:(v)=>{angleMode=v;}};
   if('serviceWorker' in navigator && location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});
