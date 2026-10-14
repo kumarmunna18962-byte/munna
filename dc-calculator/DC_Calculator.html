@@ -114,6 +114,17 @@
 @media(max-width:760px){.vault-overlay{align-items:flex-end;padding:0}.vault-sheet{width:100%;max-height:94dvh;border-radius:27px 27px 0 0;padding:21px 17px calc(18px + env(safe-area-inset-bottom));border-bottom:0}}
 
 .native-billing-note{display:grid;gap:5px;margin:13px 0 16px;border:1px solid #d7dafa;background:#f0f1ff;color:#403d86;border-radius:13px;padding:12px 13px;font-size:10px;line-height:1.55}.native-billing-note strong{font-size:11px}.native-billing-note[hidden]{display:none}
+
+  .upi-payment-content{flex:1;min-width:0}
+  .upi-payment-layout{display:grid;grid-template-columns:minmax(112px,148px) minmax(0,1fr);gap:12px;align-items:center;margin:12px 0}
+  .upi-payment-qr{display:block;width:100%;height:auto;aspect-ratio:1;object-fit:contain;background:#fff;padding:5px;border:1px solid #ddd;border-radius:12px}
+  .upi-payment-details{display:flex;flex-direction:column;align-items:flex-start;gap:7px;min-width:0}
+  .upi-payment-details>small{font-size:9px;color:var(--muted)}
+  .upi-address{font-size:11px;overflow-wrap:anywhere;line-height:1.4}
+  .upi-payment-details .vip-secondary{max-width:100%;white-space:normal;text-align:left}
+  .upi-feedback{font-size:9px;color:var(--muted);overflow-wrap:anywhere}
+  @media(max-width:380px){.upi-payment-layout{grid-template-columns:105px minmax(0,1fr);gap:9px}.upi-payment-details .vip-secondary{font-size:9px;padding:8px}}
+
 </style>
 </head>
 <body>
@@ -222,7 +233,26 @@
         <span class="plan-badge">BEST VALUE</span><span class="plan-radio"></span><span class="plan-name">Yearly VIP</span><strong>₹1,099</strong><small>365 days · manual payment verification</small>
       </button>
     </div>
-    <div class="vip-payment-note" id="vipPaymentNote"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3 4.5 6v5.4c0 4.6 3.2 7.8 7.5 9.6 4.3-1.8 7.5-5 7.5-9.6V6L12 3Z" stroke="currentColor" stroke-width="1.6"/><path d="m8.5 12 2.2 2.2 4.8-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><div><strong>Manual payment verification · ₹99 monthly / ₹1,099 yearly</strong><p>This app does not collect or process payment. Get payment instructions directly from the developer through a trusted private channel before paying. After an actual transfer, submit its UTR/reference; the request stays pending until the developer verifies receipt independently. No automatic renewal.</p><small>Never enter a bank/card PIN, password, CVV or OTP. Do not pay anyone who claims this page itself has accepted a payment.</small></div></div>
+    <div class="vip-payment-note" id="vipPaymentNote">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3 4.5 6v5.4c0 4.6 3.2 7.8 7.5 9.6 4.3-1.8 7.5-5 7.5-9.6V6L12 3Z" stroke="currentColor" stroke-width="1.6"/><path d="m8.5 12 2.2 2.2 4.8-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div class="upi-payment-content">
+        <strong>Pay with UPI · ₹99 monthly / ₹1,099 yearly</strong>
+        <p>Scan this QR with your UPI app, or tap Pay. The Pay button pre-fills the selected plan amount.</p>
+        <div class="upi-payment-layout">
+          <img class="upi-payment-qr" id="vipUpiQr" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASgAAAEoCAIAAABkZftOAAAEvklEQVR42u3dUW7cMAxF0bqY/W85XYHhKiDzSOec72DiOHMhA4Ss6+vr6w/ws/66BSA8EB4gPBAeIDwQHiA8EB4gPBAeCA8QHggPEB4IDxAeCA8QHggPhAcID4QHCA+EBwgPhAcID4QHwgOEB+/z6f4F13WtuBFV5wTe/b13n191f1LX7/tgxQOPmoDwQHggPEB4IDygxSf1i7vnJHdO50inc63TeV3Vz1fdh9T/Zcv3wYoHHjUB4YHwAOGB8EB4wA/5TLugafvTqq4zNd/bPg/c8n2w4oFHTUB4IDwQHiA8EB5Q7OMWfM/p3GzL/O307502H7PiAcID4YHwAOGB8ADhwUuY4z04nVOd/nz3fG/a3A8rHggPhAcID4QHCA+EB/yXcXO87fOf1HlrVdc5bd/dW+eBVjwQHggPEB4IDxAeCA94EJvjvXXeded0f13q+lPv/9zyfbDigfAA4YHwAOGB8EB4wA9pn+P9tvcrps67S/2/un/eigcID4QHCA+EBwgPhAe/VPscb9r8qvt6qvaz3Zm2DzD1d3VfvxUPPGoCwgPhAcID4QHCg7DXvlez6py3LfvNus+7S83N3vreTiseCA+EBwgPhAcID4QHPIi9V7N7v9adLeewpc7Tq7qeaecBWvEA4YHwQHiA8EB4gPBgmdh7NVOf0z1XnDZnq7rPp/v6Uvvopv1frHggPBAeIDwQHiA8EB7wTZ9pF9S97yv1Ps9TW84VrPo/dn8frHiA8EB4IDxAeCA8QHiwTOy9mndO5zxbzk/rnjtVzcem7Wfr/j6k5oFWPPCoCcIDhAfCA4QHwgMeXN3zitQ5eFXXU2XLfe4+7y41X522T8+KB8ID4QHCA+EBwgPhAQ+uae9pnLZvqnuedeet7+ec9j2xHw88agLCA+EBwgPhAcKDoT7b/4Bp+8dOP6fqvZHdv7f7/qTeO5qaZ1rxQHggPEB4IDxAeCA84ME1bT/b6eecmnYe3Za53LTr7GY/HnjUBIQHwgOEB8IDhAdh15bz6LbMr6p+b+o+d5v2Pk/v1QSPmoDwQHiA8EB4gPBgqNh7NVPvq5x2rlrV50w757Dqc7afg2fFA4+aIDxAeCA8QHggPOCbxp2P172vbNo8J/V+0e7rrLr+qp+ftg/QigfCA+EBwgPhAcID4QEPrmnzjXE3qPlcuGnn9VX93tTnp+6DFQ88agLCA+GB8ADhgfCAYu378baf2zbtfZVV79vsno91/12nf68VDxAeCA+EBwgPhAcID5ZZfz7eqe55VOr+TJvXdf/fp51PaMUDj5qA8EB4IDxAeCA8oNhrz8dz3l32Pkzbhznt3DwrHggPhAcID4QHCA+EBzz4uAW1Uufpdc8/U5/f/b5N+/HAoyYgPBAeIDwQHiA8GMocr1j3/Od0nrZ9X1xqLmrFA4+agPBAeIDwQHiA8CBs3BwvNVepus6qudP2+5PaT1j1e+3HA4+agPBAeIDwQHiA8CDsmrZ/LKV7ztM939v+Hs5p99OKBx41AeGB8ADhgfAA4UHYtWV/F1jxAOGB8ADhgfAA4YHwQHiA8EB4gPBAeIDwQHiA8EB4IDxAeCA8QHggPEB4IDxAeCA8EB4gPBAeIDwQHiA8GO0fkSU/UEh7p3wAAAAASUVORK5CYII=" alt="UPI payment QR for binodmahto741963@axl" width="148" height="148">
+          <div class="upi-payment-details">
+            <small>UPI ID</small>
+            <strong class="upi-address">binodmahto741963@axl</strong>
+            <button type="button" class="vip-secondary" id="copyVipUpi">Copy UPI ID</button>
+            <button type="button" class="vip-secondary" id="openVipUpi">Pay ₹99 in UPI app ↗</button>
+            <div class="upi-feedback" id="vipUpiFeedback" role="status" aria-live="polite"></div>
+          </div>
+        </div>
+        <p><b>Before you pay:</b> confirm your UPI app shows the intended recipient and correct amount. If the displayed name or amount is unexpected, cancel the payment.</p>
+        <p>After a successful transfer, enter its real UTR/reference below. Your VIP request stays pending until the developer verifies the payment independently.</p>
+        <small>QR created from the UPI ID provided by the app owner; the ID has not been independently verified here. Never share a UPI PIN or OTP. No auto-renewal.</small>
+      </div>
+    </div>
     <div class="native-billing-note" id="nativeBillingNote" hidden><strong>Google Play subscription</strong><span>Android purchases are handled by Google Play. Checkout opens only when the monthly and yearly products are configured in Play Console. This screen never collects card details, UPI PINs or bank passwords. If checkout says the plan is unavailable, no payment was taken.</span></div>
     <section class="vip-request" id="vipRequest">
       <h3>Request VIP activation</h3>
@@ -476,6 +506,27 @@
     $('vipRequest').hidden=native;
     const admin=document.querySelector('.vip-admin');if(admin)admin.hidden=native;
   }
+  const DC_UPI_ID='binodmahto741963@axl';
+  function updateVipPayButton(){
+    const button=$('openVipUpi');
+    if(button)button.textContent=(selectedVipPlan==='yearly'?'Pay ₹1,099':'Pay ₹99')+' in UPI app ↗';
+  }
+  async function copyVipUpiId(){
+    const feedback=$('vipUpiFeedback');
+    try{
+      await navigator.clipboard.writeText(DC_UPI_ID);
+      feedback.textContent='UPI ID copied.';
+    }catch{
+      feedback.textContent='Copy this UPI ID: '+DC_UPI_ID;
+    }
+  }
+  function openVipUpiPayment(){
+    const yearly=selectedVipPlan==='yearly';
+    const amount=yearly?'1099.00':'99.00';
+    const note=yearly?'DC Calculator Yearly VIP':'DC Calculator Monthly VIP';
+    const url='upi://pay?pa='+encodeURIComponent(DC_UPI_ID)+'&cu=INR&am='+amount+'&tn='+encodeURIComponent(note);
+    window.location.href=url;
+  }
   function setVipStatusUI(){
     const el=$('vipStatus');el.classList.toggle('is-active',vipState.active);
     const strong=el.querySelector('strong'),small=el.querySelector('small');
@@ -537,6 +588,7 @@
     }
     selectedVipPlan=plan;
     document.querySelectorAll('[data-vip-plan]').forEach(b=>b.classList.toggle('selected',b.dataset.vipPlan===plan));
+    updateVipPayButton();
   }
   function applyVipPalette(name,announce=true){
     if(!vipState.active){toast('VIP membership is needed for premium themes');openVip();return;}
@@ -627,6 +679,9 @@
   $('closeVip').addEventListener('click',()=>$('vipOverlay').hidden=true);
   $('vipOverlay').addEventListener('click',e=>{if(e.target===$('vipOverlay'))$('vipOverlay').hidden=true;});
   $('refreshVip').addEventListener('click',refreshVipStatus);
+  $('copyVipUpi').addEventListener('click',copyVipUpiId);
+  $('openVipUpi').addEventListener('click',openVipUpiPayment);
+  updateVipPayButton();
   document.querySelectorAll('[data-vip-plan]').forEach(b=>b.addEventListener('click',()=>chooseVipPlan(b.dataset.vipPlan)));
   $('submitVipRequest').addEventListener('click',submitVipRequest);
   $('exportHistoryCsv').addEventListener('click',exportVipHistory);
