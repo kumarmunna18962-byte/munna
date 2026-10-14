@@ -1,4 +1,4 @@
-const CACHE='dc-calculator-share-v10';
+const CACHE='dc-calculator-share-v11';
 const FILES=['./','./index.html','./DC_Calculator.html','./manifest.webmanifest','./dc-icon.svg'];
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(FILES)).then(()=>self.skipWaiting())));
 self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim())));
