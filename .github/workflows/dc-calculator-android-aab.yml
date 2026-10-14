@@ -1,4 +1,4 @@
-name: Build DC Calculator Android App Bundle
+name: Build DC Calculator Native Android App
 
 on:
   push:
@@ -6,16 +6,15 @@ on:
       - dc-calculator-android-playstore
     paths:
       - "android-playstore/**"
-      - "dc-calculator/**"
       - ".github/workflows/dc-calculator-android-aab.yml"
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
-  build-unsigned-aab:
-    name: Build Android App Bundle
+  build-native-android:
+    name: Build native Android APK and Play Store bundle
     runs-on: ubuntu-latest
     steps:
       - name: Checkout source
@@ -40,30 +39,30 @@ jobs:
       - name: Install Android 16 SDK
         run: sdkmanager "platforms;android-36" "build-tools;36.0.0"
 
-      - name: Bundle current calculator UI into Android assets
-        shell: bash
-        run: |
-          mkdir -p android-playstore/app/src/main/assets
-          cp dc-calculator/index.html android-playstore/app/src/main/assets/index.html
-          cp dc-calculator/privacy-policy.html android-playstore/app/src/main/assets/privacy-policy.html
-          cp dc-calculator/dc-icon.svg android-playstore/app/src/main/assets/dc-icon.svg
-          python3 - <<'PY'
-          from pathlib import Path
-          import re
-          p = Path("android-playstore/app/src/main/assets/index.html")
-          s = p.read_text(encoding="utf-8")
-          s = re.sub(r'<link rel="manifest"[^>]*>\s*', '', s)
-          s = re.sub(r'<link rel="icon"[^>]*>\s*', '', s)
-          p.write_text(s, encoding="utf-8")
-          PY
+      - name: Build installable debug APK and Play Store bundle
+        run: gradle -p android-playstore --no-daemon clean assembleDebug bundleRelease
 
-      - name: Build release AAB (unsigned; no private key is uploaded to CI)
-        run: gradle -p android-playstore --no-daemon clean bundleRelease
-
-      - name: Upload unsigned AAB for private-key signing outside CI
+      - name: Upload installable APK and unsigned AAB
         uses: actions/upload-artifact@v4
         with:
-          name: dc-calculator-unsigned-aab
-          path: android-playstore/app/build/outputs/bundle/release/app-release.aab
+          name: dc-calculator-native-android-builds
+          path: |
+            android-playstore/app/build/outputs/apk/debug/app-debug.apk
+            android-playstore/app/build/outputs/bundle/release/app-release.aab
           if-no-files-found: error
-          retention-days: 3
+          retention-days: 7
+
+      - name: Publish test APK as a downloadable pre-release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: native-apk-${{ github.run_number }}-${{ github.run_attempt }}
+          name: DC Calculator Native Android APK (Test Build ${{ github.run_number }})
+          body: |
+            Installable test APK for DC Calculator.
+            
+            This version uses native Android Java views and a native expression calculator. It is a sideload testing build signed with the generated debug key. It is not the signed Play Store release build.
+            
+            The AAB, if needed for Play Console, is unsigned until the owner's release keystore is configured securely.
+          prerelease: true
+          files: android-playstore/app/build/outputs/apk/debug/app-debug.apk
+          fail_on_unmatched_files: true
