@@ -1,72 +1,122 @@
 package com.munna.dc_calculator;
 
 import android.app.Activity;
-import android.webkit.JavascriptInterface;
-import android.webkit.WebView;
 import android.widget.Toast;
 import com.android.billingclient.api.*;
 import java.util.*;
 
-/** Play Store subscription bridge. Plans must exist in Play Console before checkout can work. */
-public final class VipBillingManager {
+/** Native Google Play Billing bridge. Products must be configured in Play Console. */
+public final class VipBillingManager implements PurchasesUpdatedListener {
     public static final String MONTHLY = "dc_vip_monthly";
     public static final String YEARLY = "dc_vip_yearly";
+
+    public interface StatusListener {
+        void onVipStatusChanged(boolean active, String message);
+    }
+
     private final Activity activity;
-    private final WebView webView;
+    private final StatusListener listener;
     private BillingClient client;
     private volatile boolean ready = false;
     private volatile boolean vip = false;
-    private final Map<String, ProductDetails> details = Collections.synchronizedMap(new HashMap<>());
-    private final Map<String, String> prices = Collections.synchronizedMap(new HashMap<>());
+    private boolean firstStatusSent = false;
+    private final Map<String, ProductDetails> products =
+        Collections.synchronizedMap(new HashMap<>());
+    private final Map<String, String> prices =
+        Collections.synchronizedMap(new HashMap<>());
 
-    public VipBillingManager(Activity activity, WebView webView) {
+    public VipBillingManager(Activity activity, StatusListener listener) {
         this.activity = activity;
-        this.webView = webView;
+        this.listener = listener;
         client = BillingClient.newBuilder(activity)
-            .setListener(this::onPurchasesUpdated)
+            .setListener(this)
             .enablePendingPurchases(PendingPurchasesParams.newBuilder().enableOneTimeProducts().build())
             .enableAutoServiceReconnection()
             .build();
+        connect();
+    }
+
+    private void connect() {
+        if (client == null) return;
         client.startConnection(new BillingClientStateListener() {
             @Override public void onBillingSetupFinished(BillingResult result) {
                 ready = result.getResponseCode() == BillingClient.BillingResponseCode.OK;
-                if (ready) { queryProducts(); refresh(); } else notifyWeb();
+                if (ready) {
+                    queryProducts();
+                    refresh();
+                } else {
+                    notifyStatus(vip, "Google Play Billing is unavailable right now.");
+                }
             }
             @Override public void onBillingServiceDisconnected() {
                 ready = false;
-                notifyWeb();
+                notifyStatus(vip, "Google Play Billing disconnected. Reconnect and try again.");
             }
         });
     }
 
-    public Object javascriptBridge() { return new Bridge(); }
+    public boolean isVipActive() { return vip; }
 
     private void queryProducts() {
+        if (client == null || !ready) return;
         List<QueryProductDetailsParams.Product> requested = new ArrayList<>();
-        requested.add(QueryProductDetailsParams.Product.newBuilder().setProductId(MONTHLY).setProductType(BillingClient.ProductType.SUBS).build());
-        requested.add(QueryProductDetailsParams.Product.newBuilder().setProductId(YEARLY).setProductType(BillingClient.ProductType.SUBS).build());
-        QueryProductDetailsParams params = QueryProductDetailsParams.newBuilder().setProductList(requested).build();
+        requested.add(QueryProductDetailsParams.Product.newBuilder()
+            .setProductId(MONTHLY).setProductType(BillingClient.ProductType.SUBS).build());
+        requested.add(QueryProductDetailsParams.Product.newBuilder()
+            .setProductId(YEARLY).setProductType(BillingClient.ProductType.SUBS).build());
+        QueryProductDetailsParams params = QueryProductDetailsParams.newBuilder()
+            .setProductList(requested).build();
         client.queryProductDetailsAsync(params, (result, response) -> {
-            if (result.getResponseCode() != BillingClient.BillingResponseCode.OK || response == null) { notifyWeb(); return; }
+            if (result.getResponseCode() != BillingClient.BillingResponseCode.OK || response == null) {
+                notifyStatus(vip, "VIP products are not available in Google Play Console yet.");
+                return;
+            }
             List<ProductDetails> list = response.getProductDetailsList();
-            if (list != null) for (ProductDetails item : list) {
-                details.put(item.getProductId(), item);
-                List<ProductDetails.SubscriptionOfferDetails> offers = item.getSubscriptionOfferDetails();
-                if (offers != null && !offers.isEmpty()) {
-                    List<ProductDetails.PricingPhase> phases = offers.get(0).getPricingPhases().getPricingPhaseList();
-                    if (phases != null && !phases.isEmpty()) prices.put(item.getProductId(), phases.get(phases.size()-1).getFormattedPrice());
+            if (list != null) {
+                for (ProductDetails product : list) {
+                    products.put(product.getProductId(), product);
+                    List<ProductDetails.SubscriptionOfferDetails> offers = product.getSubscriptionOfferDetails();
+                    if (offers != null && !offers.isEmpty()) {
+                        List<ProductDetails.PricingPhase> phases =
+                            offers.get(0).getPricingPhases().getPricingPhaseList();
+                        if (phases != null && !phases.isEmpty()) {
+                            prices.put(product.getProductId(),
+                                phases.get(phases.size() - 1).getFormattedPrice());
+                        }
+                    }
                 }
             }
-            notifyWeb();
+            notifyStatus(vip, "Google Play Billing connected.");
         });
     }
 
-    private boolean isVipProduct(Purchase purchase) {
-        List<String> ids = purchase.getProducts();
-        return ids != null && (ids.contains(MONTHLY) || ids.contains(YEARLY));
+    public void launchSubscription(String productId) {
+        if (!MONTHLY.equals(productId) && !YEARLY.equals(productId)) {
+            toast("Unknown VIP plan.");
+            return;
+        }
+        if (!ready || client == null) {
+            toast("Google Play Billing is not ready. Try again in a moment.");
+            return;
+        }
+        ProductDetails product = products.get(productId);
+        if (product == null || product.getSubscriptionOfferDetails() == null
+                || product.getSubscriptionOfferDetails().isEmpty()) {
+            toast("VIP plans must first be configured in Google Play Console. No payment was taken.");
+            return;
+        }
+        String offerToken = product.getSubscriptionOfferDetails().get(0).getOfferToken();
+        BillingFlowParams.ProductDetailsParams line = BillingFlowParams.ProductDetailsParams.newBuilder()
+            .setProductDetails(product).setOfferToken(offerToken).build();
+        BillingFlowParams flow = BillingFlowParams.newBuilder()
+            .setProductDetailsParamsList(Collections.singletonList(line)).build();
+        BillingResult result = client.launchBillingFlow(activity, flow);
+        if (result.getResponseCode() != BillingClient.BillingResponseCode.OK) {
+            toast("Google Play checkout could not open. No payment was taken.");
+        }
     }
 
-    private void onPurchasesUpdated(BillingResult result, List<Purchase> purchases) {
+    @Override public void onPurchasesUpdated(BillingResult result, List<Purchase> purchases) {
         if (result.getResponseCode() == BillingClient.BillingResponseCode.OK && purchases != null) {
             for (Purchase purchase : purchases) handlePurchase(purchase);
         } else if (result.getResponseCode() == BillingClient.BillingResponseCode.USER_CANCELED) {
@@ -77,62 +127,59 @@ public final class VipBillingManager {
         refresh();
     }
 
+    private boolean isVipProduct(Purchase purchase) {
+        List<String> ids = purchase.getProducts();
+        return ids != null && (ids.contains(MONTHLY) || ids.contains(YEARLY));
+    }
+
     private void handlePurchase(Purchase purchase) {
-        if (purchase.getPurchaseState() != Purchase.PurchaseState.PURCHASED || !isVipProduct(purchase)) {
-            notifyWeb(); // Pending purchases never unlock VIP.
-            return;
-        }
+        if (purchase.getPurchaseState() != Purchase.PurchaseState.PURCHASED || !isVipProduct(purchase)) return;
+        boolean changed = !vip;
         vip = true;
         if (!purchase.isAcknowledged() && client != null && ready) {
             AcknowledgePurchaseParams params = AcknowledgePurchaseParams.newBuilder()
                 .setPurchaseToken(purchase.getPurchaseToken()).build();
             client.acknowledgePurchase(params, result -> {
-                if (result.getResponseCode() != BillingClient.BillingResponseCode.OK)
-                    toast("Purchase succeeded; acknowledgement will be retried.");
+                if (result.getResponseCode() != BillingClient.BillingResponseCode.OK) {
+                    toast("Purchase succeeded; Google Play acknowledgement may need retry.");
+                }
             });
         }
-        notifyWeb();
+        if (changed) notifyStatus(true, "VIP membership purchase found.");
     }
 
     public void refresh() {
-        if (client == null || !ready) return;
-        QueryPurchasesParams params = QueryPurchasesParams.newBuilder().setProductType(BillingClient.ProductType.SUBS).build();
+        if (client == null || !ready) {
+            notifyStatus(vip, "VIP status is not available yet.");
+            return;
+        }
+        QueryPurchasesParams params = QueryPurchasesParams.newBuilder()
+            .setProductType(BillingClient.ProductType.SUBS).build();
         client.queryPurchasesAsync(params, (result, purchases) -> {
-            if (result.getResponseCode() != BillingClient.BillingResponseCode.OK) return;
+            if (result.getResponseCode() != BillingClient.BillingResponseCode.OK) {
+                notifyStatus(vip, "Could not refresh Google Play purchases.");
+                return;
+            }
             boolean found = false;
-            if (purchases != null) for (Purchase purchase : purchases) {
-                if (purchase.getPurchaseState() == Purchase.PurchaseState.PURCHASED && isVipProduct(purchase)) {
-                    found = true;
-                    handlePurchase(purchase);
+            if (purchases != null) {
+                for (Purchase purchase : purchases) {
+                    if (purchase.getPurchaseState() == Purchase.PurchaseState.PURCHASED && isVipProduct(purchase)) {
+                        found = true;
+                        handlePurchase(purchase);
+                    }
                 }
             }
+            boolean changed = vip != found;
             vip = found;
-            notifyWeb();
+            if (changed || !firstStatusSent) {
+                notifyStatus(vip, vip ? "VIP membership is active." : "No active VIP subscription was found.");
+            }
         });
     }
 
-    private void launch(String productId) {
-        if (!MONTHLY.equals(productId) && !YEARLY.equals(productId)) { toast("Unknown VIP plan."); return; }
-        if (!ready) { toast("Google Play billing is not connected yet."); return; }
-        ProductDetails product = details.get(productId);
-        if (product == null || product.getSubscriptionOfferDetails() == null || product.getSubscriptionOfferDetails().isEmpty()) {
-            toast("VIP plans are not configured in Google Play Console yet.");
-            return;
-        }
-        String offer = product.getSubscriptionOfferDetails().get(0).getOfferToken();
-        BillingFlowParams.ProductDetailsParams line = BillingFlowParams.ProductDetailsParams.newBuilder()
-            .setProductDetails(product).setOfferToken(offer).build();
-        BillingFlowParams flow = BillingFlowParams.newBuilder()
-            .setProductDetailsParamsList(Collections.singletonList(line)).build();
-        BillingResult result = client.launchBillingFlow(activity, flow);
-        if (result.getResponseCode() != BillingClient.BillingResponseCode.OK)
-            toast("Google Play checkout could not be opened. Please try again.");
-    }
-
-    private void notifyWeb() {
-        boolean active = vip;
-        webView.post(() -> webView.evaluateJavascript(
-            "window.dispatchEvent(new CustomEvent('dc-vip-status',{detail:{vip:" + active + "}}));", null));
+    private void notifyStatus(boolean active, String message) {
+        firstStatusSent = true;
+        if (listener != null) activity.runOnUiThread(() -> listener.onVipStatusChanged(active, message));
     }
 
     private void toast(String message) {
@@ -140,24 +187,9 @@ public final class VipBillingManager {
     }
 
     public void close() {
-        if (client != null) { client.endConnection(); client = null; }
-    }
-
-    private final class Bridge {
-        @JavascriptInterface public boolean isVip() { return vip; }
-        @JavascriptInterface public String getPrice(String id) {
-            String value = prices.get(id);
-            return value == null ? "" : value;
-        }
-        @JavascriptInterface public void launchSubscription(String id) {
-            activity.runOnUiThread(() -> launch(id));
-        }
-        @JavascriptInterface public void restorePurchases() {
-            activity.runOnUiThread(() -> {
-                if (!ready) { toast("Google Play billing is unavailable."); return; }
-                refresh(); queryProducts();
-                toast("Checking purchases linked to your Google Play account.");
-            });
+        if (client != null) {
+            client.endConnection();
+            client = null;
         }
     }
 }
