@@ -295,9 +295,9 @@
   function saveHistory(){try{localStorage.setItem(HISTORY_KEY,JSON.stringify(history));}catch{}}
   function saveMemory(){try{localStorage.setItem(MEMORY_KEY,String(memory));}catch{}}
   function fmt(n){if(!Number.isFinite(n))return 'Error';if(Object.is(n,-0))n=0;const v=Number.parseFloat(n.toPrecision(12));if(Math.abs(v)>=1e12 || (Math.abs(v)>0&&Math.abs(v)<1e-7))return v.toExponential(6).replace(/\.0+e/,'e');return v.toLocaleString('en-US',{maximumFractionDigits:10,useGrouping:true});}
-  function pretty(s){return String(s).replace(/\\*/g,' × ').replace(/\\//g,' ÷ ').replace(/\\+/g,' + ').replace(/-/g,' − ').replace(/\\^/g,' ^ ').replace(/\\s+/g,' ').trim();}
+  function pretty(s){return String(s).replace(/\*/g,' × ').replace(/\//g,' ÷ ').replace(/\+/g,' + ').replace(/-/g,' − ').replace(/\^/g,' ^ ').replace(/\s+/g,' ').trim();}
   function parse(source){
-    let s=String(source).replace(/\\s+/g,'');
+    let s=String(source).replace(/\s+/g,'');
     if(!s)return 0;
     const raw=[];let i=0;
     while(i<s.length){
@@ -379,7 +379,7 @@
   $('themeBtn').addEventListener('click',()=>{const dark=document.documentElement.dataset.theme!=='dark';document.documentElement.dataset.theme=dark?'dark':'light';try{localStorage.setItem(THEME_KEY,dark?'dark':'light');}catch{}$('themeIcon').innerHTML=dark?'<circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.8"/><path d="M12 2v2m0 16v2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M2 12h2m16 0h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>':'<path d="M20.2 15.3A8.3 8.3 0 0 1 8.7 3.8 8.6 8.6 0 1 0 20.2 15.3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>';document.querySelector('meta[name="theme-color"]').content=dark?'#0d111b':'#edf0f7';});
 
   function setScientific(on){$('scientificPanel').hidden=!on;$('scientificMode').classList.toggle('active',on);$('basicMode').classList.toggle('active',!on);if(on)setTimeout(()=>document.querySelector('.scientific-panel')?.scrollIntoView({block:'nearest',behavior:'smooth'}),30);}
-  function appendToken(token){feedback();if(justEvaluated){expr=String(lastAnswer);justEvaluated=false;}if(!expr)expr=token;else if(/[0-9)%!]$/.test(expr)&&/^(pi|e|ans|sin|cos|tan|sqrt|cbrt|abs|ln|log|exp|asin|acos|atan)\\b/.test(token))expr+='*'+token;else expr+=token;show();}
+  function appendToken(token){feedback();if(justEvaluated){expr=String(lastAnswer);justEvaluated=false;}if(!expr)expr=token;else if(/[0-9)%!]$/.test(expr)&&/^(pi|e|ans|sin|cos|tan|sqrt|cbrt|abs|ln|log|exp|asin|acos|atan)\b/.test(token))expr+='*'+token;else expr+=token;show();}
   function applyScientific(action){
     feedback();
     if(action==='paren'){paren();return;}
@@ -565,7 +565,7 @@
   }
   async function submitVipRequest(){
     const button=$('submitVipRequest'),email=$('vipEmail').value.trim(),reference=$('vipPaymentRef').value.trim();
-    if(!email||!/^\\S+@\\S+\\.\\S+$/.test(email)){vipFeedback('Enter a valid email address.','error');return;}
+    if(!email||!/^\S+@\S+\.\S+$/.test(email)){vipFeedback('Enter a valid email address.','error');return;}
     if(reference.length<6||reference.length>64||!/^[a-zA-Z0-9 -]+$/.test(reference)){vipFeedback('Enter the transaction/UTR reference from your payment.','error');return;}
     button.disabled=true;vipFeedback('Submitting your request securely…');
     try{
