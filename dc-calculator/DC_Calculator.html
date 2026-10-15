@@ -169,9 +169,15 @@
   #openVipUpi:disabled{opacity:.45;cursor:not-allowed}
   @media(max-width:390px){.upi-payment-section{padding:10px}.upi-payment-layout{grid-template-columns:minmax(104px,140px) minmax(0,1fr);gap:10px}.upi-qr-shell{padding:5px}.upi-payment-details .vip-secondary{font-size:9px;padding:8px}.upi-countdown{padding:6px}.upi-countdown strong{font-size:14px}}
 
+
+/* TEMPORARY SAFETY HOLD: paid VIP checkout disabled until server-side payment verification is live */
+#dc-payment-safety-hold{display:block!important;position:relative;z-index:99999;margin:12px auto;max-width:900px;padding:16px 18px;border:2px solid #c62828;border-radius:14px;background:#fff0f0;color:#7f1111;font:600 14px/1.5 system-ui,sans-serif;text-align:left}
+#dc-payment-safety-hold strong{display:block;font-size:16px;margin-bottom:5px}
+.vip-top-btn,.vip-overlay,.upi-payment-section{display:none!important}
 </style>
 </head>
 <body>
+<div id="dc-payment-safety-hold" role="alert"><strong>DC Calculator VIP payments are temporarily paused</strong>Do not pay ₹99 or ₹1,099 for VIP right now. Payment verification and VIP activation are not ready. If you already paid, save your UPI transaction details and contact your UPI app/bank to raise a complaint if the recipient or purpose is wrong. Do not pay again.</div>
 <main class="shell" id="app" aria-label="DC Calculator">
 <section class="calculator">
   <header class="topbar">
