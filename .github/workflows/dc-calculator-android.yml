@@ -5,6 +5,7 @@ on:
   push:
     paths:
       - 'android-app/**'
+      - 'dc-calculator/DC_Calculator.html'
       - '.github/workflows/dc-calculator-android.yml'
 
 permissions:
@@ -33,6 +34,11 @@ jobs:
         with:
           gradle-version: '8.9'
 
+      - name: Bundle calculator website into Android app
+        run: |
+          mkdir -p android-app/app/src/main/assets
+          cp dc-calculator/DC_Calculator.html android-app/app/src/main/assets/DC_Calculator.html
+
       - name: Build installable test APK
         run: gradle --no-daemon -p android-app assembleDebug
 
@@ -49,7 +55,7 @@ jobs:
       - name: Upload APK for testing
         uses: actions/upload-artifact@v4
         with:
-          name: dc-calculator-debug-apk
+          name: dc-calculator-full-apk
           path: android-app/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
           retention-days: 14
