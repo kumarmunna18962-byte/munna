@@ -1,6 +1,8 @@
 package com.munna.dc_calculator;
 
-import android.app.Activity;
+import android.app.AlertDialog;
+import androidx.activity.ComponentActivity;
+import androidx.activity.OnBackPressedCallback;
 import android.app.AlertDialog;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -25,7 +27,7 @@ import java.util.Locale;
  * DC Calculator Native Android edition.
  * The calculator UI and expression engine are native Java; no WebView or HTML UI is used.
  */
-public final class MainActivity extends Activity {
+public final class MainActivity extends ComponentActivity {
     private static final String PREFS = "dc_calculator_native";
     private static final String HISTORY_KEY = "history_v1";
     private static final String THEME_KEY = "dark_v1";
@@ -54,6 +56,18 @@ public final class MainActivity extends Activity {
         if (state != null) restoreUiState(state);
         applySystemBars();
         billing = new VipBillingManager(this, this::handleBillingStatus);
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override public void handleOnBackPressed() {
+                if (scientific) {
+                    scientific = false;
+                    buildUi();
+                    return;
+                }
+                setEnabled(false);
+                getOnBackPressedDispatcher().onBackPressed();
+                setEnabled(true);
+            }
+        });
         buildUi();
     }
 
@@ -623,11 +637,6 @@ public final class MainActivity extends Activity {
         lastShownExpression = state.getString("lastShownExpression", "");
         result = state.getString("result", "0");
         justEvaluated = state.getBoolean("justEvaluated", false);
-    }
-
-    @Override public void onBackPressed() {
-        if (scientific) { scientific = false; buildUi(); return; }
-        super.onBackPressed();
     }
 
     @Override protected void onDestroy() {
