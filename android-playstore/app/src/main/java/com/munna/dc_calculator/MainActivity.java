@@ -12,7 +12,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -30,25 +29,31 @@ public final class MainActivity extends Activity {
     private static final String PREFS = "dc_calculator_native";
     private static final String HISTORY_KEY = "history_v1";
     private static final String THEME_KEY = "dark_v1";
+    private static final String MEMORY_VALUE_KEY = "memory_value_v1";
+    private static final String MEMORY_SET_KEY = "memory_set_v1";
     private int bg, panel, key, text, muted, accent, accentText, danger;
     private boolean dark = false, scientific = false, memorySet = false;
-    private double memory = 0d, lastAnswer = 0d;
+    private double memory = 0d;
     private String expression = "";
     private String lastShownExpression = "";
     private String result = "0";
     private boolean justEvaluated = false;
     private LinearLayout page, scientificKeys;
-    private TextView expressionView, resultView, memoryView;
+    private TextView expressionView, resultView, memoryView, vipStatusText;
+    private Button vipMonthlyButton, vipYearlyButton;
+    private AlertDialog vipDialog;
     private final ArrayList<String> history = new ArrayList<>();
     private VipBillingManager billing;
 
     @Override protected void onCreate(Bundle state) {
         super.onCreate(state);
         dark = getPreferences(MODE_PRIVATE).getBoolean(THEME_KEY, false);
+        memory = Double.longBitsToDouble(getPreferences(MODE_PRIVATE).getLong(MEMORY_VALUE_KEY, Double.doubleToRawLongBits(0d)));
+        memorySet = getPreferences(MODE_PRIVATE).getBoolean(MEMORY_SET_KEY, false);
         loadHistory();
+        if (state != null) restoreUiState(state);
         applySystemBars();
-        billing = new VipBillingManager(this, (active, message) ->
-            runOnUiThread(() -> Toast.makeText(this, message, Toast.LENGTH_SHORT).show()));
+        billing = new VipBillingManager(this, this::handleBillingStatus);
         buildUi();
     }
 
@@ -143,8 +148,12 @@ public final class MainActivity extends Activity {
         page.addView(display, displayParams);
 
         LinearLayout mem = row();
-        addKey(mem, "MC", () -> { memory = 0; memorySet = false; updateDisplay(); }, false, false);
-        addKey(mem, "MR", () -> { expression += fmt(memory); result = fmt(memory); justEvaluated = false; updateDisplay(); }, false, false);
+        addKey(mem, "MC", () -> {
+            memory = 0; memorySet = false;
+            persistMemory();
+            updateDisplay();
+        }, false, false);
+        addKey(mem, "MR", this::recallMemory, false, false);
         addKey(mem, "M+", () -> memoryChange(1), false, false);
         addKey(mem, "M−", () -> memoryChange(-1), false, false);
         addRowToPage(mem, 10);
@@ -272,31 +281,150 @@ public final class MainActivity extends Activity {
 
     private void onKey(String keyValue) {
         if ("AC".equals(keyValue)) {
-            expression = ""; lastShownExpression = ""; result = "0"; justEvaluated = false;
+            expression = "";
+            lastShownExpression = "";
+            result = "0";
+            justEvaluated = false;
         } else if ("DEL".equals(keyValue)) {
             if (justEvaluated) { expression = result; justEvaluated = false; }
             if (!expression.isEmpty()) expression = expression.substring(0, expression.length() - 1);
             lastShownExpression = "";
         } else if ("=".equals(keyValue)) {
-            evaluateNow(); return;
+            evaluateNow();
+            return;
         } else if ("±".equals(keyValue)) {
             if (justEvaluated) { expression = result; justEvaluated = false; }
-            if (expression.startsWith("-(") && expression.endsWith(")")) expression = expression.substring(2, expression.length()-1);
+            if (expression.startsWith("-(") && expression.endsWith(")")) expression = expression.substring(2, expression.length() - 1);
             else if (!expression.isEmpty()) expression = "-(" + expression + ")";
+            else expression = "-";
             lastShownExpression = "";
         } else {
-            boolean beginsNumber = keyValue.matches("[0-9.]");
             if (justEvaluated) {
-                if (beginsNumber || keyValue.endsWith("(") || "pi".equals(keyValue) || "e".equals(keyValue)) expression = "";
-                else expression = result;
+                boolean continuation = isOperator(keyValue) || "%".equals(keyValue) || "!".equals(keyValue) || "^2".equals(keyValue);
+                expression = continuation ? result : "";
                 justEvaluated = false;
             }
-            if (keyValue.endsWith("(") && !expression.isEmpty() && expression.matches(".*[0-9.)]$")) expression += "*";
-            expression += keyValue;
+            appendToken(keyValue);
             lastShownExpression = "";
         }
         result = expression.isEmpty() ? "0" : expression;
         updateDisplay();
+    }
+
+    private void appendToken(String token) {
+        if (token == null || token.isEmpty()) return;
+        if ("^2".equals(token)) {
+            if (!endsWithOperand(expression)) {
+                Toast.makeText(this, "Enter a number before squaring it.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            expression += token;
+            return;
+        }
+        if (")".equals(token)) {
+            if (unmatchedOpeningParenthesis(expression) > 0 && endsWithOperand(expression)) expression += token;
+            else Toast.makeText(this, "There is no open parenthesis to close.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if ("!".equals(token) || "%".equals(token)) {
+            if (endsWithOperand(expression)) expression += token;
+            else Toast.makeText(this, "Enter a number before using " + token + ".", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (isOperator(token)) {
+            if (expression.isEmpty()) {
+                if ("-".equals(token) || "+".equals(token)) expression = token;
+                else Toast.makeText(this, "Enter a number first.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            char last = expression.charAt(expression.length() - 1);
+            if (isOperator(String.valueOf(last))) {
+                if ("-".equals(token) && (last == '*' || last == '/' || last == '^')) expression += token;
+                else expression = expression.substring(0, expression.length() - 1) + token;
+            } else expression += token;
+            return;
+        }
+        if ("(".equals(token)) {
+            if (endsWithOperand(expression)) expression += "*";
+            expression += token;
+            return;
+        }
+        if ("pi".equals(token) || "e".equals(token) || token.endsWith("(")) {
+            if (endsWithOperand(expression)) expression += "*";
+            expression += token;
+            return;
+        }
+        if (token.matches("[0-9]")) {
+            if (endsWithClosingOperand(expression)) expression += "*";
+            expression += token;
+            return;
+        }
+        if (".".equals(token)) {
+            if (endsWithClosingOperand(expression)) expression += "*";
+            if (currentNumberHasDecimal(expression)) {
+                Toast.makeText(this, "This number already has a decimal point.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            expression += token;
+            return;
+        }
+        expression += token;
+    }
+
+    private boolean endsWithOperand(String value) {
+        if (value == null || value.isEmpty()) return false;
+        String s = value.trim();
+        return endsWithNumber(s) || endsWithClosingOperand(s) || s.endsWith("pi") || s.endsWith("e");
+    }
+
+    private boolean endsWithNumber(String value) {
+        if (value == null || value.isEmpty()) return false;
+        char last = value.charAt(value.length() - 1);
+        return Character.isDigit(last) || last == '.';
+    }
+
+    private boolean endsWithClosingOperand(String value) {
+        if (value == null || value.isEmpty()) return false;
+        char last = value.charAt(value.length() - 1);
+        return last == ')' || last == '!';
+    }
+
+    private boolean currentNumberHasDecimal(String value) {
+        if (value == null || value.isEmpty()) return false;
+        int i = value.length() - 1;
+        while (i >= 0) {
+            char ch = value.charAt(i);
+            if (Character.isDigit(ch) || ch == '.') { if (ch == '.') return true; i--; continue; }
+            break;
+        }
+        return false;
+    }
+
+    private int unmatchedOpeningParenthesis(String value) {
+        int count = 0;
+        if (value == null) return 0;
+        for (int i = 0; i < value.length(); i++) {
+            if (value.charAt(i) == '(') count++;
+            else if (value.charAt(i) == ')') count--;
+        }
+        return Math.max(0, count);
+    }
+
+    private void recallMemory() {
+        String memoryToken = "(" + fmt(memory) + ")";
+        if (justEvaluated) { expression = ""; justEvaluated = false; }
+        if (endsWithOperand(expression)) expression += "*";
+        expression += memoryToken;
+        lastShownExpression = "";
+        result = expression;
+        updateDisplay();
+    }
+
+    private void persistMemory() {
+        getPreferences(MODE_PRIVATE).edit()
+            .putLong(MEMORY_VALUE_KEY, Double.doubleToRawLongBits(memory))
+            .putBoolean(MEMORY_SET_KEY, memorySet)
+            .apply();
     }
 
     private void evaluateNow() {
@@ -304,10 +432,9 @@ public final class MainActivity extends Activity {
         try {
             double answer = new ExpressionParser(expression).parse();
             if (!Double.isFinite(answer)) throw new IllegalArgumentException("Result is outside the supported range.");
-            lastAnswer = answer;
             lastShownExpression = expression + " =";
             result = fmt(answer);
-            history.add(0, lastShownExpression + " " + result);
+            history.add(0, expression + " = " + result);
             while (history.size() > 100) history.remove(history.size() - 1);
             saveHistory();
             expression = result.replace(",", "");
@@ -337,6 +464,7 @@ public final class MainActivity extends Activity {
             double value = new ExpressionParser(expression.isEmpty() ? result : expression).parse();
             memory += sign * value;
             memorySet = true;
+            persistMemory();
             updateDisplay();
             Toast.makeText(this, "Memory updated", Toast.LENGTH_SHORT).show();
         } catch (RuntimeException e) {
@@ -354,12 +482,13 @@ public final class MainActivity extends Activity {
         new AlertDialog.Builder(this).setTitle("Calculation history")
             .setItems(items, (dialog, which) -> {
                 String item = history.get(which);
-                int eq = item.indexOf(" =");
+                int eq = item.lastIndexOf(" = ");
                 String exp = eq > 0 ? item.substring(0, eq) : item;
+                String answer = eq > 0 ? item.substring(eq + 3) : exp;
                 expression = exp;
-                lastShownExpression = "";
-                result = exp;
-                justEvaluated = false;
+                lastShownExpression = exp + " =";
+                result = answer;
+                justEvaluated = true;
                 updateDisplay();
             })
             .setNeutralButton("Clear history", (d, w) -> {
@@ -395,31 +524,68 @@ public final class MainActivity extends Activity {
             .setPositiveButton("Done", null).show();
     }
 
+    private void handleBillingStatus(boolean active, String message) {
+        if (isFinishing() || isDestroyed()) return;
+        if (vipStatusText != null) {
+            if (active) vipStatusText.setText("VIP is active on this Google Play account.");
+            else if (message != null && (message.toLowerCase(Locale.ROOT).contains("unavailable")
+                    || message.toLowerCase(Locale.ROOT).contains("not available")
+                    || message.toLowerCase(Locale.ROOT).contains("not configured")
+                    || message.toLowerCase(Locale.ROOT).contains("could not"))) {
+                vipStatusText.setText(message);
+            } else vipStatusText.setText("VIP is Free. Google Play purchases will appear here once configured.");
+        }
+        updateVipPlanLabels();
+    }
+
+    private void updateVipPlanLabels() {
+        String monthlyPrice = billing == null ? "" : billing.getPrice(VipBillingManager.MONTHLY);
+        String yearlyPrice = billing == null ? "" : billing.getPrice(VipBillingManager.YEARLY);
+        if (vipMonthlyButton != null) {
+            vipMonthlyButton.setText("Monthly VIP · " + (monthlyPrice.isEmpty() ? "₹99" : monthlyPrice));
+        }
+        if (vipYearlyButton != null) {
+            vipYearlyButton.setText("Yearly VIP · " + (yearlyPrice.isEmpty() ? "₹1,099" : yearlyPrice));
+        }
+    }
+
     private void showVip() {
-        String status = billing != null && billing.isVipActive() ? "VIP is active on this Google Play account."
-            : "VIP is currently Free. Purchases work after the monthly and yearly subscription products are set up in Google Play Console.";
         LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.VERTICAL);
         layout.setPadding(dp(20), dp(10), dp(20), dp(4));
-        TextView info = label(status, 13, text, false);
-        layout.addView(info);
-        Button monthly = button("Monthly VIP · ₹99", accent, accentText, 14);
-        Button yearly = button("Yearly VIP · ₹1,099", accent, accentText, 14);
-        LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(-1, dp(48));
-        p.topMargin = dp(10);
-        layout.addView(monthly, p); layout.addView(yearly, p);
-        monthly.setOnClickListener(v -> {
+        vipStatusText = label(billing != null && billing.isVipActive()
+            ? "VIP is active on this Google Play account."
+            : "VIP is Free. Google Play subscriptions must be configured in Play Console before checkout works.",
+            13, text, false);
+        layout.addView(vipStatusText);
+        vipMonthlyButton = button("Monthly VIP · ₹99", accent, accentText, 14);
+        vipYearlyButton = button("Yearly VIP · ₹1,099", accent, accentText, 14);
+        LinearLayout.LayoutParams monthlyParams = new LinearLayout.LayoutParams(-1, dp(48));
+        monthlyParams.topMargin = dp(10);
+        LinearLayout.LayoutParams yearlyParams = new LinearLayout.LayoutParams(-1, dp(48));
+        yearlyParams.topMargin = dp(10);
+        layout.addView(vipMonthlyButton, monthlyParams);
+        layout.addView(vipYearlyButton, yearlyParams);
+        vipMonthlyButton.setOnClickListener(v -> {
             if (billing != null) billing.launchSubscription(VipBillingManager.MONTHLY);
             else Toast.makeText(this, "Billing is not ready yet.", Toast.LENGTH_LONG).show();
         });
-        yearly.setOnClickListener(v -> {
+        vipYearlyButton.setOnClickListener(v -> {
             if (billing != null) billing.launchSubscription(VipBillingManager.YEARLY);
             else Toast.makeText(this, "Billing is not ready yet.", Toast.LENGTH_LONG).show();
         });
-        new AlertDialog.Builder(this).setTitle("DC Calculator VIP").setView(layout)
+        updateVipPlanLabels();
+        vipDialog = new AlertDialog.Builder(this).setTitle("DC Calculator VIP").setView(layout)
             .setNegativeButton("Close", null).setNeutralButton("Restore purchases", (d,w) -> {
                 if (billing != null) billing.refresh();
-            }).show();
+            }).create();
+        vipDialog.setOnDismissListener(d -> {
+            vipDialog = null;
+            vipStatusText = null;
+            vipMonthlyButton = null;
+            vipYearlyButton = null;
+        });
+        vipDialog.show();
     }
 
     private void loadHistory() {
@@ -434,6 +600,29 @@ public final class MainActivity extends Activity {
         JSONArray a = new JSONArray();
         for (String item : history) a.put(item);
         getPreferences(MODE_PRIVATE).edit().putString(HISTORY_KEY, a.toString()).apply();
+    }
+
+    @Override protected void onSaveInstanceState(Bundle outState) {
+        outState.putBoolean("dark", dark);
+        outState.putBoolean("scientific", scientific);
+        outState.putBoolean("memorySet", memorySet);
+        outState.putDouble("memory", memory);
+        outState.putString("expression", expression);
+        outState.putString("lastShownExpression", lastShownExpression);
+        outState.putString("result", result);
+        outState.putBoolean("justEvaluated", justEvaluated);
+        super.onSaveInstanceState(outState);
+    }
+
+    private void restoreUiState(Bundle state) {
+        dark = state.getBoolean("dark", dark);
+        scientific = state.getBoolean("scientific", false);
+        memorySet = state.getBoolean("memorySet", memorySet);
+        memory = state.getDouble("memory", memory);
+        expression = state.getString("expression", "");
+        lastShownExpression = state.getString("lastShownExpression", "");
+        result = state.getString("result", "0");
+        justEvaluated = state.getBoolean("justEvaluated", false);
     }
 
     @Override public void onBackPressed() {
