@@ -3,7 +3,6 @@ package com.munna.dc_calculator;
 import android.app.AlertDialog;
 import androidx.activity.ComponentActivity;
 import androidx.activity.OnBackPressedCallback;
-import android.app.AlertDialog;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
