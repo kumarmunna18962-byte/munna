@@ -5,6 +5,7 @@ plugins { id("com.android.application") }
 dependencies {
     implementation("com.android.billingclient:billing:9.1.0")
     implementation("androidx.biometric:biometric:1.1.0")
+    implementation("androidx.activity:activity:1.13.0")
     testImplementation("junit:junit:4.13.2")
 }
 
