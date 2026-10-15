@@ -386,7 +386,7 @@ public final class MainActivity extends Activity {
     private boolean endsWithClosingOperand(String value) {
         if (value == null || value.isEmpty()) return false;
         char last = value.charAt(value.length() - 1);
-        return last == ')' || last == '!';
+        return last == ')' || last == '!' || value.endsWith("pi") || value.endsWith("e");
     }
 
     private boolean currentNumberHasDecimal(String value) {
@@ -636,7 +636,7 @@ public final class MainActivity extends Activity {
     }
 
     /** Safe recursive-descent parser; no JavaScript eval or arbitrary code execution. */
-    private static final class ExpressionParser {
+    static final class ExpressionParser {
         private final String s;
         private int pos;
         ExpressionParser(String source) { s = source.replace("×","*").replace("÷","/").replace("−","-").replace("π","pi").replace("√","sqrt"); }
@@ -664,6 +664,9 @@ public final class MainActivity extends Activity {
                     double d = unary();
                     if (d == 0) throw new IllegalArgumentException("Cannot divide by zero.");
                     n /= d;
+                } else if (pos < s.length() && (s.charAt(pos) == '(' || Character.isLetter(s.charAt(pos)))) {
+                    // Support conventional implicit multiplication such as 2(3+4), 2pi and 2sin(30).
+                    n *= unary();
                 } else return n;
             }
         }
