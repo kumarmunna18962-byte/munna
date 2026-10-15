@@ -57,6 +57,11 @@ public final class VipBillingManager implements PurchasesUpdatedListener {
 
     public boolean isVipActive() { return vip; }
 
+    public String getPrice(String productId) {
+        String value = prices.get(productId);
+        return value == null ? "" : value;
+    }
+
     private void queryProducts() {
         if (client == null || !ready) return;
         List<QueryProductDetailsParams.Product> requested = new ArrayList<>();
