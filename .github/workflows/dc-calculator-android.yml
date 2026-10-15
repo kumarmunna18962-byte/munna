@@ -34,7 +34,7 @@ jobs:
           gradle-version: '8.9'
 
       - name: Build installable test APK
-        run: gradle --no-daemon assembleDebug
+        run: gradle --no-daemon -p android-app assembleDebug
 
       - name: Prepare release signing key
         if: ${{ env.ANDROID_KEYSTORE_BASE64 != '' && env.ANDROID_KEYSTORE_PASSWORD != '' && env.ANDROID_KEY_ALIAS != '' && env.ANDROID_KEY_PASSWORD != '' }}
@@ -44,7 +44,7 @@ jobs:
 
       - name: Build signed Play Store AAB
         if: ${{ env.ANDROID_KEYSTORE_BASE64 != '' && env.ANDROID_KEYSTORE_PASSWORD != '' && env.ANDROID_KEY_ALIAS != '' && env.ANDROID_KEY_PASSWORD != '' }}
-        run: gradle --no-daemon bundleRelease
+        run: gradle --no-daemon -p android-app bundleRelease
 
       - name: Upload APK for testing
         uses: actions/upload-artifact@v4
