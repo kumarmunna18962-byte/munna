@@ -3,6 +3,11 @@ package com.munna.dc_calculator;
 import android.app.AlertDialog;
 import androidx.activity.ComponentActivity;
 import androidx.activity.OnBackPressedCallback;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
@@ -87,10 +92,15 @@ public final class MainActivity extends ComponentActivity {
     private void applySystemBars() {
         Window w = getWindow();
         int color = dark ? Color.rgb(15, 21, 34) : Color.rgb(239, 242, 249);
+        // Android 15+ enforces edge-to-edge for modern target SDKs. Handle insets
+        // explicitly so the header and bottom controls remain clear of system bars.
+        WindowCompat.setDecorFitsSystemWindows(w, false);
         w.setStatusBarColor(color);
         w.setNavigationBarColor(color);
-        w.getDecorView().setSystemUiVisibility(dark ? 0 :
-            View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
+        WindowInsetsControllerCompat controller =
+            new WindowInsetsControllerCompat(w, w.getDecorView());
+        controller.setAppearanceLightStatusBars(!dark);
+        controller.setAppearanceLightNavigationBars(!dark);
         w.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
     }
 
@@ -99,6 +109,12 @@ public final class MainActivity extends ComponentActivity {
         ScrollView scroll = new ScrollView(this);
         scroll.setFillViewport(true);
         scroll.setBackgroundColor(bg);
+        ViewCompat.setOnApplyWindowInsetsListener(scroll, (view, windowInsets) -> {
+            Insets bars = windowInsets.getInsets(
+                WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.displayCutout());
+            view.setPadding(0, bars.top, 0, bars.bottom);
+            return windowInsets;
+        });
         page = new LinearLayout(this);
         page.setOrientation(LinearLayout.VERTICAL);
         page.setPadding(dp(14), dp(12), dp(14), dp(18));
@@ -196,6 +212,7 @@ public final class MainActivity extends ComponentActivity {
         page.addView(footer, fp);
 
         setContentView(scroll);
+        ViewCompat.requestApplyInsets(scroll);
         updateDisplay();
     }
 
