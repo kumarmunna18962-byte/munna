@@ -1,0 +1,14 @@
+require("dotenv").config();
+const express=require("express");
+const {google}=require("googleapis");
+const app=express();
+const port=process.env.PORT||3000;
+app.use(express.static("public"));
+const redirect=process.env.GOOGLE_REDIRECT_URI||`http://localhost:${port}/oauth2callback`;
+const oauth=new google.auth.OAuth2(process.env.GOOGLE_CLIENT_ID,process.env.GOOGLE_CLIENT_SECRET,redirect);
+app.get("/health",(_req,res)=>res.json({ok:true,app:"Nandni YouTube Automation starter"}));
+app.get("/api/status",(_req,res)=>res.json({configured:!!(process.env.GOOGLE_CLIENT_ID&&process.env.GOOGLE_CLIENT_SECRET),redirectUri:redirect,uploadEnabled:false}));
+app.get("/auth/youtube",(_req,res)=>{if(!process.env.GOOGLE_CLIENT_ID||!process.env.GOOGLE_CLIENT_SECRET)return res.status(400).send("Google OAuth credentials are not configured in Render Environment.");res.redirect(oauth.generateAuthUrl({access_type:"offline",prompt:"consent",scope:["https://www.googleapis.com/auth/youtube.upload"]}));});
+app.get("/oauth2callback",async(req,res)=>{if(req.query.error)return res.status(400).send("Google authorization was not completed.");try{await oauth.getToken(String(req.query.code||""));res.send("Google authorization callback worked, but this starter does not store tokens or upload videos yet. Return to the dashboard.");}catch(e){res.status(400).send("OAuth callback failed. Verify the redirect URI in Google Cloud and Render.");}});
+app.get("/api/story",(_req,res)=>res.json({title:"लालची सास और समझदार बहू",description:"एक मौलिक हिंदी पारिवारिक कहानी। अंत तक देखिए और अपनी राय बताइए।",scenes:[{visual:"भारतीय घर की रसोई",dialogue:"सास: इस महीने खर्च बहुत बढ़ गया है।"},{visual:"बहू कॉपी में बजट दिखाती है",dialogue:"बहू: माँजी, चलिए मिलकर खर्च का हिसाब देखते हैं।"},{visual:"दोनों बजट देखती हैं",dialogue:"सास: अब समझ आया, मुझे तुम पर भरोसा करना चाहिए था।"},{visual:"परिवार साथ भोजन करता है",dialogue:"बहू: घर प्यार और भरोसे से चलता है।"}]}));
+app.listen(port,()=>console.log("Nandni starter listening on "+port));
